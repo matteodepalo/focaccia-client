@@ -10,7 +10,7 @@ module.exports = phase => {
   const env = {
     API_URL: (() => {
       if (isDev) return 'http://localhost:3001'
-      if (isProd) { return 'https://focaccia-client.now.sh' }
+      if (isProd) { return 'https://focaccia-server.herokuapp.com' }
       return 'http://localhost:3001'
     })()
   }
