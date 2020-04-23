@@ -1,22 +1,18 @@
-import { useState, useEffect } from "react"
+import { GetServerSideProps } from 'next'
+import axios from 'axios'
 
-function useRandomNumber() {
-  const [ number, setNumber ] = useState<number>()
-
-  useEffect(
-    () => {
-      fetch(process.env.API_URL!)
-        .then(response => response.text())
-        .then(text => setNumber(+text))
-    },
-    []
-  )
-
-  return number
+type Props = {
+  number: number
 }
 
-const Home = () => {
-  const number = useRandomNumber()
+export const getServerSideProps: GetServerSideProps<Props> = async _context => {
+  const response = await axios.get(process.env.API_URL!)
+  const number = +response.data
+
+  return { props: { number } }
+}
+
+const Home = ({ number }: Props) => {
   return (
     <p>
       Random Number: {number}
