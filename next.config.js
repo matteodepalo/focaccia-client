@@ -9,9 +9,9 @@ module.exports = phase => {
 
   const env = {
     API_URL: (() => {
-      if (isDev) return 'http://localhost:3001'
-      if (isProd) { return 'https://focaccia-server.herokuapp.com' }
-      return 'http://localhost:3001'
+      if (isDev) { return 'http://localhost:3001/graphql' }
+      else if (isProd) { return 'https://focaccia-server.herokuapp.com/graphql' }
+      else { return 'http://localhost:3001/graphql' }
     })()
   }
 
