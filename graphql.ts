@@ -6,18 +6,17 @@
 
 /* tslint:disable */
 /* eslint-disable */
-export class Recipe {
-    id?: number;
+export interface Recipe {
+    id: number;
     title?: string;
     description?: string;
 }
 
-export abstract class IQuery {
-    abstract recipe(id: number): Recipe | Promise<Recipe>;
-
-    abstract recipes(): Recipe[] | Promise<Recipe[]>;
+export interface IQuery {
+    recipe(id: number): Recipe | Promise<Recipe>;
+    recipes(): Recipe[] | Promise<Recipe[]>;
 }
 
-export abstract class IMutation {
-    abstract createRecipe(title?: string, description?: string): Recipe | Promise<Recipe>;
+export interface IMutation {
+    createRecipe(title?: string, description?: string): Recipe | Promise<Recipe>;
 }

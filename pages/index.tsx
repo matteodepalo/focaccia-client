@@ -1,12 +1,7 @@
 import { withApollo } from '../lib/apollo'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-
-type Recipe = {
-  id: number
-  title: string
-  description: string
-}
+import { Recipe } from '../graphql';
 
 const GET_RECIPES = gql`
   query GetRecipes {
@@ -34,7 +29,7 @@ const Home = () => {
   return (
     <section>
       <ul>
-        {recipes ? recipes.map((recipe) => (
+        {recipes.length ? recipes.map((recipe) => (
           <li key={recipe.id}>
             <div>
               <p>{recipe.title}</p>
