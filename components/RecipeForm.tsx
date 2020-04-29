@@ -4,7 +4,7 @@ import { FormEvent, useState, ChangeEvent } from 'react'
 import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
 
 gql`
-  mutation createRecipe($title: String, $description: String) {
+  mutation createRecipe($title: String!, $description: String!) {
     createRecipe(data: { title: $title, description: $description }) {
       id
       title
@@ -13,9 +13,11 @@ gql`
   }
 `
 
+type InputValue = string | null
+
 const RecipeForm = () => {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
+  const [title, setTitle] = useState<InputValue>(null)
+  const [description, setDescription] = useState<InputValue>(null)
   const [createRecipe, { loading }] = useCreateRecipeMutation()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -23,27 +25,29 @@ const RecipeForm = () => {
 
     const form = event.target as HTMLFormElement
     form.reset()
-    setTitle('')
-    setDescription('')
+    setTitle(null)
+    setDescription(null)
 
-    createRecipe({
-      variables: { title, description },
-      update: (cache, { data }) => {
-        const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
-          query: GetRecipesDocument
-        })
+    if (title && description) {
+      createRecipe({
+        variables: { title, description },
+        update: (cache, { data }) => {
+          const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
+            query: GetRecipesDocument
+          })
 
-        const existingRecipes = getExistingRecipes?.recipes ?? []
-        const newRecipe = data?.createRecipe
+          const existingRecipes = getExistingRecipes?.recipes ?? []
+          const newRecipe = data?.createRecipe
 
-        cache.writeQuery({
-          query: GetRecipesDocument,
-          data: {
-            recipes: [newRecipe, ...existingRecipes]
-          }
-        })
-      },
-    })
+          cache.writeQuery({
+            query: GetRecipesDocument,
+            data: {
+              recipes: [newRecipe, ...existingRecipes]
+            }
+          })
+        },
+      })
+    }
   }
 
   return (
@@ -51,20 +55,30 @@ const RecipeForm = () => {
       <FormGroup
         label="Title"
         labelFor="title"
+        labelInfo="(required)"
         inline={true}
       >
-        <InputGroup id="title" onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)} />
+        <InputGroup
+          id="title"
+          onChange={
+            (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value.length > 0 ? e.target.value : null)
+          } />
       </FormGroup>
 
       <FormGroup
         label="Description"
         labelFor="description"
+        labelInfo="(required)"
         inline={true}
       >
-        <InputGroup id="description" onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)} />
+        <InputGroup
+          id="description"
+          onChange={
+            (e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value.length > 0 ? e.target.value : null)
+          } />
       </FormGroup>
 
-      <Button intent="primary" type="submit" disabled={loading}>Save</Button>
+      <Button intent="primary" type="submit" disabled={loading || title === null || description === null}>Save</Button>
     </form>
   )
 }

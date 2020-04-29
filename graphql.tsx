@@ -43,13 +43,13 @@ export type MutationRemoveRecipeArgs = {
 };
 
 export type CreateRecipeInput = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  description: Scalars['String'];
 };
 
 export type CreateRecipeMutationVariables = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  description: Scalars['String'];
 };
 
 
@@ -69,7 +69,7 @@ export type RemoveRecipeMutation = { removeRecipe: Pick<Recipe, 'id'> };
 
 
 export const CreateRecipeDocument = gql`
-    mutation createRecipe($title: String, $description: String) {
+    mutation createRecipe($title: String!, $description: String!) {
   createRecipe(data: {title: $title, description: $description}) {
     id
     title
