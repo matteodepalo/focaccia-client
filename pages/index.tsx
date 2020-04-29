@@ -5,7 +5,7 @@ import styles from './index.module.css'
 
 const Home = () => {
   return (
-    <section className={styles.mainSection}>
+    <section className={styles['main-section']}>
       <h1>Recipes</h1>
       <RecipeList/>
       <RecipeForm/>

@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument } from '../graphql'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useState, ChangeEvent } from 'react'
+import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
 
 gql`
   mutation createRecipe($title: String, $description: String) {
@@ -22,6 +23,8 @@ const RecipeForm = () => {
 
     const form = event.target as HTMLFormElement
     form.reset()
+    setTitle('')
+    setDescription('')
 
     createRecipe({
       variables: { title, description },
@@ -45,16 +48,23 @@ const RecipeForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Title:
-        <input type="text" name="title" onChange={e => setTitle(e.target.value)} />
-      </label>
+      <FormGroup
+        label="Title"
+        labelFor="title"
+        inline={true}
+      >
+        <InputGroup id="title" onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)} />
+      </FormGroup>
 
-      <label>
-        Description:
-        <input type="text" name="description" onChange={e => setDescription(e.target.value)} />
-      </label>
-      <input type="submit" value="Submit" disabled={loading}/>
+      <FormGroup
+        label="Description"
+        labelFor="description"
+        inline={true}
+      >
+        <InputGroup id="description" onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)} />
+      </FormGroup>
+
+      <Button intent="primary" type="submit" disabled={loading}>Save</Button>
     </form>
   )
 }

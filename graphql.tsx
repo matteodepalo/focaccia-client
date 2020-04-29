@@ -29,11 +29,17 @@ export type QueryRecipeArgs = {
 
 export type Mutation = {
   createRecipe: Recipe;
+  removeRecipe: Recipe;
 };
 
 
 export type MutationCreateRecipeArgs = {
   data: CreateRecipeInput;
+};
+
+
+export type MutationRemoveRecipeArgs = {
+  id: Scalars['Int'];
 };
 
 export type CreateRecipeInput = {
@@ -53,6 +59,13 @@ export type GetRecipesQueryVariables = {};
 
 
 export type GetRecipesQuery = { recipes: Array<Pick<Recipe, 'id' | 'title' | 'description'>> };
+
+export type RemoveRecipeMutationVariables = {
+  id: Scalars['Int'];
+};
+
+
+export type RemoveRecipeMutation = { removeRecipe: Pick<Recipe, 'id'> };
 
 
 export const CreateRecipeDocument = gql`
@@ -124,3 +137,35 @@ export function useGetRecipesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryH
 export type GetRecipesQueryHookResult = ReturnType<typeof useGetRecipesQuery>;
 export type GetRecipesLazyQueryHookResult = ReturnType<typeof useGetRecipesLazyQuery>;
 export type GetRecipesQueryResult = ApolloReactCommon.QueryResult<GetRecipesQuery, GetRecipesQueryVariables>;
+export const RemoveRecipeDocument = gql`
+    mutation removeRecipe($id: Int!) {
+  removeRecipe(id: $id) {
+    id
+  }
+}
+    `;
+export type RemoveRecipeMutationFn = ApolloReactCommon.MutationFunction<RemoveRecipeMutation, RemoveRecipeMutationVariables>;
+
+/**
+ * __useRemoveRecipeMutation__
+ *
+ * To run a mutation, you first call `useRemoveRecipeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveRecipeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeRecipeMutation, { data, loading, error }] = useRemoveRecipeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveRecipeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveRecipeMutation, RemoveRecipeMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveRecipeMutation, RemoveRecipeMutationVariables>(RemoveRecipeDocument, baseOptions);
+      }
+export type RemoveRecipeMutationHookResult = ReturnType<typeof useRemoveRecipeMutation>;
+export type RemoveRecipeMutationResult = ApolloReactCommon.MutationResult<RemoveRecipeMutation>;
+export type RemoveRecipeMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveRecipeMutation, RemoveRecipeMutationVariables>;
