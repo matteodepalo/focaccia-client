@@ -78,7 +78,7 @@ const RecipeForm = () => {
           } />
       </FormGroup>
 
-      <Button intent="primary" type="submit" disabled={loading || title === null || description === null}>Save</Button>
+      <Button intent="primary" type="submit" loading={loading} disabled={loading || title === null || description === null}>Save</Button>
     </form>
   )
 }
