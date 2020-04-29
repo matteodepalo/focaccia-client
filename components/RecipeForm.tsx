@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-import { Recipe } from '../graphql';
+import { Recipe, CreateRecipeInput } from '../graphql';
 import { FormEvent, useState } from 'react';
 import { GET_RECIPES } from './RecipeList';
 
@@ -14,16 +14,11 @@ const CREATE_RECIPE = gql`
   }
 `
 
-type Variables = {
-  title?: string
-  description?: string
-}
-
 const RecipeForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const [createRecipe, { loading }] = useMutation<{ createRecipe: Recipe }, Variables>(CREATE_RECIPE);
+  const [createRecipe, { loading }] = useMutation<{ createRecipe: Recipe }, CreateRecipeInput>(CREATE_RECIPE);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

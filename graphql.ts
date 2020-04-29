@@ -6,6 +6,11 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export interface CreateRecipeInput {
+    title?: string;
+    description?: string;
+}
+
 export interface Recipe {
     id: number;
     title?: string;
@@ -18,5 +23,5 @@ export interface IQuery {
 }
 
 export interface IMutation {
-    createRecipe(title?: string, description?: string): Recipe | Promise<Recipe>;
+    createRecipe(createRecipeData: CreateRecipeInput): Recipe | Promise<Recipe>;
 }
