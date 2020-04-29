@@ -1,12 +1,10 @@
-import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-import { Recipe, CreateRecipeInput } from '../graphql';
-import { FormEvent, useState } from 'react';
-import { GET_RECIPES } from './RecipeList';
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument } from '../graphql'
+import { FormEvent, useState } from 'react'
 
-const CREATE_RECIPE = gql`
+gql`
   mutation createRecipe($title: String, $description: String) {
-    createRecipe(title: $title, description: $description) {
+    createRecipe(data: { title: $title, description: $description }) {
       id
       title
       description
@@ -15,32 +13,32 @@ const CREATE_RECIPE = gql`
 `
 
 const RecipeForm = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-
-  const [createRecipe, { loading }] = useMutation<{ createRecipe: Recipe }, CreateRecipeInput>(CREATE_RECIPE);
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [createRecipe, { loading }] = useCreateRecipeMutation()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
 
     const form = event.target as HTMLFormElement
     form.reset()
 
     createRecipe({
       variables: { title, description },
-      update: (cache, { data: createRecipe }) => {
-        const data = cache.readQuery<{ recipes: Recipe[] }>({
-          query: GET_RECIPES
+      update: (cache, { data }) => {
+        const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
+          query: GetRecipesDocument
         })
 
-        if (data && createRecipe) {
-          cache.writeQuery({
-            query: GET_RECIPES,
-            data: {
-              recipes: [createRecipe.createRecipe, ...data.recipes]
-            }
-          })
-        }
+        const existingRecipes = getExistingRecipes?.recipes ?? []
+        const newRecipe = data?.createRecipe
+
+        cache.writeQuery({
+          query: GetRecipesDocument,
+          data: {
+            recipes: [newRecipe, ...existingRecipes]
+          }
+        })
       },
     })
   }

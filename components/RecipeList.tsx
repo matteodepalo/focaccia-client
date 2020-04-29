@@ -1,8 +1,7 @@
-import { useQuery } from '@apollo/react-hooks'
-import { Recipe } from '../graphql'
 import gql from 'graphql-tag'
+import { useGetRecipesQuery, Recipe } from '../graphql'
 
-export const GET_RECIPES = gql`
+gql`
   query getRecipes {
     recipes {
       id
@@ -17,7 +16,7 @@ export default function RecipeList() {
     data,
     loading,
     error
-  } = useQuery<{ recipes: Recipe[] }>(GET_RECIPES)
+  } = useGetRecipesQuery()
 
   let recipes: Recipe[] = []
 
