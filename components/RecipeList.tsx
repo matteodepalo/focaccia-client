@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import { useGetRecipesQuery, Recipe, useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument } from '../graphql'
-import { Classes, Icon } from '@blueprintjs/core';
+import { Classes, Icon, Spinner } from '@blueprintjs/core';
 
 gql`
   query getRecipes {
@@ -25,7 +25,7 @@ export default function RecipeList() {
     error
   } = useGetRecipesQuery()
 
-  const [removeRecipe] = useRemoveRecipeMutation()
+  const [removeRecipe, { loading: removeLoading }] = useRemoveRecipeMutation()
 
   let recipes: Recipe[] = []
 
@@ -71,7 +71,9 @@ export default function RecipeList() {
               <td>{recipe.title}</td>
               <td>{recipe.description}</td>
               <td className="delete">
-                <Icon intent="danger" icon="trash" onClick={() => handleRemoveClick(recipe.id) } />
+                {removeLoading ?
+                  <Spinner intent="danger" size={16} />
+                : <Icon intent="danger" icon="trash" onClick={() => handleRemoveClick(recipe.id) } />}
               </td>
             </tr>
           ))}
