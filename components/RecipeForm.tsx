@@ -79,6 +79,13 @@ const RecipeForm = () => {
       </FormGroup>
 
       <Button intent="primary" type="submit" loading={loading} disabled={loading || title === null || description === null}>Save</Button>
+
+      <style jsx>{`
+        form {
+          margin-top: 50px;
+        }
+      `}
+      </style>
     </form>
   )
 }
