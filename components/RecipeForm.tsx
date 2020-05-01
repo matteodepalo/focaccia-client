@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument } from '../graphql'
 import { FormEvent, useState, ChangeEvent } from 'react'
 import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
+import styled from 'styled-components'
 
 gql`
   mutation createRecipe($title: String!, $description: String!) {
@@ -14,6 +15,10 @@ gql`
 `
 
 type InputValue = string | null
+
+const Form = styled.form`
+  margin-top: 50px;
+`
 
 const RecipeForm = () => {
   const [title, setTitle] = useState<InputValue>(null)
@@ -51,7 +56,7 @@ const RecipeForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       <FormGroup
         label="Title"
         labelFor="title"
@@ -79,14 +84,7 @@ const RecipeForm = () => {
       </FormGroup>
 
       <Button intent="primary" type="submit" loading={loading} disabled={loading || title === null || description === null}>Save</Button>
-
-      <style jsx>{`
-        form {
-          margin-top: 50px;
-        }
-      `}
-      </style>
-    </form>
+    </Form>
   )
 }
 
