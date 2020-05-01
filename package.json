@@ -14,6 +14,7 @@
     "apollo-client": "^2.6.8",
     "apollo-link-http": "^1.5.17",
     "axios": "^0.19.2",
+    "formik": "^2.1.4",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
     "isomorphic-unfetch": "^3.0.0",
@@ -31,6 +32,7 @@
     "@types/node": "^13.13.2",
     "@types/react": "^16.9.34",
     "@types/styled-components": "^5.1.0",
+    "babel-plugin-styled-components": "^1.10.7",
     "typescript": "^3.8.3"
   }
 }

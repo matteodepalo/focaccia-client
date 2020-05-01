@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument } from '../graphql'
-import { FormEvent, useState, ChangeEvent } from 'react'
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables } from '../graphql'
 import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
 import styled from 'styled-components'
+import { Formik, Form as FormikForm, Field } from 'formik';
 
 gql`
   mutation createRecipe($name: String!) {
@@ -13,62 +13,56 @@ gql`
   }
 `
 
-type InputValue = string | null
-
-const Form = styled.form`
+const Form = styled(FormikForm)`
   margin-top: 50px;
 `
 
 const RecipeForm = () => {
-  const [name, setName] = useState<InputValue>(null)
-  const [createRecipe, { loading }] = useCreateRecipeMutation()
+  const [createRecipeMutation] = useCreateRecipeMutation()
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const createRecipe = async ({ name }: CreateRecipeMutationVariables) => {
+    await createRecipeMutation({
+      variables: { name },
+      update: (cache, { data }) => {
+        const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
+          query: GetRecipesDocument
+        })
 
-    const form = event.target as HTMLFormElement
-    form.reset()
-    setName(null)
+        const existingRecipes = getExistingRecipes?.recipes ?? []
+        const newRecipe = data?.createRecipe
 
-    if (name) {
-      createRecipe({
-        variables: { name },
-        update: (cache, { data }) => {
-          const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
-            query: GetRecipesDocument
-          })
-
-          const existingRecipes = getExistingRecipes?.recipes ?? []
-          const newRecipe = data?.createRecipe
-
-          cache.writeQuery({
-            query: GetRecipesDocument,
-            data: {
-              recipes: [newRecipe, ...existingRecipes]
-            }
-          })
-        },
-      })
-    }
+        cache.writeQuery({
+          query: GetRecipesDocument,
+          data: {
+            recipes: [newRecipe, ...existingRecipes]
+          }
+        })
+      },
+    })
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <FormGroup
-        label="Name"
-        labelFor="name"
-        labelInfo="(required)"
-        inline={true}
-      >
-        <InputGroup
-          id="name"
-          onChange={
-            (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value.length > 0 ? e.target.value : null)
-          } />
-      </FormGroup>
-
-      <Button intent="primary" type="submit" loading={loading} disabled={loading || name === null}>Save</Button>
-    </Form>
+    <Formik
+      initialValues={{ name: '' }}
+      onSubmit={async (values, actions) => {
+        await createRecipe({ name: values.name })
+        actions.setSubmitting(false);
+        actions.resetForm();
+      }}>
+      {({ values, isSubmitting }) => (
+        <Form>
+          <FormGroup
+            label="Name"
+            labelFor="name"
+            labelInfo="(required)"
+            inline={true}
+          >
+            <Field as={InputGroup} name="name" />
+          </FormGroup>
+          <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || values.name === ''}>Save</Button>
+        </Form>
+      )}
+    </Formik>
   )
 }
 
