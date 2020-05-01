@@ -5,11 +5,10 @@ import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
 import styled from 'styled-components'
 
 gql`
-  mutation createRecipe($title: String!, $description: String!) {
-    createRecipe(data: { title: $title, description: $description }) {
+  mutation createRecipe($name: String!) {
+    createRecipe(data: { name: $name }) {
       id
-      title
-      description
+      name
     }
   }
 `
@@ -21,8 +20,7 @@ const Form = styled.form`
 `
 
 const RecipeForm = () => {
-  const [title, setTitle] = useState<InputValue>(null)
-  const [description, setDescription] = useState<InputValue>(null)
+  const [name, setName] = useState<InputValue>(null)
   const [createRecipe, { loading }] = useCreateRecipeMutation()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -30,12 +28,11 @@ const RecipeForm = () => {
 
     const form = event.target as HTMLFormElement
     form.reset()
-    setTitle(null)
-    setDescription(null)
+    setName(null)
 
-    if (title && description) {
+    if (name) {
       createRecipe({
-        variables: { title, description },
+        variables: { name },
         update: (cache, { data }) => {
           const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
             query: GetRecipesDocument
@@ -58,32 +55,19 @@ const RecipeForm = () => {
   return (
     <Form onSubmit={handleSubmit}>
       <FormGroup
-        label="Title"
-        labelFor="title"
+        label="Name"
+        labelFor="name"
         labelInfo="(required)"
         inline={true}
       >
         <InputGroup
-          id="title"
+          id="name"
           onChange={
-            (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value.length > 0 ? e.target.value : null)
+            (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value.length > 0 ? e.target.value : null)
           } />
       </FormGroup>
 
-      <FormGroup
-        label="Description"
-        labelFor="description"
-        labelInfo="(required)"
-        inline={true}
-      >
-        <InputGroup
-          id="description"
-          onChange={
-            (e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value.length > 0 ? e.target.value : null)
-          } />
-      </FormGroup>
-
-      <Button intent="primary" type="submit" loading={loading} disabled={loading || title === null || description === null}>Save</Button>
+      <Button intent="primary" type="submit" loading={loading} disabled={loading || name === null}>Save</Button>
     </Form>
   )
 }

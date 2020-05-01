@@ -12,3 +12,5 @@ generates:
       withComponent: false
       withHOC: false
       withHooks: true
+      scalars:
+        DateTime: Date

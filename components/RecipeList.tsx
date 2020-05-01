@@ -7,8 +7,7 @@ gql`
   query getRecipes {
     recipes {
       id
-      title
-      description
+      name
     }
   }
 `
@@ -20,7 +19,7 @@ export default function RecipeList() {
     error
   } = useGetRecipesQuery()
 
-  let recipes: Recipe[] = []
+  let recipes: Pick<Recipe, "id" | "name">[] = []
 
   if (loading) return <Spinner />
   if (error) return <p>Error Loading Recipes</p>
@@ -32,8 +31,7 @@ export default function RecipeList() {
         <table className={Classes.HTML_TABLE}>
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Description</th>
+              <th>Name</th>
               <th></th>
             </tr>
           </thead>

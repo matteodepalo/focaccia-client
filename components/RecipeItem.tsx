@@ -17,7 +17,7 @@ const DeleteButton = styled.span`
 
 const iconSize = 16
 
-export default function RecipeItem({ recipe }: { recipe: Recipe }) {
+export default function RecipeItem({ recipe }: { recipe: Pick<Recipe, "id" | "name"> }) {
   const [removeRecipe, { loading }] = useRemoveRecipeMutation()
 
   const handleRemoveClick = () => {
@@ -43,8 +43,7 @@ export default function RecipeItem({ recipe }: { recipe: Recipe }) {
 
   return (
     <tr>
-      <td>{recipe.title}</td>
-      <td>{recipe.description}</td>
+      <td>{recipe.name}</td>
       <td>
         <DeleteButton>
           {loading ?

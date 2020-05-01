@@ -9,13 +9,17 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
+  DateTime: Date;
 };
 
 export type Recipe = {
   id: Scalars['Int'];
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  name: Scalars['String'];
 };
+
 
 export type Query = {
   recipe: Recipe;
@@ -43,17 +47,15 @@ export type MutationRemoveRecipeArgs = {
 };
 
 export type CreateRecipeInput = {
-  title: Scalars['String'];
-  description: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type CreateRecipeMutationVariables = {
-  title: Scalars['String'];
-  description: Scalars['String'];
+  name: Scalars['String'];
 };
 
 
-export type CreateRecipeMutation = { createRecipe: Pick<Recipe, 'id' | 'title' | 'description'> };
+export type CreateRecipeMutation = { createRecipe: Pick<Recipe, 'id' | 'name'> };
 
 export type RemoveRecipeMutationVariables = {
   id: Scalars['Int'];
@@ -65,15 +67,14 @@ export type RemoveRecipeMutation = { removeRecipe: Pick<Recipe, 'id'> };
 export type GetRecipesQueryVariables = {};
 
 
-export type GetRecipesQuery = { recipes: Array<Pick<Recipe, 'id' | 'title' | 'description'>> };
+export type GetRecipesQuery = { recipes: Array<Pick<Recipe, 'id' | 'name'>> };
 
 
 export const CreateRecipeDocument = gql`
-    mutation createRecipe($title: String!, $description: String!) {
-  createRecipe(data: {title: $title, description: $description}) {
+    mutation createRecipe($name: String!) {
+  createRecipe(data: {name: $name}) {
     id
-    title
-    description
+    name
   }
 }
     `;
@@ -92,8 +93,7 @@ export type CreateRecipeMutationFn = ApolloReactCommon.MutationFunction<CreateRe
  * @example
  * const [createRecipeMutation, { data, loading, error }] = useCreateRecipeMutation({
  *   variables: {
- *      title: // value for 'title'
- *      description: // value for 'description'
+ *      name: // value for 'name'
  *   },
  * });
  */
@@ -139,8 +139,7 @@ export const GetRecipesDocument = gql`
     query getRecipes {
   recipes {
     id
-    title
-    description
+    name
   }
 }
     `;
