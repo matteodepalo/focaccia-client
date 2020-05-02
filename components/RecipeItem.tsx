@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import { useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument, Recipe } from '../graphql'
 import { Icon, Spinner } from '@blueprintjs/core'
 import styled from 'styled-components'
+import { FunctionComponent } from 'react'
 
 gql`
   mutation removeRecipe($id: Int!) {
@@ -11,13 +12,17 @@ gql`
   }
 `
 
+interface Props {
+  recipe: Pick<Recipe, "id" | "name">
+}
+
 const DeleteButton = styled.span`
   cursor: pointer;
 `
 
 const iconSize = 16
 
-export default function RecipeItem({ recipe }: { recipe: Pick<Recipe, "id" | "name"> }) {
+const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
   const [removeRecipe, { loading }] = useRemoveRecipeMutation()
 
   const handleRemoveClick = () => {
@@ -54,3 +59,5 @@ export default function RecipeItem({ recipe }: { recipe: Pick<Recipe, "id" | "na
     </tr>
   )
 }
+
+export default RecipeItem

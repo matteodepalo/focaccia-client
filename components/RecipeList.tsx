@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import { useGetRecipesQuery, Recipe } from '../graphql'
 import { Classes, Spinner } from '@blueprintjs/core'
 import RecipeItem from './RecipeItem'
+import { Box } from 'reflexbox/styled-components'
 
 gql`
   query getRecipes {
@@ -12,7 +13,7 @@ gql`
   }
 `
 
-export default function RecipeList() {
+const RecipeList = () => {
   const {
     data,
     loading,
@@ -26,7 +27,7 @@ export default function RecipeList() {
   if (data) recipes = data.recipes
 
   return (
-    <div>
+    <Box>
       {recipes.length > 0 ?
         <table className={Classes.HTML_TABLE}>
           <thead>
@@ -41,6 +42,8 @@ export default function RecipeList() {
             ))}
           </tbody>
         </table> : <p>No recipes</p>}
-    </div>
+    </Box>
   )
 }
+
+export default RecipeList

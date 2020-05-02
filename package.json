@@ -22,6 +22,7 @@
     "react": "16.13.1",
     "react-apollo": "^3.1.5",
     "react-dom": "16.13.1",
+    "reflexbox": "^4.0.6",
     "styled-components": "^5.1.0"
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "@graphql-codegen/typescript-react-apollo": "1.13.3",
     "@types/node": "^13.13.2",
     "@types/react": "^16.9.34",
+    "@types/reflexbox": "^4.0.0",
     "@types/styled-components": "^5.1.0",
     "babel-plugin-styled-components": "^1.10.7",
     "typescript": "^3.8.3"
