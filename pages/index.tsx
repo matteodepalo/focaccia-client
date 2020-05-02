@@ -1,15 +1,12 @@
 import { withApollo } from '../lib/apollo'
-import RecipeForm from '../components/RecipeForm'
 import RecipeList from '../components/RecipeList'
-import styles from './index.module.css'
+import Layout from '../components/Layout'
 
 const Home = () => {
   return (
-    <section className={styles['main-section']}>
-      <h1>Recipes</h1>
+    <Layout>
       <RecipeList/>
-      <RecipeForm/>
-    </section>
+    </Layout>
   )
 }
 

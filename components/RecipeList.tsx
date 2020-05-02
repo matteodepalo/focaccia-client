@@ -1,8 +1,9 @@
 import gql from 'graphql-tag'
 import { useGetRecipesQuery, Recipe } from '../graphql'
-import { Classes, Spinner } from '@blueprintjs/core'
+import { Classes, Spinner, NonIdealState, AnchorButton } from '@blueprintjs/core'
 import RecipeItem from './RecipeItem'
 import { Box } from 'reflexbox/styled-components'
+import Link from 'next/link'
 
 gql`
   query getRecipes {
@@ -12,6 +13,16 @@ gql`
     }
   }
 `
+
+const EmptyList = () => {
+  return (
+    <NonIdealState
+      icon="document"
+      title="You have no saved recipes"
+      description="Create a new recipe"
+      action={<Link href="/recipes/new"><AnchorButton intent="primary" text="Create"/></Link>} />
+  )
+}
 
 const RecipeList = () => {
   const {
@@ -41,7 +52,7 @@ const RecipeList = () => {
               <RecipeItem recipe={recipe} key={recipe.id} />
             ))}
           </tbody>
-        </table> : <p>No recipes</p>}
+        </table> : <EmptyList />}
     </Box>
   )
 }

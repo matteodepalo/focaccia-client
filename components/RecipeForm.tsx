@@ -3,6 +3,7 @@ import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRec
 import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
 import styled from 'styled-components'
 import { Formik, Form as FormikForm, Field } from 'formik';
+import { FunctionComponent } from 'react'
 
 gql`
   mutation createRecipe($name: String!) {
@@ -13,11 +14,15 @@ gql`
   }
 `
 
+interface Props {
+  onSave: () => void
+}
+
 const Form = styled(FormikForm)`
   margin-top: 50px;
 `
 
-const RecipeForm = () => {
+const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
   const [createRecipeMutation] = useCreateRecipeMutation()
 
   const createRecipe = async ({ name }: CreateRecipeMutationVariables) => {
@@ -48,6 +53,7 @@ const RecipeForm = () => {
         await createRecipe({ name: values.name })
         actions.setSubmitting(false);
         actions.resetForm();
+        onSave()
       }}>
       {({ values, isSubmitting }) => (
         <Form>
