@@ -32,6 +32,7 @@ const Layout: FunctionComponent = ({ children }) => {
       <Container p={4}>
         <Head>
           <title>Focaccia</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
         </Head>
         {children}
       </Container>
