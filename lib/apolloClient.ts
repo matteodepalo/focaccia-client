@@ -3,6 +3,7 @@ import { HttpLink } from 'apollo-link-http'
 import fetch from 'isomorphic-unfetch'
 import { NextPageContext } from 'next'
 import { ApolloClient as Client } from 'apollo-client'
+const config: Config = require('./config')
 
 export class ApolloClient extends Client<NormalizedCacheObject> {
   toJSON!: Function
@@ -14,7 +15,7 @@ export default function createApolloClient(initialState: NormalizedCacheObject, 
   return new ApolloClient({
     ssrMode: Boolean(ctx),
     link: new HttpLink({
-      uri: process.env.API_URL, // Server URL (must be absolute)
+      uri: config.API_URL, // Server URL (must be absolute)
       fetch
     }),
     cache: new InMemoryCache().restore(initialState)

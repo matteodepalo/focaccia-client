@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import App, { AppContext as NextAppContext } from 'next/app'
 import Head from 'next/head'
 import { ApolloProvider } from '@apollo/react-hooks'
@@ -75,7 +75,7 @@ export const initOnContext = (ctx: PageOrAppContext): RequiredPageOrAppContext =
  * @param  {NormalizedCacheObject} initialState
  * @param  {NextPageContext} ctx
  */
-const initApolloClient = (initialState: NormalizedCacheObject, ctx?: NextPageContext): ApolloClient => {
+const initApolloClient = (initialState: NormalizedCacheObject, ctx?: NextPageContext) => {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
@@ -98,7 +98,7 @@ const initApolloClient = (initialState: NormalizedCacheObject, ctx?: NextPageCon
  * @param  {Boolean} [withApolloOptions.ssr=false]
  * @returns {(PageComponent: ReactNode) => ReactNode}
  */
-export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage): ReactNode => {
+export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage) => {
   const WithApollo = ({ apolloClient, apolloState, ...pageProps }: Props) => {
     let client
     if (apolloClient) {

@@ -1,13 +1,17 @@
 import { withApollo } from '../lib/apollo'
-import RecipeList from '../components/RecipeList'
 import Layout from '../components/Layout'
+import { useFetchUser } from '../lib/user'
+import { NonIdealState } from '@blueprintjs/core'
 
 const Home = () => {
+  const { user, loading } = useFetchUser()
+
   return (
-    <Layout>
-      <RecipeList/>
+    <Layout user={user} loading={loading}>
+      <NonIdealState
+        title="Welcome to Focaccia" />
     </Layout>
   )
 }
 
-export default withApollo({ ssr: true })(Home)
+export default withApollo()(Home)
