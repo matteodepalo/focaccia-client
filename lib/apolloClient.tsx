@@ -1,10 +1,14 @@
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
-import config from './next.config'
 import fetch from 'isomorphic-unfetch'
+import { NextPageContext } from 'next'
+import { ApolloClient as Client } from 'apollo-client'
 
-export default function createApolloClient(initialState, ctx) {
+export class ApolloClient extends Client<NormalizedCacheObject> {
+  toJSON!: Function
+}
+
+export default function createApolloClient(initialState: NormalizedCacheObject, ctx?: NextPageContext) {
   // The `ctx` (NextPageContext) will only be present on the server.
   // use it to extract auth headers (ctx.req) or similar.
   return new ApolloClient({
