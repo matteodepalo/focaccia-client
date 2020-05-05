@@ -1,6 +1,7 @@
 import { withApollo } from '../lib/apollo'
 import Layout from '../components/Layout'
 import { NonIdealState } from '@blueprintjs/core'
+import { withAuthenticated } from '../lib/authenticated'
 
 const Home = () => {
   return (
@@ -11,4 +12,4 @@ const Home = () => {
   )
 }
 
-export default withApollo({ ssr: true })(Home)
+export default withAuthenticated()(withApollo({ ssr: true })(Home))

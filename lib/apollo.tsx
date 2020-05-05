@@ -8,11 +8,11 @@ import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 
 // On the client, we store the Apollo Client in the following variable.
 // This prevents the client from reinitializing between page transitions.
-let globalApolloClient: ApolloClient | null = null
+let globalApolloClient: ApolloClient
 
 interface Props {
-  apolloClient: ApolloClient | null
-  apolloState: NormalizedCacheObject
+  apolloClient?: ApolloClient
+  apolloState?: NormalizedCacheObject
 }
 
 type PageContext = NextPageContext & Props
@@ -21,9 +21,6 @@ type AppContext = NextAppContext & Props & {
 }
 
 type PageOrAppContext = PageContext | AppContext
-type RequiredPageOrAppContext = PageOrAppContext & {
-  apolloClient: ApolloClient
-}
 
 function inAppContext(ctx: any): ctx is AppContext {
   return "ctx" in ctx
@@ -35,7 +32,7 @@ function inAppContext(ctx: any): ctx is AppContext {
  * inside getStaticProps, getStaticPaths or getServerSideProps
  * @param {NextPageContext | NextAppContext} ctx
  */
-export const initOnContext = (ctx: PageOrAppContext): RequiredPageOrAppContext => {
+export const initOnContext = (ctx: PageOrAppContext) => {
   // We consider installing `withApollo({ ssr: true })` on global App level
   // as antipattern since it disables project wide Automatic Static Optimization.
   if (process.env.NODE_ENV === 'development') {
@@ -66,7 +63,7 @@ export const initOnContext = (ctx: PageOrAppContext): RequiredPageOrAppContext =
     ctx.ctx.apolloClient = apolloClient
   }
 
-  return ctx as RequiredPageOrAppContext
+  return ctx
 }
 
 /**
@@ -98,20 +95,20 @@ const initApolloClient = (initialState: NormalizedCacheObject, ctx?: NextPageCon
  * @param  {Boolean} [withApolloOptions.ssr=false]
  * @returns {(PageComponent: ReactNode) => ReactNode}
  */
-export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage) => {
-  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: Props) => {
+export const withApollo = ({ ssr = false } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
+  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: P & Props) => {
     let client
     if (apolloClient) {
       // Happens on: getDataFromTree & next.js ssr
       client = apolloClient
     } else {
       // Happens on: next.js csr
-      client = initApolloClient(apolloState, undefined)
+      client = initApolloClient(apolloState || {}, undefined)
     }
 
     return (
       <ApolloProvider client={client}>
-        <PageComponent {...pageProps} />
+        <PageComponent {...pageProps as P} />
       </ApolloProvider>
     )
   }
@@ -124,12 +121,13 @@ export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage) =>
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async (ctx: PageOrAppContext) => {
+    WithApollo.getInitialProps = async (ctx: PageOrAppContext): Promise<P & Props> => {
       const { apolloClient } = initOnContext(ctx)
 
       // Run wrapped getInitialProps methods
-      let pageProps = {}
-      if (PageComponent.getInitialProps && !inAppContext(ctx)) {
+      let pageProps
+
+      if (!inAppContext(ctx) && PageComponent.getInitialProps) {
         pageProps = await PageComponent.getInitialProps(ctx)
       } else if (inAppContext(ctx)) {
         pageProps = await App.getInitialProps(ctx)
@@ -141,7 +139,7 @@ export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage) =>
         // When redirecting, the response is finished.
         // No point in continuing to render
         if (!inAppContext(ctx) && ctx.res && ctx.res.finished) {
-          return pageProps
+          return pageProps as P & Props
         }
 
         // Only if dataFromTree is enabled
@@ -154,7 +152,7 @@ export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage) =>
             // Since AppComponents and PageComponents have different context types
             // we need to modify their props a little.
             let props: any
-            if (inAppContext(ctx)) {
+            if (!inAppContext(ctx)) {
               props = { ...pageProps, apolloClient }
             } else {
               props = { pageProps: { ...pageProps, apolloClient } }
@@ -182,11 +180,11 @@ export const withApollo = ({ ssr = false } = {}) => (PageComponent: NextPage) =>
       return {
         ...pageProps,
         // Extract query data from the Apollo store
-        apolloState: apolloClient.cache.extract(),
+        apolloState: apolloClient?.cache.extract(),
         // Provide the client for ssr. As soon as this payload
         // gets JSON.stringified it will remove itself.
         apolloClient: ctx.apolloClient,
-      }
+      } as P & Props
     }
   }
 

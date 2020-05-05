@@ -1,39 +1,39 @@
 import { NextPage, NextPageContext } from "next"
 import { User } from "./user"
 import auth0 from "./auth0"
-import App, { AppContext } from "next/app"
 import UserContext from "../contexts/userContext"
 
 export interface Props {
   user: User | null
 }
 
-function inAppContext(ctx: any): ctx is AppContext {
-  return "ctx" in ctx
-}
-
-export const withAuthenticated = () => (PageComponent: NextPage) => {
-  const WithAuthenticated = ({ user, ...pageProps }: Props) => {
+export const withAuthenticated = () => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
+  const WithAuthenticated = ({ user, ...pageProps }: P & Props) => {
     return (
       <UserContext.Provider value={user}>
-        <PageComponent {...pageProps} />
+        <PageComponent {...pageProps as P} />
       </UserContext.Provider>
     )
+  }
+
+   // Set the correct displayName in development
+   if (process.env.NODE_ENV !== 'production') {
+    const displayName =
+      PageComponent.displayName || PageComponent.name || 'Component'
+    WithAuthenticated.displayName = `withAuthenticated(${displayName})`
   }
 
   WithAuthenticated.getInitialProps = async (ctx: NextPageContext) => {
     const { res, req } = ctx
 
-    let pageProps = {}
+    let pageProps = {} as P
 
-    if (PageComponent.getInitialProps && !inAppContext(ctx)) {
+    if (PageComponent.getInitialProps) {
       pageProps = await PageComponent.getInitialProps(ctx)
-    } else if (inAppContext(ctx)) {
-      pageProps = await App.getInitialProps(ctx)
     }
 
     if (!req || !res) {
-      return { ...pageProps, user: null }
+      return { ...pageProps, user: null } as P & Props
     } else {
       const session = await auth0.getSession(req)
 
@@ -42,10 +42,10 @@ export const withAuthenticated = () => (PageComponent: NextPage) => {
           Location: '/api/login',
         })
         res.end()
-        return { ...pageProps, user: null }
+        return { ...pageProps, user: null } as P & Props
       }
 
-      return { ...pageProps, user: session.user }
+      return { ...pageProps, user: session.user } as P & Props
     }
   }
 
