@@ -9,3 +9,7 @@ interface Config {
   SESSION_COOKIE_SECRET?: string,
   SESSION_COOKIE_LIFETIME?: number
 }
+
+const config: Config
+
+export default config

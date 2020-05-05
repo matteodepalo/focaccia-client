@@ -3,7 +3,7 @@ import { useFetchUser, User } from "./user"
 import Layout from "../components/Layout"
 import auth0 from "./auth0"
 
-interface HOCProps {
+interface Props {
   required: boolean
 }
 
@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async fun
   return { props: { user: session.user } }
 }
 
-export const withAuthenticated = ({ required = false, ...pageProps }: HOCProps) => (PageComponent: NextPage) => {
+export const withAuthenticated = ({ required = false, ...pageProps }: Props) => (PageComponent: NextPage) => {
   const { user, loading } = useFetchUser({ required: required })
 
   return (
