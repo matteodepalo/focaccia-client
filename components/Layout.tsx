@@ -5,19 +5,13 @@ import styled from "styled-components"
 import { Box } from "reflexbox/styled-components"
 import Link from "next/link"
 import { useRouter } from 'next/router'
-import { User } from "../lib/user"
+import UserContext from "../contexts/userContext"
 
 const Container = styled(Box)`
   max-width: 1024px;
   height: 100%;
 `
-
-interface Props {
-  user: User | null,
-  loading: boolean
-}
-
-const Layout: FunctionComponent<Props> = ({ user, loading = false, children }) => {
+const Layout: FunctionComponent = ({ children }) => {
   const router = useRouter()
 
   return (
@@ -32,23 +26,26 @@ const Layout: FunctionComponent<Props> = ({ user, loading = false, children }) =
 
           <Navbar.Divider />
 
-          {!loading &&
-            (user ? (
-              <>
-                <Link href="/recipes">
-                  <AnchorButton minimal={true} icon="document" text="Recipes" disabled={router.pathname === '/recipes'} />
-                </Link>
-                <Link href="/recipes/new">
-                  <AnchorButton minimal={true} icon="plus" text="Add" disabled={router.pathname === '/recipes/new'} />
-                </Link>
+          <UserContext.Consumer>
+            {(user) =>
+              user ? (
+                <>
+                  <Link href="/recipes">
+                    <AnchorButton minimal={true} icon="document" text="Recipes" disabled={router.pathname === '/recipes'} />
+                  </Link>
+                  <Link href="/recipes/new">
+                    <AnchorButton minimal={true} icon="plus" text="Add" disabled={router.pathname === '/recipes/new'} />
+                  </Link>
 
-                <Navbar.Divider />
+                  <Navbar.Divider />
 
-                <AnchorButton minimal={true} icon="log-out" text="Logout" href="/api/logout" />
-              </>
-            ) : (
-              <AnchorButton minimal={true} icon="log-in" text="Login" href="/api/login" />
-            ))}
+                  <AnchorButton minimal={true} icon="log-out" text="Logout" href="/api/logout" />
+                </>
+              ) : (
+                <AnchorButton minimal={true} icon="log-in" text="Login" href="/api/login" />
+              )}
+          </UserContext.Consumer>
+
         </Navbar.Group>
       </Navbar>
 

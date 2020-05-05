@@ -1,11 +1,14 @@
 import { withApollo } from '../../lib/apollo'
 import RecipeList from '../../components/RecipeList'
 import { withAuthenticated } from '../../lib/authenticated'
+import Layout from '../../components/Layout'
 
 const Recipes = () => {
   return (
-    <RecipeList/>
+    <Layout>
+      <RecipeList/>
+    </Layout>
   )
 }
 
-export default withAuthenticated({ required: true })(withApollo({ ssr: true })(Recipes))
+export default withAuthenticated()(withApollo({ ssr: true })(Recipes))
