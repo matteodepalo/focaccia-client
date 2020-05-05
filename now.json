@@ -6,7 +6,7 @@
       "AUTH0_CLIENT_ID": "qQj5FuRpVJmBrRcu6RO05f2AyiYRzpXi",
       "AUTH0_CLIENT_SECRET": "@auth0_client_secret",
       "REDIRECT_URI": "https://focaccia-client.now.sh/api/callback",
-      "POST_LOGOUT_REDIRECT_URI": "https://focaccia-client.now.sh/recipes",
+      "POST_LOGOUT_REDIRECT_URI": "https://focaccia-client.now.sh",
       "SESSION_COOKIE_SECRET": "@session_cookie_secret",
       "SESSION_COOKIE_LIFETIME": "7200"
     }
