@@ -14,4 +14,4 @@ const NewRecipe = () => {
   )
 }
 
-export default withAuthenticated()(withApollo({ ssr: true })(NewRecipe))
+export default withAuthenticated({ required: true })(withApollo({ ssr: true })(NewRecipe))

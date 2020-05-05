@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function callback(req: NextApiRequest, res: NextApiResponse) {
   try {
-    await auth0.handleCallback(req, res, { redirectTo: '/' })
+    await auth0.handleCallback(req, res, { redirectTo: '/recipes' })
   } catch (error) {
     console.error(error)
     res.status(error.status || 500).end(error.message)

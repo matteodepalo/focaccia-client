@@ -1,16 +1,24 @@
 import { NextPage, NextPageContext } from "next"
-import { User } from "./user"
+import { User, useFetchUser } from "./user"
 import auth0 from "./auth0"
 import UserContext from "../contexts/userContext"
 
 export interface Props {
-  user: User | null
+  user?: User | null
 }
 
-export const withAuthenticated = () => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
+let currentUser: User | null
+
+export const withAuthenticated = ({ required = false } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
   const WithAuthenticated = ({ user, ...pageProps }: P & Props) => {
+    if (typeof user !== 'undefined') {
+      currentUser = user
+    } else {
+      currentUser = currentUser ?? useFetchUser({ required: required }).user
+    }
+
     return (
-      <UserContext.Provider value={user}>
+      <UserContext.Provider value={currentUser}>
         <PageComponent {...pageProps as P} />
       </UserContext.Provider>
     )
@@ -32,20 +40,20 @@ export const withAuthenticated = () => <P extends object>(PageComponent: NextPag
       pageProps = await PageComponent.getInitialProps(ctx)
     }
 
-    if (!req || !res) {
-      return { ...pageProps, user: null } as P & Props
-    } else {
+    if (req && res) {
       const session = await auth0.getSession(req)
 
-      if (!session || !session.user) {
+      if (required && (!session || !session.user)) {
         res.writeHead(302, {
           Location: '/api/login',
         })
         res.end()
         return { ...pageProps, user: null } as P & Props
+      } else {
+        return { ...pageProps, user: session?.user ?? null } as P & Props
       }
-
-      return { ...pageProps, user: session.user } as P & Props
+    } else {
+      return { ...pageProps } as P & Props
     }
   }
 
