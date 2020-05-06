@@ -1,4 +1,3 @@
-import { withApollo } from '../lib/apollo'
 import { NonIdealState } from '@blueprintjs/core'
 import { withAuthenticated } from '../lib/authenticated'
 
@@ -9,4 +8,4 @@ const Home = () => {
   )
 }
 
-export default withAuthenticated({ ssr: false, required: false })(withApollo({ ssr: false })(Home))
+export default withAuthenticated({ ssr: false, required: false })(Home)
