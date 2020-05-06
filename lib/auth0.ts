@@ -7,9 +7,12 @@ export default initAuth0({
   scope: config.AUTH0_SCOPE,
   domain: config.AUTH0_DOMAIN,
   redirectUri: config.REDIRECT_URI,
+  audience: config.API_URL,
   postLogoutRedirectUri: config.POST_LOGOUT_REDIRECT_URI,
   session: {
     cookieSecret: config.SESSION_COOKIE_SECRET!,
     cookieLifetime: config.SESSION_COOKIE_LIFETIME,
+    cookieDomain: config.API_URL,
+    storeAccessToken: true
   },
 })
