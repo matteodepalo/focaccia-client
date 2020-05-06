@@ -95,7 +95,7 @@ const initApolloClient = (initialState: NormalizedCacheObject, ctx?: NextPageCon
  * @param  {Boolean} [withApolloOptions.ssr=false]
  * @returns {(PageComponent: ReactNode) => ReactNode}
  */
-export const withApollo = ({ ssr = false } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
+export const withApollo = ({ ssr = true } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
   const WithApollo = ({ apolloClient, apolloState, ...pageProps }: P & Props) => {
     let client
     if (apolloClient) {

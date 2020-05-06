@@ -12,4 +12,4 @@ const Home = () => {
   )
 }
 
-export default withAuthenticated()(withApollo({ ssr: true })(Home))
+export default withAuthenticated({ ssr: false, required: false })(withApollo({ ssr: false })(Home))

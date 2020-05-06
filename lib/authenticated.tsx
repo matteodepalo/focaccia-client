@@ -7,7 +7,7 @@ export interface Props {
   user?: User | null
 }
 
-export const withAuthenticated = ({ required = false } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
+export const withAuthenticated = ({ required = true, ssr = true } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
   const WithAuthenticated = ({ user, ...pageProps }: P & Props) => {
     let currentUser;
 
@@ -34,29 +34,31 @@ export const withAuthenticated = ({ required = false } = {}) => <P extends objec
     WithAuthenticated.displayName = `withAuthenticated(${displayName})`
   }
 
-  WithAuthenticated.getInitialProps = async (ctx: NextPageContext) => {
-    const { res, req } = ctx
+  if (ssr || PageComponent.getInitialProps) {
+    WithAuthenticated.getInitialProps = async (ctx: NextPageContext) => {
+      const { res, req } = ctx
 
-    let pageProps = {} as P
+      let pageProps = {} as P
 
-    if (PageComponent.getInitialProps) {
-      pageProps = await PageComponent.getInitialProps(ctx)
-    }
-
-    if (req && res) {
-      const session = await auth0.getSession(req)
-
-      if (required && (!session || !session.user)) {
-        res.writeHead(302, {
-          Location: '/api/login',
-        })
-        res.end()
-        return { ...pageProps, user: null } as P & Props
-      } else {
-        return { ...pageProps, user: session?.user ?? null } as P & Props
+      if (PageComponent.getInitialProps) {
+        pageProps = await PageComponent.getInitialProps(ctx)
       }
-    } else {
-      return { ...pageProps } as P & Props
+
+      if (req && res) {
+        const session = await auth0.getSession(req)
+
+        if (required && (!session || !session.user)) {
+          res.writeHead(302, {
+            Location: '/api/login',
+          })
+          res.end()
+          return { ...pageProps, user: null } as P & Props
+        } else {
+          return { ...pageProps, user: session?.user ?? null } as P & Props
+        }
+      } else {
+        return { ...pageProps } as P & Props
+      }
     }
   }
 
