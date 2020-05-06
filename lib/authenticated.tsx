@@ -1,5 +1,5 @@
 import { NextPage, NextPageContext } from "next"
-import { User, useFetchUser } from "./user"
+import { User, useFetchUser, CurrentUser } from "./user"
 import auth0 from "./auth0"
 import UserContext from "../contexts/userContext"
 
@@ -7,14 +7,17 @@ export interface Props {
   user?: User | null
 }
 
-let currentUser: User | null
-
 export const withAuthenticated = ({ required = false } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
   const WithAuthenticated = ({ user, ...pageProps }: P & Props) => {
-    if (typeof user !== 'undefined') {
+    let currentUser;
+
+    if (user) {
+      // Cache the user in the client after the first render
+      CurrentUser.set(user)
       currentUser = user
     } else {
-      currentUser = currentUser ?? useFetchUser({ required: required }).user
+      // If the user is logged out try to fetch the user client side and redirect when required
+      currentUser = useFetchUser({ required: required }).user
     }
 
     return (

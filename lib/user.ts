@@ -10,9 +10,31 @@ declare global {
   }
 }
 
+export class CurrentUser {
+  static get() {
+    if (typeof window !== 'undefined' && window.__user) {
+      return window.__user
+    } else {
+      return undefined
+    }
+  }
+
+  static set(user: User) {
+    if (typeof window !== 'undefined') {
+      window.__user = user
+    }
+  }
+
+  static delete() {
+    if (typeof window !== 'undefined') {
+      delete window.__user
+    }
+  }
+}
+
 export async function fetchUser(cookie = '') {
-  if (typeof window !== 'undefined' && window.__user) {
-    return window.__user
+  if (CurrentUser.get()) {
+    return CurrentUser.get()
   }
 
   const res = await fetch(
@@ -27,27 +49,25 @@ export async function fetchUser(cookie = '') {
   )
 
   if (!res.ok) {
-    delete window.__user
+    CurrentUser.delete()
     return null
   }
 
   const json = await res.json()
-  if (typeof window !== 'undefined') {
-    window.__user = json
-  }
+  CurrentUser.set(json)
   return json
 }
 
 export function useFetchUser({ required } = { required: false }) {
   const [loading, setLoading] = useState(
-    () => !(typeof window !== 'undefined' && window.__user)
+    () => !(CurrentUser.get())
   )
   const [user, setUser] = useState(() => {
     if (typeof window === 'undefined') {
       return null
     }
 
-    return window.__user || null
+    return CurrentUser.get() ?? null
   })
 
   useEffect(
