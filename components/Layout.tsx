@@ -1,18 +1,23 @@
-import { Navbar, Alignment, AnchorButton, Menu, Popover } from "@blueprintjs/core"
+import { Navbar, Alignment, AnchorButton, Menu, Popover, Spinner } from "@blueprintjs/core"
 import Head from "next/head"
 import { FunctionComponent } from "react"
 import styled from "styled-components"
 import { Box } from "reflexbox/styled-components"
 import Link from "next/link"
 import { useRouter } from 'next/router'
-import UserContext from "../contexts/userContext"
+import { User } from "../lib/user"
 
 const Container = styled(Box)`
   max-width: 1024px;
   height: 100%;
 `
 
-const Layout: FunctionComponent = ({ children }) => {
+interface Props {
+  user: User | null
+  loading: boolean
+}
+
+const Layout: FunctionComponent<Props> = ({ user, loading = false, children }) => {
   const router = useRouter()
 
   const userMenu = <Menu>
@@ -21,34 +26,32 @@ const Layout: FunctionComponent = ({ children }) => {
 
   return (
     <>
+
       <Navbar>
         <Navbar.Group align={Alignment.LEFT}>
-          <Navbar.Heading>
-            <UserContext.Consumer>
-              {(user) =>
-                user ? (
-                  <Popover content={userMenu}>
-                    <AnchorButton minimal={true} icon="user" text={user.nickname} />
-                  </Popover>
-                ) : <AnchorButton minimal={true} icon="log-in" text="Login" href="/api/login" />}
-            </UserContext.Consumer>
-          </Navbar.Heading>
+          {loading ? <Spinner size={Spinner.SIZE_SMALL} /> :
+          <>
+            <Navbar.Heading>
+              {user ?
+                <Popover content={userMenu}>
+                  <AnchorButton minimal={true} icon="user" text={user.nickname} />
+                </Popover>
+              : <AnchorButton minimal={true} icon="log-in" text="Login" href="/api/login" />}
+            </Navbar.Heading>
 
-          <UserContext.Consumer>
-            {(user) =>
-              user ? (
-                <>
-                  <Navbar.Divider />
+            {user ?
+              <>
+                <Navbar.Divider />
 
-                  <Link href="/recipes">
-                    <AnchorButton minimal={true} icon="document" text="Recipes" disabled={router.pathname === '/recipes'} />
-                  </Link>
-                  <Link href="/recipes/new">
-                    <AnchorButton minimal={true} icon="plus" text="Add" disabled={router.pathname === '/recipes/new'} />
-                  </Link>
-                </>
-              ): null}
-          </UserContext.Consumer>
+                <Link href="/recipes">
+                  <AnchorButton minimal={true} icon="document" text="Recipes" disabled={router.pathname === '/recipes'} />
+                </Link>
+                <Link href="/recipes/new">
+                  <AnchorButton minimal={true} icon="plus" text="Add" disabled={router.pathname === '/recipes/new'} />
+                </Link>
+              </>
+            : null}
+          </>}
         </Navbar.Group>
       </Navbar>
 
