@@ -1,5 +1,5 @@
 import { NonIdealState } from '@blueprintjs/core'
-import { withAuthenticated } from '../lib/authenticated'
+import { withAuthenticated } from '../lib/withAuthenticated'
 
 const Home = () => {
   return (

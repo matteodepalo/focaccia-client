@@ -1,6 +1,7 @@
-import { withApollo } from '../../lib/apollo'
+import withApollo from '../../lib/withApollo'
 import RecipeList from '../../components/RecipeList'
-import { withAuthenticated } from '../../lib/authenticated'
+import { withAuthenticated } from '../../lib/withAuthenticated'
+import { getDataFromTree } from '@apollo/react-ssr';
 
 const Recipes = () => {
   return (
@@ -8,4 +9,4 @@ const Recipes = () => {
   )
 }
 
-export default withAuthenticated()(withApollo()(Recipes))
+export default withApollo(withAuthenticated()(Recipes), { getDataFromTree })
