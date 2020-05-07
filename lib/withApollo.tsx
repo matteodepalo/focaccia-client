@@ -32,6 +32,8 @@ export default withApollo(
       fetch
     })
 
+    // TODO: Customize fetch so that whenever you encounter a 401 we refresh the token and retry the request with the refreshed token
+
     return new ApolloClient({
       link: authLink.concat(httpLink),
       cache: new InMemoryCache().restore(initialState || {})

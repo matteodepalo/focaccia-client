@@ -10,5 +10,8 @@
       "SESSION_COOKIE_SECRET": "@session_cookie_secret",
       "SESSION_COOKIE_LIFETIME": "7200"
     }
+  },
+  "github": {
+    "silent": true
   }
 }
