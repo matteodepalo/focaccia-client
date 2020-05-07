@@ -16,6 +16,7 @@ export default function createApolloClient(initialState: NormalizedCacheObject, 
     ssrMode: Boolean(ctx),
     link: new HttpLink({
       uri: config.API_URL, // Server URL (must be absolute)
+      credentials: 'include',
       fetch
     }),
     cache: new InMemoryCache().restore(initialState)
