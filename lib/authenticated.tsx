@@ -1,6 +1,5 @@
 import { NextPage, NextPageContext } from "next"
 import { User, useFetchUser, CurrentUser } from "./user"
-import auth0 from "./auth0"
 import Layout from "../components/Layout"
 
 export interface Props {
@@ -47,8 +46,9 @@ export const withAuthenticated = ({ required = true, ssr = true } = {}) => <P ex
         pageProps = await PageComponent.getInitialProps(ctx)
       }
 
-      if (req && res) {
-        const session = await auth0.getSession(req)
+      if (req && res && typeof window === 'undefined') {
+        const auth0 = await import('./auth0')
+        const session = await auth0.default.getSession(req)
 
         if (required && (!session || !session.user)) {
           res.writeHead(302, {
