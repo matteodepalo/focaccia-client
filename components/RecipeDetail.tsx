@@ -16,7 +16,7 @@ const RecipeDetail = ({ id }: { id: number }) => {
     data,
     loading,
     error
-  } = useGetRecipeQuery({ variables: { id: id }})
+  } = useGetRecipeQuery({ variables: { id: id } })
 
   let recipe: Pick<Recipe, "id" | "name"> | null = null
 
@@ -25,7 +25,11 @@ const RecipeDetail = ({ id }: { id: number }) => {
   if (data) recipe = data.recipe
 
   return (
-    <p>{recipe?.name}</p>
+    <>
+      {recipe ?
+        <p>{recipe.name}</p>
+      : null}
+    </>
   )
 }
 
