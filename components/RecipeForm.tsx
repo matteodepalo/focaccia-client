@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables } from '../graphql'
-import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
+import { Button, FormGroup, InputGroup, ControlGroup, HTMLSelect } from '@blueprintjs/core'
 import styled from 'styled-components'
-import { Formik, Form as FormikForm, Field } from 'formik';
+import { Formik, Form as FormikForm, Field, FieldProps } from 'formik'
 import { FunctionComponent } from 'react'
 
 gql`
@@ -20,7 +20,27 @@ interface Props {
 
 const Form = styled(FormikForm)`
   margin-top: 50px;
+  width: 500px;
 `
+
+type YeastType = 'natural' | 'dry'
+type YeastLabel = 'Natural' | 'Dry'
+
+interface Yeast {
+  value: YeastType,
+  label: YeastLabel
+}
+
+const yeasts: Yeast[] = [
+  {
+    label: 'Natural',
+    value: 'natural'
+  },
+  {
+    label: 'Dry',
+    value: 'dry'
+  }
+]
 
 const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
   const [createRecipeMutation] = useCreateRecipeMutation()
@@ -46,6 +66,14 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
     })
   }
 
+  const YeastSelect: FunctionComponent<FieldProps['field']> = (props) => {
+    return <HTMLSelect
+      options={yeasts}
+      value={props.value}
+      onChange={props.onChange}
+      name={props.name} />
+  }
+
   return (
     <Formik
       initialValues={{ name: '' }}
@@ -65,6 +93,19 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
           >
             <Field as={InputGroup} name="name" />
           </FormGroup>
+
+          <FormGroup
+            label="Yeast"
+            labelFor="yeast"
+            labelInfo="(required)"
+            inline={true}
+          >
+            <ControlGroup>
+              <Field as={YeastSelect} name="yeastType" />
+              <Field as={InputGroup} name="yeastWeight" />
+            </ControlGroup>
+          </FormGroup>
+
           <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || values.name === ''}>Save</Button>
         </Form>
       )}
