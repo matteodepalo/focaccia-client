@@ -51,6 +51,13 @@ export type CreateRecipeInput = {
   name: Scalars['String'];
 };
 
+export type GetRecipeQueryVariables = {
+  id: Scalars['Int'];
+};
+
+
+export type GetRecipeQuery = { recipe: Pick<Recipe, 'id' | 'name'> };
+
 export type CreateRecipeMutationVariables = {
   name: Scalars['String'];
 };
@@ -71,6 +78,40 @@ export type GetRecipesQueryVariables = {};
 export type GetRecipesQuery = { recipes: Array<Pick<Recipe, 'id' | 'name'>> };
 
 
+export const GetRecipeDocument = gql`
+    query getRecipe($id: Int!) {
+  recipe(id: $id) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetRecipeQuery__
+ *
+ * To run a query within a React component, call `useGetRecipeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecipeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecipeQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetRecipeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetRecipeQuery, GetRecipeQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetRecipeQuery, GetRecipeQueryVariables>(GetRecipeDocument, baseOptions);
+      }
+export function useGetRecipeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetRecipeQuery, GetRecipeQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetRecipeQuery, GetRecipeQueryVariables>(GetRecipeDocument, baseOptions);
+        }
+export type GetRecipeQueryHookResult = ReturnType<typeof useGetRecipeQuery>;
+export type GetRecipeLazyQueryHookResult = ReturnType<typeof useGetRecipeLazyQuery>;
+export type GetRecipeQueryResult = ApolloReactCommon.QueryResult<GetRecipeQuery, GetRecipeQueryVariables>;
 export const CreateRecipeDocument = gql`
     mutation createRecipe($name: String!) {
   createRecipe(data: {name: $name}) {

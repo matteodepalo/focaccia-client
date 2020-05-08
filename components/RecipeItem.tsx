@@ -3,6 +3,7 @@ import { useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument, Recipe } 
 import { Icon, Spinner } from '@blueprintjs/core'
 import styled from 'styled-components'
 import { FunctionComponent } from 'react'
+import Link from 'next/link'
 
 gql`
   mutation removeRecipe($id: Int!) {
@@ -48,7 +49,7 @@ const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
 
   return (
     <tr>
-      <td>{recipe.name}</td>
+      <td><Link href={`/recipes/${recipe.id}`}>{recipe.name}</Link></td>
       <td>
         <DeleteButton>
           {loading ?
