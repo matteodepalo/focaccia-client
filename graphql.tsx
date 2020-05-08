@@ -15,6 +15,7 @@ export type Scalars = {
 
 export type Recipe = {
   id: Scalars['Int'];
+  userId: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   name: Scalars['String'];
