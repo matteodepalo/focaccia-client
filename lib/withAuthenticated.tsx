@@ -13,12 +13,11 @@ export const withAuthenticated = ({ required = true } = {}) => <P extends object
     let fetchUser;
 
     if (user) {
-      // Cache the user in the client after the first render
+      // Cache the user in the client after the first server side render
       CurrentUser.set(user)
       currentUser = user
     } else {
-      // If the user is logged out or the page is not rendered in the server
-      // try to fetch the user and redirect when required
+      // If the user is logged out try to fetch it and redirect when required
       fetchUser = useFetchUser({ required: required })
       currentUser = fetchUser.user
     }
