@@ -6,29 +6,23 @@ import config from './config'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
 import { createHttpLink } from 'apollo-link-http'
+import { parseCookies } from 'nookies'
 
 export default withApollo(
   ({ initialState, ctx }) => {
     const authLink = setContext((_, { headers }) => {
-      const cookie = ctx?.req?.headers.cookie
+      const accessToken = parseCookies(ctx).accessToken
 
-      if (cookie) {
-        return {
-          headers: {
-            ...headers,
-            cookie
-          }
-        }
-      } else {
-        return {
-          headers
+      return {
+        headers: {
+          ...headers,
+          authorization: accessToken ? `Bearer ${accessToken}` : "",
         }
       }
     });
 
     const httpLink = createHttpLink({
       uri: config.API_URL,
-      credentials: 'include',
       fetch
     })
 
@@ -36,6 +30,7 @@ export default withApollo(
 
     return new ApolloClient({
       link: authLink.concat(httpLink),
+      ssrMode: Boolean(ctx),
       cache: new InMemoryCache().restore(initialState || {})
     });
   },

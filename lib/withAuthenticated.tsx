@@ -1,12 +1,13 @@
 import { NextPage, NextPageContext } from "next"
 import { User, useFetchUser, CurrentUser } from "./user"
 import Layout from "../components/Layout"
+import { setCookie, destroyCookie } from "nookies"
 
 export interface Props {
   user?: User | null
 }
 
-export const withAuthenticated = ({ required = true, ssr = true } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
+export const withAuthenticated = ({ required = true } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
   const WithAuthenticated = ({ user, ...pageProps }: P & Props) => {
     let currentUser;
     let fetchUser;
@@ -17,14 +18,14 @@ export const withAuthenticated = ({ required = true, ssr = true } = {}) => <P ex
       currentUser = user
     } else {
       // If the user is logged out or the page is not rendered in the server
-      // try to fetch the user client side and redirect when required
+      // try to fetch the user and redirect when required
       fetchUser = useFetchUser({ required: required })
       currentUser = fetchUser.user
     }
 
     return (
       <Layout user={currentUser} loading={!!fetchUser?.loading}>
-          <PageComponent {...pageProps as P} />
+        <PageComponent {...pageProps as P} />
       </Layout>
     )
   }
@@ -36,32 +37,36 @@ export const withAuthenticated = ({ required = true, ssr = true } = {}) => <P ex
     WithAuthenticated.displayName = `withAuthenticated(${displayName})`
   }
 
-  if (ssr || PageComponent.getInitialProps) {
-    WithAuthenticated.getInitialProps = async (ctx: NextPageContext) => {
-      const { res, req } = ctx
+  WithAuthenticated.getInitialProps = async (ctx: NextPageContext) => {
+    const { res, req } = ctx
 
-      let pageProps = {} as P
+    let pageProps = {} as P
 
-      if (PageComponent.getInitialProps) {
-        pageProps = await PageComponent.getInitialProps(ctx)
-      }
+    if (PageComponent.getInitialProps) {
+      pageProps = await PageComponent.getInitialProps(ctx)
+    }
 
-      if (req && res && typeof window === 'undefined') {
-        const auth0 = await import('./auth0')
-        const session = await auth0.default.getSession(req)
+    if (req && res && typeof window === 'undefined') {
+      const { default: auth0 } = await import('./auth0')
+      const session = await auth0.getSession(req)
 
-        if (required && (!session || !session.user)) {
-          res.writeHead(302, {
-            Location: '/api/login',
-          })
-          res.end()
-          return { ...pageProps, user: null } as P & Props
-        } else {
-          return { ...pageProps, user: session?.user ?? null } as P & Props
-        }
+      if(session?.accessToken!) {
+        setCookie(ctx, 'accessToken', session?.accessToken!, { path: '/' })
       } else {
-        return { ...pageProps } as P & Props
+        destroyCookie(ctx, 'accessToken')
       }
+
+      if (required && (!session || !session.user)) {
+        res.writeHead(302, {
+          Location: '/api/login',
+        })
+        res.end()
+        return { ...pageProps, user: null } as P & Props
+      } else {
+        return { ...pageProps, user: session?.user ?? null } as P & Props
+      }
+    } else {
+      return { ...pageProps } as P & Props
     }
   }
 

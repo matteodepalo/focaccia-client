@@ -8,4 +8,4 @@ const Home = () => {
   )
 }
 
-export default withAuthenticated({ ssr: false, required: false })(Home)
+export default withAuthenticated({ required: false })(Home)
