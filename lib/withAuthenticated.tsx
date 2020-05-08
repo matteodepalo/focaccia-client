@@ -50,8 +50,8 @@ export const withAuthenticated = ({ required = true } = {}) => <P extends object
       const { default: auth0 } = await import('./auth0')
       const session = await auth0.getSession(req)
 
-      if(session?.accessToken!) {
-        setCookie(ctx, 'accessToken', session?.accessToken!, { path: '/' })
+      if(session?.accessToken) {
+        setCookie(ctx, 'accessToken', session!.accessToken!, { path: '/' })
       } else {
         destroyCookie(ctx, 'accessToken')
       }
