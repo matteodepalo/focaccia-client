@@ -31,21 +31,12 @@ export class CurrentUser {
   }
 }
 
-export async function fetchUser(cookie = ''): Promise<User | null> {
+export async function fetchUser(): Promise<User | null> {
   if (CurrentUser.get()) {
     return CurrentUser.get()
   }
 
-  const res = await fetch(
-    '/api/me',
-    cookie
-      ? {
-          headers: {
-            cookie,
-          },
-        }
-      : {}
-  )
+  const res = await fetch('/api/me')
 
   if (!res.ok) {
     CurrentUser.delete()
