@@ -71,6 +71,7 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
             <ControlGroup>
               <Field name="yeastType">
                 {({ field }: FieldProps<CreateRecipeInput['yeastType']>) => (
+                  // yeastType initial value is set in the form so we can use !
                   <HTMLSelect
                     options={yeasts}
                     value={field.value!}
@@ -81,6 +82,7 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
 
               <Field name="yeastWeight">
                 {({ field }: FieldProps<CreateRecipeInput['yeastWeight']>) => (
+                  // yeastWeight initial value is set in the form so we can use !
                   <NumericInput value={field.value!} onValueChange={handleNumericInputChange(setFieldValue)} name={field.name} />
                 )}
               </Field>
