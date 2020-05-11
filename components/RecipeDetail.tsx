@@ -1,34 +1,36 @@
-import gql from 'graphql-tag'
-import { Recipe, useGetRecipeQuery } from '../graphql'
-import { Spinner } from '@blueprintjs/core'
+import { useGetRecipeQuery, GetRecipeQueryVariables } from '../graphql'
+import { Spinner, Card, Elevation } from '@blueprintjs/core'
+import { FunctionComponent } from 'react'
+import DeleteButton from './DeleteButton'
 
-gql`
-  query getRecipe($id: Int!) {
-    recipe(id: $id) {
-      id
-      name
-    }
-  }
-`
+interface Props {
+  id: GetRecipeQueryVariables['id']
+}
 
-const RecipeDetail = ({ id }: { id: number }) => {
+const RecipeDetail: FunctionComponent<Props> = ({ id }) => {
   const {
     data,
     loading,
     error
   } = useGetRecipeQuery({ variables: { id: id } })
 
-  let recipe: Pick<Recipe, "id" | "name"> | null = null
-
   if (loading) return <Spinner />
   if (error) return <p>Error Loading Recipe</p>
-  if (data) recipe = data.recipe
+
+  const recipe = data?.recipe
 
   return (
     <>
-      {recipe ?
-        <p>{recipe.name}</p>
-      : null}
+      {recipe &&
+        <Card elevation={Elevation.TWO}>
+          <h5>{recipe.name}</h5>
+          <p>
+            Yeast Type: {recipe.yeastType}<br/>
+            Yeast Weight: {recipe.yeastWeight}<br/>
+          </p>
+
+          <DeleteButton recipeId={recipe.id} />
+        </Card>}
     </>
   )
 }

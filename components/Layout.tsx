@@ -35,7 +35,7 @@ const Layout: FunctionComponent<Props> = ({ user, children }) => {
             : <AnchorButton minimal={true} icon="log-in" text="Login" href="/api/login" />}
           </Navbar.Heading>
 
-          {user ?
+          {user &&
             <>
               <Navbar.Divider />
 
@@ -45,8 +45,7 @@ const Layout: FunctionComponent<Props> = ({ user, children }) => {
               <Link href="/recipes/new">
                 <AnchorButton minimal={true} icon="plus" text="Add" disabled={router.pathname === '/recipes/new'} />
               </Link>
-            </>
-          : null}
+            </>}
         </Navbar.Group>
       </Navbar>
 

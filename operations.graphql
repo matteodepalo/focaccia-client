@@ -1,0 +1,30 @@
+fragment recipeFields on Recipe {
+  id
+  name
+  yeastType
+  yeastWeight
+}
+
+query getRecipes {
+  recipes {
+    ...recipeFields
+  }
+}
+
+query getRecipe($id: Int!) {
+  recipe(id: $id) {
+    ...recipeFields
+  }
+}
+
+mutation createRecipe($name: String!) {
+  createRecipe(data: { name: $name }) {
+    ...recipeFields
+  }
+}
+
+mutation removeRecipe($id: Int!) {
+  removeRecipe(id: $id) {
+    id
+  }
+}
