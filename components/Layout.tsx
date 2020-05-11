@@ -1,4 +1,4 @@
-import { Navbar, Alignment, AnchorButton, Menu, Popover, Spinner } from "@blueprintjs/core"
+import { Navbar, Alignment, AnchorButton, Menu, Popover, Spinner, Classes } from "@blueprintjs/core"
 import Head from "next/head"
 import { FunctionComponent } from "react"
 import styled from "styled-components"
@@ -25,8 +25,7 @@ const Layout: FunctionComponent<Props> = ({ user, loading = false, children }) =
   </Menu>
 
   return (
-    <>
-
+    <div className={Classes.DARK}>
       <Navbar>
         <Navbar.Group align={Alignment.LEFT}>
           {loading ? <Spinner size={Spinner.SIZE_SMALL} /> :
@@ -62,7 +61,7 @@ const Layout: FunctionComponent<Props> = ({ user, loading = false, children }) =
         </Head>
         {children}
       </Container>
-    </>
+    </div>
   )
 }
 
