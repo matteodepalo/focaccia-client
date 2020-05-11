@@ -65,7 +65,6 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
           <FormGroup
             label="Yeast"
             labelFor="yeast"
-            labelInfo="(required)"
             inline={true}
           >
             <ControlGroup>
