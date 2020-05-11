@@ -1,29 +1,16 @@
 import { NextPage, NextPageContext } from "next"
-import { User, useFetchUser, CurrentUser } from "./user"
+import { User, fetchUser } from "./user"
 import Layout from "../components/Layout"
 import { setCookie, destroyCookie } from "nookies"
 
 export interface Props {
-  user?: User | null
+  user: User | null
 }
 
 export const withAuthenticated = ({ required = true } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
   const WithAuthenticated = ({ user, ...pageProps }: P & Props) => {
-    let currentUser;
-    let fetchUser;
-
-    if (user) {
-      // Cache the user in the client after the first server side render
-      CurrentUser.set(user)
-      currentUser = user
-    } else {
-      // If the user is logged out try to fetch it and redirect when required
-      fetchUser = useFetchUser({ required: required })
-      currentUser = fetchUser.user
-    }
-
     return (
-      <Layout user={currentUser} loading={!!fetchUser?.loading}>
+      <Layout user={user}>
         <PageComponent {...pageProps as P} />
       </Layout>
     )
@@ -46,26 +33,30 @@ export const withAuthenticated = ({ required = true } = {}) => <P extends object
     }
 
     if (req && res && typeof window === 'undefined') {
+      // Server side
       const { default: auth0 } = await import('./auth0')
       const session = await auth0.getSession(req)
 
-      if(session?.accessToken) {
-        setCookie(ctx, 'accessToken', session!.accessToken!, { path: '/' })
+      if(session && session.user && session.accessToken) {
+        setCookie(ctx, 'accessToken', session.accessToken, { path: '/' })
+
+        return { ...pageProps, user: session.user } as P & Props
       } else {
         destroyCookie(ctx, 'accessToken')
-      }
 
-      if (required && (!session || !session.user)) {
-        res.writeHead(302, {
-          Location: '/api/login',
-        })
-        res.end()
+        if (required) {
+          res.writeHead(302, {
+            Location: '/api/login',
+          })
+          res.end()
+        }
+
         return { ...pageProps, user: null } as P & Props
-      } else {
-        return { ...pageProps, user: session?.user ?? null } as P & Props
       }
     } else {
-      return { ...pageProps } as P & Props
+      // Client side
+      const user = await fetchUser()
+      return { ...pageProps, user: user } as P & Props
     }
   }
 

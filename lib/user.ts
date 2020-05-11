@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import fetch from 'isomorphic-unfetch'
 import { IClaims } from '@auth0/nextjs-auth0/dist/session/session'
 
@@ -15,7 +14,7 @@ export class CurrentUser {
     if (typeof window !== 'undefined' && window.__user) {
       return window.__user
     } else {
-      return undefined
+      return null
     }
   }
 
@@ -32,7 +31,7 @@ export class CurrentUser {
   }
 }
 
-export async function fetchUser(cookie = '') {
+export async function fetchUser(cookie = ''): Promise<User | null> {
   if (CurrentUser.get()) {
     return CurrentUser.get()
   }
@@ -55,49 +54,5 @@ export async function fetchUser(cookie = '') {
 
   const json = await res.json()
   CurrentUser.set(json)
-  return json
-}
-
-export function useFetchUser({ required } = { required: false }) {
-  const [loading, setLoading] = useState(
-    () => !(CurrentUser.get())
-  )
-  const [user, setUser] = useState(() => {
-    if (typeof window === 'undefined') {
-      return null
-    }
-
-    return CurrentUser.get() ?? null
-  })
-
-  useEffect(
-    () => {
-      if (!loading && user) {
-        return
-      }
-      setLoading(true)
-      let isMounted = true
-
-      fetchUser().then(user => {
-        // Only set the user if the component is still mounted
-        if (isMounted) {
-          // When the user is not logged in but login is required
-          if (required && !user) {
-            window.location.href = '/api/login'
-            return
-          }
-          setUser(user)
-          setLoading(false)
-        }
-      })
-
-      return () => {
-        isMounted = false
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
-
-  return { user, loading }
+  return json as User
 }

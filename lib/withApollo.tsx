@@ -16,7 +16,7 @@ export default withApollo(
       return {
         headers: {
           ...headers,
-          authorization: accessToken ? `Bearer ${accessToken}` : "",
+          authorization: accessToken ? `Bearer ${accessToken}` : ''
         }
       }
     });
@@ -25,8 +25,6 @@ export default withApollo(
       uri: config.API_URL,
       fetch
     })
-
-    // TODO: Customize fetch so that whenever you encounter a 401 we refresh the token and retry the request with the refreshed token
 
     return new ApolloClient({
       link: authLink.concat(httpLink),
