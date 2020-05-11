@@ -1,6 +1,6 @@
 overwrite: true
 schema: "../focaccia-server/src/schema.gql"
-documents: "./{components,pages}/**/*.{ts,tsx}"
+documents: "./operations.graphql"
 generates:
   ./graphql.tsx:
     plugins:

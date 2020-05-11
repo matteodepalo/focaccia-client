@@ -1,18 +1,8 @@
-import gql from 'graphql-tag'
-import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables } from '../graphql'
-import { Button, FormGroup, InputGroup, ControlGroup, HTMLSelect } from '@blueprintjs/core'
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, CreateRecipeInput } from '../graphql'
+import { Button, FormGroup, InputGroup, ControlGroup, HTMLSelect, NumericInput } from '@blueprintjs/core'
 import styled from 'styled-components'
 import { Formik, Form as FormikForm, Field, FieldProps } from 'formik'
 import { FunctionComponent } from 'react'
-
-gql`
-  mutation createRecipe($name: String!) {
-    createRecipe(data: { name: $name }) {
-      id
-      name
-    }
-  }
-`
 
 interface Props {
   onSave: () => void
@@ -75,9 +65,10 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
   }
 
   return (
-    <Formik
-      initialValues={{ name: '' }}
+    <Formik<CreateRecipeInput>
+      initialValues={{ name: '', yeastType: 'natural', yeastWeight: 0 }}
       onSubmit={async (values, actions) => {
+        debugger
         await createRecipe({ name: values.name })
         actions.setSubmitting(false);
         actions.resetForm();
@@ -102,7 +93,7 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
           >
             <ControlGroup>
               <Field as={YeastSelect} name="yeastType" />
-              <Field as={InputGroup} name="yeastWeight" />
+              <Field as={NumericInput} name="yeastWeight" />
             </ControlGroup>
           </FormGroup>
 
