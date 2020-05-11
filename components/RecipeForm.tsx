@@ -44,7 +44,7 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
 
   return (
     <Formik<CreateRecipeInput>
-      initialValues={{ name: '', yeastType: 'natural', yeastWeight: 0 }}
+      initialValues={{ name: '' }}
       onSubmit={async (values, actions) => {
         await createRecipe({ name: values.name, yeastType: values.yeastType, yeastWeight: values.yeastWeight })
         actions.setSubmitting(false)
@@ -71,10 +71,9 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
             <ControlGroup>
               <Field name="yeastType">
                 {({ field }: FieldProps<CreateRecipeInput['yeastType']>) => (
-                  // yeastType initial value is set in the form so we can use !
                   <HTMLSelect
                     options={yeasts}
-                    value={field.value!}
+                    value={field.value ?? undefined}
                     onChange={field.onChange}
                     name={field.name} />
                 )}
@@ -82,8 +81,7 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
 
               <Field name="yeastWeight">
                 {({ field }: FieldProps<CreateRecipeInput['yeastWeight']>) => (
-                  // yeastWeight initial value is set in the form so we can use !
-                  <NumericInput value={field.value!} onValueChange={handleNumericInputChange(setFieldValue)} name={field.name} />
+                  <NumericInput value={field.value ?? undefined} onValueChange={handleNumericInputChange(setFieldValue)} name={field.name} />
                 )}
               </Field>
             </ControlGroup>
