@@ -26,9 +26,8 @@ const RecipeDetail = ({ id }: { id: number }) => {
 
   return (
     <>
-      {recipe ?
-        <p>{recipe.name}</p>
-      : null}
+      {recipe &&
+        <p>{recipe.name}</p>}
     </>
   )
 }
