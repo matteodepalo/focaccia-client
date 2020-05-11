@@ -70,7 +70,7 @@ export type GetRecipeQueryVariables = {
 export type GetRecipeQuery = { recipe: RecipeFieldsFragment };
 
 export type CreateRecipeMutationVariables = {
-  name: Scalars['String'];
+  data: CreateRecipeInput;
 };
 
 
@@ -157,8 +157,8 @@ export type GetRecipeQueryHookResult = ReturnType<typeof useGetRecipeQuery>;
 export type GetRecipeLazyQueryHookResult = ReturnType<typeof useGetRecipeLazyQuery>;
 export type GetRecipeQueryResult = ApolloReactCommon.QueryResult<GetRecipeQuery, GetRecipeQueryVariables>;
 export const CreateRecipeDocument = gql`
-    mutation createRecipe($name: String!) {
-  createRecipe(data: {name: $name}) {
+    mutation createRecipe($data: CreateRecipeInput!) {
+  createRecipe(data: $data) {
     ...recipeFields
   }
 }
@@ -178,7 +178,7 @@ export type CreateRecipeMutationFn = ApolloReactCommon.MutationFunction<CreateRe
  * @example
  * const [createRecipeMutation, { data, loading, error }] = useCreateRecipeMutation({
  *   variables: {
- *      name: // value for 'name'
+ *      data: // value for 'data'
  *   },
  * });
  */

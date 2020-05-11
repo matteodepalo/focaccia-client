@@ -3,6 +3,7 @@ import { Button, FormGroup, InputGroup, ControlGroup, HTMLSelect, NumericInput }
 import styled from 'styled-components'
 import { Formik, Form as FormikForm, Field, FieldProps } from 'formik'
 import { FunctionComponent } from 'react'
+import { yeasts } from '../lib/yeast'
 
 interface Props {
   onSave: () => void
@@ -13,31 +14,12 @@ const Form = styled(FormikForm)`
   width: 500px;
 `
 
-type YeastType = 'natural' | 'dry'
-type YeastLabel = 'Natural' | 'Dry'
-
-interface Yeast {
-  value: YeastType,
-  label: YeastLabel
-}
-
-const yeasts: Yeast[] = [
-  {
-    label: 'Natural',
-    value: 'natural'
-  },
-  {
-    label: 'Dry',
-    value: 'dry'
-  }
-]
-
 const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
   const [createRecipeMutation] = useCreateRecipeMutation()
 
-  const createRecipe = async ({ name }: CreateRecipeMutationVariables) => {
+  const createRecipe = async (data: CreateRecipeMutationVariables['data']) => {
     await createRecipeMutation({
-      variables: { name },
+      variables: { data },
       update: (cache, { data }) => {
         const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
           query: GetRecipesDocument
@@ -56,25 +38,20 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
     })
   }
 
-  const YeastSelect: FunctionComponent<FieldProps['field']> = (props) => {
-    return <HTMLSelect
-      options={yeasts}
-      value={props.value}
-      onChange={props.onChange}
-      name={props.name} />
+  const handleNumericInputChange = (setFieldValue: Function) => (value: number) => {
+    setFieldValue('yeastWeight', value)
   }
 
   return (
     <Formik<CreateRecipeInput>
       initialValues={{ name: '', yeastType: 'natural', yeastWeight: 0 }}
       onSubmit={async (values, actions) => {
-        debugger
-        await createRecipe({ name: values.name })
-        actions.setSubmitting(false);
-        actions.resetForm();
+        await createRecipe({ name: values.name, yeastType: values.yeastType, yeastWeight: values.yeastWeight })
+        actions.setSubmitting(false)
+        actions.resetForm()
         onSave()
       }}>
-      {({ values, isSubmitting }) => (
+      {({ values, isSubmitting, setFieldValue }) => (
         <Form>
           <FormGroup
             label="Name"
@@ -92,8 +69,21 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
             inline={true}
           >
             <ControlGroup>
-              <Field as={YeastSelect} name="yeastType" />
-              <Field as={NumericInput} name="yeastWeight" />
+              <Field name="yeastType">
+                {({ field }: FieldProps<CreateRecipeInput['yeastType']>) => (
+                  <HTMLSelect
+                    options={yeasts}
+                    value={field.value!}
+                    onChange={field.onChange}
+                    name={field.name} />
+                )}
+              </Field>
+
+              <Field name="yeastWeight">
+                {({ field }: FieldProps<CreateRecipeInput['yeastWeight']>) => (
+                  <NumericInput value={field.value!} onValueChange={handleNumericInputChange(setFieldValue)} name={field.name} />
+                )}
+              </Field>
             </ControlGroup>
           </FormGroup>
 

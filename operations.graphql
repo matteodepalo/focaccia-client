@@ -17,8 +17,8 @@ query getRecipe($id: Int!) {
   }
 }
 
-mutation createRecipe($name: String!) {
-  createRecipe(data: { name: $name }) {
+mutation createRecipe($data: CreateRecipeInput!) {
+  createRecipe(data: $data) {
     ...recipeFields
   }
 }
