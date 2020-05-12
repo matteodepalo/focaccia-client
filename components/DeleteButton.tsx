@@ -1,19 +1,12 @@
 import { Recipe, useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument } from "../graphql"
 import { FunctionComponent } from "react"
-import { Spinner, Icon } from "@blueprintjs/core"
-import styled from "styled-components"
+import { Button } from "@blueprintjs/core"
 import { useRouter } from "next/router"
 
 interface Props {
   recipeId: Recipe['id'],
   redirect?: boolean
 }
-
-const Button = styled.span`
-  cursor: pointer;
-`
-
-const iconSize = 16
 
 const DeleteButton: FunctionComponent<Props> = ({ recipeId, redirect }) => {
   const [removeRecipe, { loading }] = useRemoveRecipeMutation()
@@ -47,11 +40,7 @@ const DeleteButton: FunctionComponent<Props> = ({ recipeId, redirect }) => {
   }
 
   return (
-    <Button>
-      {loading ?
-        <Spinner intent="danger" size={iconSize} />
-      : <Icon intent="danger" icon="trash" onClick={handleRemoveClick} iconSize={iconSize} />}
-    </Button>
+    <Button icon="trash" loading={loading} intent="danger" onClick={handleRemoveClick} />
   )
 }
 
