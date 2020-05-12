@@ -26,20 +26,24 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
     await createRecipeMutation({
       variables: { data },
       update: (cache, { data }) => {
-        const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
-          query: GetRecipesDocument
-        })
+        try {
+          const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
+            query: GetRecipesDocument
+          })
 
-        const existingRecipes = getExistingRecipes?.recipes ?? []
-        const newRecipe = data?.createRecipe
+          const existingRecipes = getExistingRecipes?.recipes
+          const newRecipe = data?.createRecipe
 
-        cache.writeQuery({
-          query: GetRecipesDocument,
-          data: {
-            recipes: [newRecipe, ...existingRecipes]
+          if (existingRecipes) {
+            cache.writeQuery({
+              query: GetRecipesDocument,
+              data: {
+                recipes: [newRecipe, ...existingRecipes]
+              }
+            })
           }
-        })
-      },
+        } catch {}
+      }
     })
   }
 

@@ -23,9 +23,7 @@ const DeleteButton: FunctionComponent<Props> = ({ recipeId, redirect }) => {
     removeRecipe({
       variables: { id: recipeId },
       update: (cache, { data }) => {
-        if (redirect) {
-          router.push('/recipes')
-        } else {
+        try {
           const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
             query: GetRecipesDocument
           })
@@ -39,6 +37,10 @@ const DeleteButton: FunctionComponent<Props> = ({ recipeId, redirect }) => {
               recipes: existingRecipes.filter((recipe) => recipe.id !== removeRecipeId)
             }
           })
+        } catch {}
+
+        if (redirect) {
+          router.push('/recipes')
         }
       }
     })
