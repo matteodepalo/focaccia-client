@@ -12,6 +12,7 @@ interface Props {
 
 const RecipeCard = styled(Card)`
   margin-bottom: 15px;
+  width: 300px;
 `
 
 const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {

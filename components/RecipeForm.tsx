@@ -4,6 +4,11 @@ import styled from 'styled-components'
 import { Formik, Form as FormikForm, Field, FieldProps } from 'formik'
 import { FunctionComponent } from 'react'
 import { yeasts } from '../lib/yeast'
+import * as Yup from 'yup';
+
+const CreateRecipeSchema = Yup.object().shape({
+  name: Yup.string().required('Required')
+});
 
 interface Props {
   onSave: () => void
@@ -11,7 +16,7 @@ interface Props {
 
 const Form = styled(FormikForm)`
   margin-top: 50px;
-  width: 500px;
+  width: 360px;
 `
 
 const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
@@ -45,8 +50,16 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
   return (
     <Formik<CreateRecipeInput>
       initialValues={{ name: '' }}
+      validationSchema={CreateRecipeSchema}
       onSubmit={async (values, actions) => {
-        await createRecipe({ name: values.name, yeastType: values.yeastType, yeastWeight: values.yeastWeight })
+        const input = {
+          name: values.name
+        }
+
+        if (values.yeastType) Object.assign(input, { yeastType: values.yeastType })
+        if (values.yeastWeight) Object.assign(input, { yeastWeight: values.yeastWeight })
+
+        await createRecipe(input)
         actions.setSubmitting(false)
         onSave()
       }}>
@@ -55,26 +68,22 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
           <FormGroup
             label="Name"
             labelFor="name"
-            labelInfo="(required)"
-            inline={true}
-          >
+            labelInfo="(required)">
             <Field as={InputGroup} name="name" />
           </FormGroup>
 
           <FormGroup
             label="Yeast"
-            labelFor="yeast"
-            inline={true}
-          >
-            <ControlGroup>
+            labelFor="yeast">
+            <ControlGroup fill={true}>
               <Field name="yeastType">
                 {({ field }: FieldProps<CreateRecipeInput['yeastType']>) => (
                   <HTMLSelect
                     value={field.value ?? undefined}
                     onChange={field.onChange}
                     name={field.name}>
-                      <option selected>Choose a type...</option>
-                      {yeasts.map((yeast) => <option value={yeast.value} selected={yeast.value === values.yeastType}>{yeast.label}</option>)}
+                      <option value="">Choose a type...</option>
+                      {yeasts.map((yeast, index) => <option key={index} value={yeast.value}>{yeast.label}</option>)}
                   </HTMLSelect>
                 )}
               </Field>
@@ -87,7 +96,7 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
             </ControlGroup>
           </FormGroup>
 
-          <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || values.name === ''}>Save</Button>
+          <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || !CreateRecipeSchema.isValidSync(values)}>Save</Button>
         </Form>
       )}
     </Formik>
