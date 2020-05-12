@@ -36,7 +36,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ id }) => {
               Yeast Weight: {recipe.yeastWeight}<br/>
             </p>
           }
-          <DeleteButton recipeId={recipe.id} />
+          <DeleteButton recipeId={recipe.id} redirect={true} />
         </RecipeCard>}
     </>
   )

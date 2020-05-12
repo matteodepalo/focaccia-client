@@ -51,7 +51,7 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
     <Formik<CreateRecipeInput>
       initialValues={{ name: '' }}
       validationSchema={CreateRecipeSchema}
-      onSubmit={async (values, actions) => {
+      onSubmit={async (values) => {
         const input = {
           name: values.name
         }
@@ -60,7 +60,6 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
         if (values.yeastWeight) Object.assign(input, { yeastWeight: values.yeastWeight })
 
         await createRecipe(input)
-        actions.setSubmitting(false)
         onSave()
       }}>
       {({ values, isSubmitting, setFieldValue }) => (
