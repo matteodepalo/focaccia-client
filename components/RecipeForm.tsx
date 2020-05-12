@@ -48,7 +48,6 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
       onSubmit={async (values, actions) => {
         await createRecipe({ name: values.name, yeastType: values.yeastType, yeastWeight: values.yeastWeight })
         actions.setSubmitting(false)
-        actions.resetForm()
         onSave()
       }}>
       {({ values, isSubmitting, setFieldValue }) => (
@@ -71,10 +70,12 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
               <Field name="yeastType">
                 {({ field }: FieldProps<CreateRecipeInput['yeastType']>) => (
                   <HTMLSelect
-                    options={yeasts}
                     value={field.value ?? undefined}
                     onChange={field.onChange}
-                    name={field.name} />
+                    name={field.name}>
+                      <option selected>Choose a type...</option>
+                      {yeasts.map((yeast) => <option value={yeast.value} selected={yeast.value === values.yeastType}>{yeast.label}</option>)}
+                  </HTMLSelect>
                 )}
               </Field>
 
