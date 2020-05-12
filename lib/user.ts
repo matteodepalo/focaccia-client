@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch'
 import { IClaims } from '@auth0/nextjs-auth0/dist/session/session'
 
 export type User = IClaims
@@ -23,27 +22,4 @@ export class CurrentUser {
       window.__user = user
     }
   }
-
-  static delete() {
-    if (typeof window !== 'undefined') {
-      delete window.__user
-    }
-  }
-}
-
-export async function fetchUser(): Promise<User | null> {
-  if (CurrentUser.get()) {
-    return CurrentUser.get()
-  }
-
-  const res = await fetch('/api/me')
-
-  if (!res.ok) {
-    CurrentUser.delete()
-    return null
-  }
-
-  const json = await res.json()
-  CurrentUser.set(json)
-  return json as User
 }

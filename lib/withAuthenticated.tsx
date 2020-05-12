@@ -1,5 +1,5 @@
 import { NextPage, NextPageContext } from "next"
-import { User, fetchUser, CurrentUser } from "./user"
+import { User, CurrentUser } from "./user"
 import Layout from "../components/Layout"
 import { setCookie, destroyCookie } from "nookies"
 
@@ -57,8 +57,7 @@ export const withAuthenticated = ({ required = true } = {}) => <P extends object
       }
     } else {
       // Client side
-      const user = await fetchUser()
-      return { ...pageProps, user: user } as P & Props
+      return { ...pageProps, user: CurrentUser.get() } as P & Props
     }
   }
 
