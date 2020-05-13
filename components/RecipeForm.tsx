@@ -48,7 +48,9 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
   }
 
   const handleNumericInputChange = (setFieldValue: Function) => (value: number) => {
-    setFieldValue('yeastWeight', value)
+    if (!isNaN(value)) {
+      setFieldValue('yeastWeight', value)
+    }
   }
 
   return (
@@ -85,15 +87,19 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
                     value={field.value ?? undefined}
                     onChange={field.onChange}
                     name={field.name}>
-                      <option value="">Choose a type...</option>
+                      <option>Choose a type...</option>
                       {yeasts.map((yeast, index) => <option key={index} value={yeast.value}>{yeast.label}</option>)}
                   </HTMLSelect>
                 )}
               </Field>
 
-              <Field name="yeastWeight">
+              <Field name="yeastWeight" type="number">
                 {({ field }: FieldProps<CreateRecipeInput['yeastWeight']>) => (
-                  <NumericInput value={field.value ?? undefined} onValueChange={handleNumericInputChange(setFieldValue)} name={field.name} />
+                  <NumericInput
+                    allowNumericCharactersOnly={true}
+                    value={field.value ?? undefined}
+                    onValueChange={handleNumericInputChange(setFieldValue)}
+                    name={field.name} />
                 )}
               </Field>
             </ControlGroup>
