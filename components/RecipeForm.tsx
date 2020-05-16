@@ -1,9 +1,8 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, CreateRecipeInput } from '../graphql'
-import { Button, FormGroup, InputGroup, ControlGroup, HTMLSelect, NumericInput } from '@blueprintjs/core'
+import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
 import styled from 'styled-components'
-import { Formik, Form as FormikForm, Field, FieldProps } from 'formik'
+import { Formik, Form as FormikForm, Field } from 'formik'
 import { FunctionComponent } from 'react'
-import { yeasts } from '../lib/yeast'
 import * as Yup from 'yup';
 
 const CreateRecipeSchema = Yup.object().shape({
@@ -47,62 +46,26 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
     })
   }
 
-  const handleNumericInputChange = (setFieldValue: Function) => (value: number) => {
-    if (!isNaN(value)) {
-      setFieldValue('yeastWeight', value)
-    }
-  }
-
   return (
     <Formik<CreateRecipeInput>
-      initialValues={{ name: '' }}
+      initialValues={{ name: '', ingredients: [] }}
       validationSchema={CreateRecipeSchema}
       onSubmit={async (values) => {
         const input = {
-          name: values.name
+          name: values.name,
+          ingredients: values.ingredients
         }
-
-        if (values.yeastType) Object.assign(input, { yeastType: values.yeastType })
-        if (values.yeastWeight) Object.assign(input, { yeastWeight: values.yeastWeight })
 
         await createRecipe(input)
         onSave()
       }}>
-      {({ values, isSubmitting, setFieldValue }) => (
+      {({ values, isSubmitting }) => (
         <Form>
           <FormGroup
             label="Name"
             labelFor="name"
             labelInfo="(required)">
             <Field as={InputGroup} name="name" />
-          </FormGroup>
-
-          <FormGroup
-            label="Yeast"
-            labelFor="yeast">
-            <ControlGroup fill={true}>
-              <Field name="yeastType">
-                {({ field }: FieldProps<CreateRecipeInput['yeastType']>) => (
-                  <HTMLSelect
-                    value={field.value ?? undefined}
-                    onChange={field.onChange}
-                    name={field.name}>
-                      <option>Choose a type...</option>
-                      {yeasts.map((yeast, index) => <option key={index} value={yeast.value}>{yeast.label}</option>)}
-                  </HTMLSelect>
-                )}
-              </Field>
-
-              <Field name="yeastWeight" type="number">
-                {({ field }: FieldProps<CreateRecipeInput['yeastWeight']>) => (
-                  <NumericInput
-                    allowNumericCharactersOnly={true}
-                    value={field.value ?? undefined}
-                    onValueChange={handleNumericInputChange(setFieldValue)}
-                    name={field.name} />
-                )}
-              </Field>
-            </ControlGroup>
           </FormGroup>
 
           <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || !CreateRecipeSchema.isValidSync(values)}>Save</Button>

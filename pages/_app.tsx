@@ -3,10 +3,12 @@ import { AppProps } from 'next/app'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
 
 const theme = {
-  backgroundColor: '#293742'
+  backgroundColor: 'white'
 }
 
-const GlobalStyle = createGlobalStyle<typeof theme>`
+type Theme = typeof theme
+
+const GlobalStyle = createGlobalStyle<Theme>`
   body {
     background-color: ${(props) => props.backgroundColor}
   }

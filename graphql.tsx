@@ -13,16 +13,25 @@ export type Scalars = {
   DateTime: Date;
 };
 
-export type Recipe = {
+export type Ingredient = {
   id: Scalars['Int'];
-  yeastWeight?: Maybe<Scalars['Int']>;
-  userId: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  weight: Scalars['Float'];
   name: Scalars['String'];
-  yeastType?: Maybe<Scalars['String']>;
+  type: Scalars['String'];
+  group: Scalars['String'];
 };
 
+
+export type Recipe = {
+  id: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  ingredients: Array<Ingredient>;
+  userId: Scalars['String'];
+  name: Scalars['String'];
+};
 
 export type Query = {
   recipe: Recipe;
@@ -50,12 +59,23 @@ export type MutationRemoveRecipeArgs = {
 };
 
 export type CreateRecipeInput = {
-  yeastWeight?: Maybe<Scalars['Int']>;
+  ingredients: Array<IngredientInput>;
   name: Scalars['String'];
-  yeastType?: Maybe<Scalars['String']>;
 };
 
-export type RecipeFieldsFragment = Pick<Recipe, 'id' | 'name' | 'yeastType' | 'yeastWeight'>;
+export type IngredientInput = {
+  weight: Scalars['Float'];
+  name: Scalars['String'];
+  type: Scalars['String'];
+  group: Scalars['String'];
+};
+
+export type IngredientFieldsFragment = Pick<Ingredient, 'id' | 'name' | 'type' | 'group' | 'weight'>;
+
+export type RecipeFieldsFragment = (
+  Pick<Recipe, 'id' | 'name'>
+  & { ingredients: Array<IngredientFieldsFragment> }
+);
 
 export type GetRecipesQueryVariables = {};
 
@@ -83,14 +103,24 @@ export type RemoveRecipeMutationVariables = {
 
 export type RemoveRecipeMutation = { removeRecipe: Pick<Recipe, 'id'> };
 
+export const IngredientFieldsFragmentDoc = gql`
+    fragment ingredientFields on Ingredient {
+  id
+  name
+  type
+  group
+  weight
+}
+    `;
 export const RecipeFieldsFragmentDoc = gql`
     fragment recipeFields on Recipe {
   id
   name
-  yeastType
-  yeastWeight
+  ingredients {
+    ...ingredientFields
+  }
 }
-    `;
+    ${IngredientFieldsFragmentDoc}`;
 export const GetRecipesDocument = gql`
     query getRecipes {
   recipes {

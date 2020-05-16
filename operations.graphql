@@ -1,8 +1,17 @@
+fragment ingredientFields on Ingredient {
+  id
+  name
+  type
+  group
+  weight
+}
+
 fragment recipeFields on Recipe {
   id
   name
-  yeastType
-  yeastWeight
+  ingredients {
+    ...ingredientFields
+  }
 }
 
 query getRecipes {

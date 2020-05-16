@@ -1,4 +1,4 @@
-import { Navbar, Alignment, AnchorButton, Menu, Popover, Classes } from "@blueprintjs/core"
+import { Navbar, Alignment, AnchorButton, Menu, Popover } from "@blueprintjs/core"
 import Head from "next/head"
 import { FunctionComponent } from "react"
 import styled from "styled-components"
@@ -24,7 +24,7 @@ const Layout: FunctionComponent<Props> = ({ user, children }) => {
   </Menu>
 
   return (
-    <div className={Classes.DARK}>
+    <>
       <Navbar>
         <Navbar.Group align={Alignment.LEFT}>
           <Navbar.Heading>
@@ -56,7 +56,7 @@ const Layout: FunctionComponent<Props> = ({ user, children }) => {
         </Head>
         {children}
       </Container>
-    </div>
+    </>
   )
 }
 
