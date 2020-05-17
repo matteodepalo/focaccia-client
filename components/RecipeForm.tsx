@@ -1,7 +1,6 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, CreateRecipeInput } from '../graphql'
-import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
-import styled from 'styled-components'
-import { Formik, Form as FormikForm, Field } from 'formik'
+import { Button, EditableText } from '@blueprintjs/core'
+import { Formik, Form as FormikForm, Field, FieldProps } from 'formik'
 import { FunctionComponent } from 'react'
 import * as Yup from 'yup';
 
@@ -12,11 +11,6 @@ const CreateRecipeSchema = Yup.object().shape({
 interface Props {
   onSave: () => void
 }
-
-const Form = styled(FormikForm)`
-  margin-top: 50px;
-  width: 360px;
-`
 
 const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
   const [createRecipeMutation] = useCreateRecipeMutation()
@@ -59,17 +53,22 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
         await createRecipe(input)
         onSave()
       }}>
-      {({ values, isSubmitting }) => (
-        <Form>
-          <FormGroup
-            label="Name"
-            labelFor="name"
-            labelInfo="(required)">
-            <Field as={InputGroup} name="name" />
-          </FormGroup>
+      {({ values, isSubmitting, setFieldValue }) => (
+        <FormikForm>
+          <Field name="name">
+            {({ field }: FieldProps<CreateRecipeInput['name']>) => (
+              <h1>
+                <EditableText
+                  value={field.value}
+                  onChange={(value: string) => setFieldValue('name', value)}
+                  multiline={true}
+                  placeholder="Edit name..." />
+              </h1>
+            )}
+          </Field>
 
           <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || !CreateRecipeSchema.isValidSync(values)}>Save</Button>
-        </Form>
+        </FormikForm>
       )}
     </Formik>
   )
