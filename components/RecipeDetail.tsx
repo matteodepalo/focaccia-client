@@ -29,6 +29,12 @@ const RecipeDetail: FunctionComponent<Props> = ({ id }) => {
       {recipe &&
         <RecipeCard elevation={Elevation.TWO}>
           <h2>{recipe.name}</h2>
+          {recipe.ingredients.length > 0 && <ul>
+            {recipe.ingredients.map(ingredient => {
+              return <li key={ingredient.id}>{ingredient.name} / {ingredient.weight} / {ingredient.type} / {ingredient.group}</li>
+            })}
+          </ul>}
+
           <DeleteButton recipeId={recipe.id} redirect={true} />
         </RecipeCard>}
     </>

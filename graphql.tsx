@@ -17,12 +17,25 @@ export type Ingredient = {
   id: Scalars['Int'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  type: IngredientType;
+  group: IngredientGroup;
   weight: Scalars['Float'];
   name: Scalars['String'];
-  type: Scalars['String'];
-  group: Scalars['String'];
 };
 
+
+export enum IngredientType {
+  yeast = 'yeast',
+  water = 'water',
+  salt = 'salt',
+  flour = 'flour',
+  other = 'other'
+}
+
+export enum IngredientGroup {
+  starter = 'starter',
+  dough = 'dough'
+}
 
 export type Recipe = {
   id: Scalars['Int'];
