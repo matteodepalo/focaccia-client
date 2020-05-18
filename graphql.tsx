@@ -17,10 +17,10 @@ export type Ingredient = {
   id: Scalars['Int'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
-  type: IngredientType;
-  group: IngredientGroup;
   weight: Scalars['Float'];
   name: Scalars['String'];
+  type: IngredientType;
+  group: IngredientGroup;
 };
 
 
@@ -41,9 +41,9 @@ export type Recipe = {
   id: Scalars['Int'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
-  ingredients: Array<Ingredient>;
   userId: Scalars['String'];
   name: Scalars['String'];
+  ingredients: Array<Ingredient>;
 };
 
 export type Query = {
