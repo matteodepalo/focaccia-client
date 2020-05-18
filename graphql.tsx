@@ -18,7 +18,7 @@ export type Ingredient = {
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   weight: Scalars['Float'];
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   type: IngredientType;
   group: IngredientGroup;
 };
@@ -78,7 +78,7 @@ export type CreateRecipeInput = {
 
 export type IngredientInput = {
   weight: Scalars['Float'];
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   type: Scalars['String'];
   group: Scalars['String'];
 };

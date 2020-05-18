@@ -1,9 +1,9 @@
 import { FunctionComponent } from "react";
 import { IngredientType } from "../graphql";
-import { labelForIngredientType } from "../lib/ingredients";
 import { Field, FieldProps } from "formik";
 import { HTMLSelect, InputGroup } from "@blueprintjs/core";
 import { NumericInput } from "./NumericInput";
+import { ingredientTypes } from "../lib/ingredients";
 
 interface Props {
   prefix: string,
@@ -12,15 +12,6 @@ interface Props {
 }
 
 export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue }) => {
-  let types: { value: string, label?: string }[] = [];
-
-  for (let value in IngredientType) {
-    types.push({
-      value: value,
-      label: labelForIngredientType(value)
-    })
-  }
-
   return <>
     <Field name={`${prefix}Ingredients.${index}.type`}>
       {({ field }: FieldProps<IngredientType>) => (
@@ -28,7 +19,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
           value={field.value}
           onChange={field.onChange}
           name={field.name}>
-            {types.map((type, index) => <option key={index} value={type.value}>{type.label}</option>)}
+            {ingredientTypes.map((type, index) => <option key={index} value={type.value}>{type.label}</option>)}
         </HTMLSelect>
       )}
     </Field>

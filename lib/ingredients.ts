@@ -1,6 +1,6 @@
 import { IngredientGroup, IngredientType } from "../graphql"
 
-const ingredientGroupLabels = [
+const ingredientGroups = [
   {
     label: 'Starter',
     value: IngredientGroup.starter
@@ -11,7 +11,7 @@ const ingredientGroupLabels = [
   }
 ]
 
-const ingredientTypeLabels = [
+export const ingredientTypes = [
   {
     label: 'Flour',
     value: IngredientType.flour
@@ -34,10 +34,10 @@ const ingredientTypeLabels = [
   }
 ]
 
-export function labelForIngredientGroup(group: string) {
-  return ingredientGroupLabels.find((label) => label.value === group)?.label
+export function labelForIngredientGroup(group: IngredientGroup) {
+  return ingredientGroups.find((g) => g.value === group)?.label
 }
 
-export function labelForIngredientType(type: string) {
-  return ingredientTypeLabels.find((label) => label.value === type)?.label
+export function labelForIngredientType(type: IngredientType) {
+  return ingredientTypes.find((t) => t.value === type)?.label
 }

@@ -11,13 +11,13 @@ const CreateRecipeSchema = Yup.object().shape({
   starterIngredients: Yup.array()
     .of(
       Yup.object().shape({
-        name: Yup.string().required('Required')
+        weight: Yup.number().moreThan(0)
       })
     ),
   doughIngredients: Yup.array()
     .of(
       Yup.object().shape({
-        name: Yup.string().required('Required')
+        weight: Yup.number().moreThan(0)
       })
     )
     .required('Must have doughIngredients')
@@ -107,7 +107,7 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
                   ))
                 )}
 
-                <Button icon="add" onClick={() => arrayHelpers.push({ name: '' , type: IngredientType.flour, group: IngredientGroup.starter, weight: 0 })} />
+                <Button icon="add" onClick={() => arrayHelpers.push({ type: IngredientType.flour, group: IngredientGroup.starter, weight: 0 })} />
               </div>
             )}
           />
@@ -129,7 +129,7 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
                   ))
                 )}
 
-                <Button icon="add" onClick={() => arrayHelpers.push({ name: '' , type: IngredientType.flour, group: IngredientGroup.dough, weight: 0 })} />
+                <Button icon="add" onClick={() => arrayHelpers.push({ type: IngredientType.flour, group: IngredientGroup.dough, weight: 0 })} />
               </div>
             )}
           />
