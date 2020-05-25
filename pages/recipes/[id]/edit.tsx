@@ -1,12 +1,12 @@
-import RecipeDetail from "../../components/RecipeDetail"
 import { useRouter } from "next/router"
-import withApollo from "../../lib/withApollo"
-import { withAuthenticated } from "../../lib/withAuthenticated"
 import { getDataFromTree } from '@apollo/react-ssr';
-import { useGetRecipeQuery } from "../../graphql";
+import RecipeForm from "../../../components/RecipeForm";
+import { useGetRecipeQuery } from "../../../graphql";
 import { Spinner } from "@blueprintjs/core";
+import withApollo from "../../../lib/withApollo";
+import { withAuthenticated } from "../../../lib/withAuthenticated";
 
-const Recipe = () => {
+const EditRecipe = () => {
   const router = useRouter()
 
   const {
@@ -20,7 +20,7 @@ const Recipe = () => {
 
   const recipe = data?.recipe
 
-  return recipe ? <RecipeDetail recipe={recipe} /> : null
+  return <RecipeForm recipe={recipe} onSave={() => router.push('/recipes')} />
 }
 
-export default withApollo(withAuthenticated()(Recipe), { getDataFromTree })
+export default withApollo(withAuthenticated()(EditRecipe), { getDataFromTree })

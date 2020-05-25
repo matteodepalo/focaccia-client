@@ -1,4 +1,4 @@
-import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, IngredientInput } from '../graphql'
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, IngredientInput, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation } from '../graphql'
 import { Button, EditableText, ControlGroup } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray } from 'formik'
 import { FunctionComponent } from 'react'
@@ -24,6 +24,7 @@ const CreateRecipeSchema = Yup.object().shape({
 });
 
 interface Props {
+  recipe?: RecipeFieldsFragment
   onSave: () => void
 }
 
@@ -37,8 +38,15 @@ function newIngredient(group: IngredientGroup): IngredientInput {
   return { type: IngredientType.flour, group: group, weight: 0 }
 }
 
-const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
+const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
   const [createRecipeMutation] = useCreateRecipeMutation()
+  const [updateRecipeMutation] = useUpdateRecipeMutation()
+
+  const initialValues = {
+    name: recipe?.name ?? '',
+    starterIngredients: recipe?.ingredients.filter(i => i.group === IngredientGroup.starter) ?? [],
+    doughIngredients: recipe?.ingredients.filter(i => i.group === IngredientGroup.dough) ?? []
+  }
 
   const createRecipe = async (data: CreateRecipeMutationVariables['data']) => {
     await createRecipeMutation({
@@ -65,17 +73,44 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
     })
   }
 
+  const updateRecipe = async (data: UpdateRecipeMutationVariables['data']) => {
+    await updateRecipeMutation({
+      variables: { data },
+      update: (cache, { data }) => {
+        try {
+          const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
+            query: GetRecipesDocument
+          })
+
+          const existingRecipes = getExistingRecipes?.recipes
+          const newRecipe = data?.updateRecipe
+
+          // TODO: need to update the fragment, we don't want to insert the array
+
+          if (existingRecipes) {
+            cache.writeQuery({
+              query: GetRecipesDocument,
+              data: {
+                recipes: [newRecipe, ...existingRecipes]
+              }
+            })
+          }
+        } catch {}
+      }
+    })
+  }
+
   return (
     <Formik<FormValues>
-      initialValues={{ name: '', starterIngredients: [], doughIngredients: [] }}
+      initialValues={initialValues}
       validationSchema={CreateRecipeSchema}
       onSubmit={async (values) => {
-        const recipe = {
+        const recipeInput = {
           name: values.name,
           ingredients: values.starterIngredients.concat(values.doughIngredients)
         }
 
-        await createRecipe(recipe)
+        await recipe?.id ? updateRecipe({ ...recipeInput, id: recipe!.id }) : createRecipe(recipeInput)
         onSave()
       }}>
       {({ values, isSubmitting, setFieldValue }) => (

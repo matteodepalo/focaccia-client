@@ -32,6 +32,12 @@ mutation createRecipe($data: CreateRecipeInput!) {
   }
 }
 
+mutation updateRecipe($data: UpdateRecipeInput!) {
+  updateRecipe(data: $data) {
+    ...recipeFields
+  }
+}
+
 mutation removeRecipe($id: Int!) {
   removeRecipe(id: $id) {
     id

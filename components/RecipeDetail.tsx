@@ -1,42 +1,38 @@
-import { useGetRecipeQuery, GetRecipeQueryVariables } from '../graphql'
-import { Spinner, Card, Elevation } from '@blueprintjs/core'
+import { Button } from '@blueprintjs/core'
 import { FunctionComponent } from 'react'
 import DeleteButton from './DeleteButton'
-import styled from 'styled-components'
+import { useRouter } from 'next/router'
+import { RecipeFieldsFragment } from '../graphql'
+import { Box, Flex } from 'reflexbox/styled-components'
 
 interface Props {
-  id: GetRecipeQueryVariables['id']
+  recipe: RecipeFieldsFragment
 }
 
-const RecipeCard = styled(Card)`
-  width: 300px;
-`
-
-const RecipeDetail: FunctionComponent<Props> = ({ id }) => {
-  const {
-    data,
-    loading,
-    error
-  } = useGetRecipeQuery({ variables: { id: id } })
-
-  if (loading) return <Spinner />
-  if (error) return <p>Error Loading Recipe</p>
-
-  const recipe = data?.recipe
+const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
+  const router = useRouter()
 
   return (
     <>
       {recipe &&
-        <RecipeCard elevation={Elevation.TWO}>
-          <h2>{recipe.name}</h2>
+        <div>
+          <h1>{recipe.name}</h1>
           {recipe.ingredients.length > 0 && <ul>
             {recipe.ingredients.map(ingredient => {
               return <li key={ingredient.id}>{ingredient.name} / {ingredient.weight} / {ingredient.type} / {ingredient.group}</li>
             })}
           </ul>}
 
-          <DeleteButton recipeId={recipe.id} redirect={true} />
-        </RecipeCard>}
+          <Flex>
+            <Box mr={2}>
+              <Button icon="edit" onClick={() => router.push(`/recipes/${recipe.id}/edit`)} />
+            </Box>
+
+            <Box>
+              <DeleteButton recipeId={recipe.id} redirect={true} />
+            </Box>
+          </Flex>
+        </div>}
     </>
   )
 }
