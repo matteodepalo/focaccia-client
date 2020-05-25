@@ -27,10 +27,14 @@ interface Props {
   onSave: () => void
 }
 
-interface FormValues {
+export interface FormValues {
   name: string,
   starterIngredients: IngredientInput[],
   doughIngredients: IngredientInput[]
+}
+
+function newIngredient(group: IngredientGroup): IngredientInput {
+  return { type: IngredientType.flour, group: group, weight: 0 }
 }
 
 const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
@@ -100,14 +104,14 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
                   values.starterIngredients.map((_ingredient, index) => (
                     <div key={index}>
                       <ControlGroup>
-                        <IngredientField prefix="starter" index={index} setFieldValue={setFieldValue} />
+                        <IngredientField prefix="starter" index={index} setFieldValue={setFieldValue} formValues={values} />
                         <Button icon="remove" onClick={() => arrayHelpers.remove(index)} />
                       </ControlGroup>
                     </div>
                   ))
                 )}
 
-                <Button icon="add" onClick={() => arrayHelpers.push({ type: IngredientType.flour, group: IngredientGroup.starter, weight: 0 })} />
+                <Button icon="add" onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.starter))} />
               </div>
             )}
           />
@@ -122,14 +126,14 @@ const RecipeForm: FunctionComponent<Props> = ({ onSave }) => {
                   values.doughIngredients.map((_ingredient, index) => (
                     <div key={index}>
                       <ControlGroup>
-                        <IngredientField prefix="dough" index={index} setFieldValue={setFieldValue} />
+                        <IngredientField prefix="dough" index={index} setFieldValue={setFieldValue} formValues={values} />
                         <Button icon="remove" onClick={() => arrayHelpers.remove(index)} />
                       </ControlGroup>
                     </div>
                   ))
                 )}
 
-                <Button icon="add" onClick={() => arrayHelpers.push({ type: IngredientType.flour, group: IngredientGroup.dough, weight: 0 })} />
+                <Button icon="add" onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough))} />
               </div>
             )}
           />

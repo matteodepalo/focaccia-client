@@ -1,17 +1,19 @@
 import { FunctionComponent } from "react";
 import { IngredientType } from "../graphql";
-import { Field, FieldProps } from "formik";
+import { Field, FieldProps, getIn } from "formik";
 import { HTMLSelect, InputGroup } from "@blueprintjs/core";
 import { NumericInput } from "./NumericInput";
 import { ingredientTypes } from "../lib/ingredients";
+import { FormValues } from "./RecipeForm";
 
 interface Props {
   prefix: string,
   index: number,
-  setFieldValue: Function
+  setFieldValue: Function,
+  formValues: FormValues
 }
 
-export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue }) => {
+export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues }) => {
   return <>
     <Field name={`${prefix}Ingredients.${index}.type`}>
       {({ field }: FieldProps<IngredientType>) => (
@@ -24,7 +26,8 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
       )}
     </Field>
 
-    <Field as={InputGroup} placeholder="Name" name={`${prefix}Ingredients.${index}.name`} />
+    {getIn(formValues, `${prefix}Ingredients.${index}.type`) === IngredientType.flour &&
+      <Field as={InputGroup} placeholder="Name" name={`${prefix}Ingredients.${index}.name`} />}
 
     <Field name={`${prefix}Ingredients.${index}.weight`}>
       {({ field }: FieldProps<number>) => (
