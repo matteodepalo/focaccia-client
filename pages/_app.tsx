@@ -1,6 +1,7 @@
 import '../styles/global.css'
 import { AppProps } from 'next/app'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
+import ProgressBar from '../components/ProgressBar'
 
 const theme = {
   backgroundColor: 'white'
@@ -17,6 +18,7 @@ const GlobalStyle = createGlobalStyle<Theme>`
 function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
+      <ProgressBar />
       <GlobalStyle backgroundColor={theme.backgroundColor} />
       <Component {...pageProps} />
     </ThemeProvider>
