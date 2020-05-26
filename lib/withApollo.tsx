@@ -7,9 +7,22 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
 import { createHttpLink } from 'apollo-link-http'
 import { parseCookies } from 'nookies'
+import omitDeep from 'omit-deep-lodash'
+import { ApolloLink } from 'apollo-link'
+import { getMainDefinition } from 'apollo-utilities';
 
 export default withApollo(
   ({ initialState, ctx }) => {
+    const cleanTypenameLink = new ApolloLink((operation, forward) => {
+      const keysToOmit = ['__typename', 'createdAt', 'updatedAt']
+
+      const def = getMainDefinition(operation.query)
+      if (def && def.kind === 'OperationDefinition' && def.operation === 'mutation') {
+        operation.variables = omitDeep(operation.variables, keysToOmit)
+      }
+      return forward ? forward(operation) : null
+    })
+
     const authLink = setContext((_, { headers }) => {
       const accessToken = parseCookies(ctx).accessToken
 
@@ -27,7 +40,7 @@ export default withApollo(
     })
 
     return new ApolloClient({
-      link: authLink.concat(httpLink),
+      link: authLink.concat(cleanTypenameLink).concat(httpLink),
       ssrMode: Boolean(ctx),
       cache: new InMemoryCache().restore(initialState || {})
     });

@@ -83,6 +83,7 @@ export type CreateRecipeInput = {
 };
 
 export type IngredientInput = {
+  id?: Maybe<Scalars['Int']>;
   weight: Scalars['Float'];
   name?: Maybe<Scalars['String']>;
   type: Scalars['String'];
@@ -92,7 +93,7 @@ export type IngredientInput = {
 export type UpdateRecipeInput = {
   ingredients: Array<IngredientInput>;
   name: Scalars['String'];
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 export type IngredientFieldsFragment = Pick<Ingredient, 'id' | 'name' | 'type' | 'group' | 'weight'>;

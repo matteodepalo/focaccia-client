@@ -1,4 +1,4 @@
-import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, IngredientInput, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation } from '../graphql'
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../graphql'
 import { Button, EditableText, ControlGroup } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray } from 'formik'
 import { FunctionComponent } from 'react'
@@ -87,7 +87,17 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
           ingredients: values.starterIngredients.concat(values.doughIngredients)
         }
 
-        await recipe?.id ? updateRecipe({ ...recipeInput, id: recipe!.id }) : createRecipe(recipeInput)
+        if (recipe?.id) {
+          const updateRecipeInput = {
+            ...recipeInput,
+            id: recipe.id
+          }
+
+          await updateRecipe(updateRecipeInput)
+        } else {
+          await createRecipe(recipeInput)
+        }
+
         onSave()
       }}>
       {({ values, isSubmitting, setFieldValue }) => (
