@@ -1,4 +1,4 @@
-import { RecipeFieldsFragment, IngredientType } from "../graphql"
+import { RecipeFieldsFragment, IngredientType, IngredientGroup } from "../graphql"
 import { uniq } from 'lodash'
 
 export function recipeHydration(recipe: RecipeFieldsFragment) {
@@ -18,4 +18,12 @@ export function recipeFlourList(recipe: RecipeFieldsFragment) {
 
 export function recipeWeight(_recipe: RecipeFieldsFragment) {
   return 1
+}
+
+export function starterIngredients(recipe: RecipeFieldsFragment) {
+  return recipe.ingredients.filter(i => i.group === IngredientGroup.starter)
+}
+
+export function doughIngredients(recipe: RecipeFieldsFragment) {
+  return recipe.ingredients.filter(i => i.group === IngredientGroup.dough)
 }

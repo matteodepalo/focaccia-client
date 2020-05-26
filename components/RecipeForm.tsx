@@ -5,6 +5,8 @@ import { FunctionComponent } from 'react'
 import * as Yup from 'yup';
 import { labelForIngredientGroup } from '../lib/ingredients';
 import { IngredientField } from './IngredientField';
+import { starterIngredients, doughIngredients } from '../lib/recipe';
+import { Box } from 'reflexbox/styled-components';
 
 const CreateRecipeSchema = Yup.object().shape({
   name: Yup.string().required('Required'),
@@ -44,8 +46,8 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
 
   const initialValues = {
     name: recipe?.name ?? '',
-    starterIngredients: recipe?.ingredients.filter(i => i.group === IngredientGroup.starter) ?? [],
-    doughIngredients: recipe?.ingredients.filter(i => i.group === IngredientGroup.dough) ?? []
+    starterIngredients: recipe ? starterIngredients(recipe) : [],
+    doughIngredients: recipe ? doughIngredients(recipe) : []
   }
 
   const createRecipe = async (data: CreateRecipeMutationVariables['data']) => {
@@ -124,12 +126,12 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
               <div>
                 {values.starterIngredients.length > 0 && (
                   values.starterIngredients.map((_ingredient, index) => (
-                    <div key={index}>
+                    <Box mb={2} key={index}>
                       <ControlGroup>
                         <IngredientField prefix="starter" index={index} setFieldValue={setFieldValue} formValues={values} />
                         <Button icon="remove" onClick={() => arrayHelpers.remove(index)} />
                       </ControlGroup>
-                    </div>
+                    </Box>
                   ))
                 )}
 
@@ -146,12 +148,12 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
               <div>
                 {values.doughIngredients.length > 0 && (
                   values.doughIngredients.map((_ingredient, index) => (
-                    <div key={index}>
+                    <Box mb={2} key={index}>
                       <ControlGroup>
                         <IngredientField prefix="dough" index={index} setFieldValue={setFieldValue} formValues={values} />
                         <Button icon="remove" onClick={() => arrayHelpers.remove(index)} />
                       </ControlGroup>
-                    </div>
+                    </Box>
                   ))
                 )}
 
@@ -160,7 +162,9 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
             )}
           />
 
-          <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || !CreateRecipeSchema.isValidSync(values)}>Save</Button>
+          <Box mt={4}>
+            <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || !CreateRecipeSchema.isValidSync(values)}>Save</Button>
+          </Box>
         </FormikForm>
       )}
     </Formik>
