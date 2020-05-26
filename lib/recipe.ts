@@ -16,8 +16,9 @@ export function recipeFlourList(recipe: RecipeFieldsFragment) {
     .map(i => i.name))
 }
 
-export function recipeWeight(_recipe: RecipeFieldsFragment) {
-  return 1
+export function recipeWeightInG(recipe: RecipeFieldsFragment) {
+  return recipe.ingredients
+    .reduce((memo, i) => memo += i.weight, 0)
 }
 
 export function starterIngredients(recipe: RecipeFieldsFragment) {

@@ -1,13 +1,14 @@
-import { Button, IconName } from '@blueprintjs/core'
-import { FunctionComponent } from 'react'
+import { Button, IconName, NumericInput } from '@blueprintjs/core'
+import { FunctionComponent, useState } from 'react'
 import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientType, IngredientFieldsFragment } from '../graphql'
 import { Box, Flex } from 'reflexbox/styled-components'
 import { labelForIngredientGroup } from '../lib/ingredients'
-import { starterIngredients, doughIngredients } from '../lib/recipe'
+import { starterIngredients, doughIngredients, recipeWeightInG } from '../lib/recipe'
 import Ingredient from './Ingredient'
-import { capitalize } from 'lodash'
+import { capitalize, round } from 'lodash'
+import styled from 'styled-components'
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -47,12 +48,20 @@ export const ingredientTypeColor = (type: IngredientType): string => {
   }
 }
 
+const RecipeWeightTitle = styled.h3`
+  display: flex;
+  align-items: center;
+`
+
 const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
   const router = useRouter()
+  const recipeOriginalWeight = recipeWeightInG(recipe)
+  const [weight, setWeight] = useState(recipeOriginalWeight)
+  const scaleFactor = weight / recipeOriginalWeight
 
   const ingredientItem = (ingredient: IngredientFieldsFragment) => {
     return <Ingredient
-      text={`${ingredient.weight}g ${ingredient.name ?? capitalize(ingredient.type)}`}
+      text={`${round(ingredient.weight * scaleFactor)}g ${ingredient.name ?? capitalize(ingredient.type)}`}
       icon={ingredientTypeIcon(ingredient.type)}
       color={ingredientTypeColor(ingredient.type)} />
   }
@@ -62,6 +71,18 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
       {recipe &&
         <div>
           <h1>{recipe.name}</h1>
+
+          <RecipeWeightTitle>
+            Recipe for
+            {
+              <Box marginX={2}>
+                <NumericInput
+                  value={round(weight / 1000, 2)}
+                  onValueChange={(value: number) => setWeight(value * 1000)} />
+              </Box>
+            }
+            kg
+          </RecipeWeightTitle>
 
           <h2>Ingredients</h2>
 
