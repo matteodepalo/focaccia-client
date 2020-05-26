@@ -29,7 +29,12 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
       )}
     </Field>
 
-    {nameRequired && <Field as={InputGroup} placeholder="Name" name={`${prefix}Ingredients.${index}.name`} />}
+    {nameRequired &&
+      <Field placeholder="Name" name={`${prefix}Ingredients.${index}.name`}>
+        {({ field }: FieldProps<string>) => (
+          <InputGroup value={field.value ?? ''} onChange={field.onChange} name={field.name} />
+        )}
+      </Field>}
 
     <Field name={`${prefix}Ingredients.${index}.weight`}>
       {({ field }: FieldProps<number>) => (
