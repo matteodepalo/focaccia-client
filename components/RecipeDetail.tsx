@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientType, IngredientFieldsFragment } from '../graphql'
 import { Box, Flex } from 'reflexbox/styled-components'
 import { labelForIngredientGroup } from '../lib/ingredients'
-import { starterIngredients, doughIngredients, recipeWeightInG } from '../lib/recipe'
+import { starterIngredients, doughIngredients, recipeWeightInG, recipeHydration } from '../lib/recipe'
 import Ingredient from './Ingredient'
 import { capitalize, round } from 'lodash'
 import styled from 'styled-components'
@@ -60,13 +60,19 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
   const [weight, setWeight] = useState(recipeOriginalWeight)
   const weightScaleFactor = weight / recipeOriginalWeight
 
-  // const recipeOriginalHydration = recipeHydration(recipe)
-  // const [hydration, setHydration] = useState(recipeOriginalHydration)
-  // const hydrationScaleFactor = hydration / recipeOriginalHydration
+  const recipeOriginalHydration = recipeHydration(recipe)
+  const [hydration, setHydration] = useState(recipeOriginalHydration)
+  const hydrationScaleFactor = hydration / recipeOriginalHydration
 
   const ingredientItem = (ingredient: IngredientFieldsFragment) => {
+    let ingredientWeight = ingredient.weight * weightScaleFactor
+
+    if (ingredient.type === IngredientType.water && ingredient.group === IngredientGroup.dough) {
+      ingredientWeight *= hydrationScaleFactor
+    }
+
     return <Ingredient
-      text={`${round(ingredient.weight * weightScaleFactor)}g ${ingredient.name ?? capitalize(ingredient.type)}`}
+      text={`${round(ingredientWeight)}g ${ingredient.name ?? capitalize(ingredient.type)}`}
       icon={ingredientTypeIcon(ingredient.type)}
       color={ingredientTypeColor(ingredient.type)} />
   }
@@ -96,8 +102,8 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
               <Box marginX={2} width={100}>
                 <NumericInput
                   fill={true}
-                  value={70}
-                  onValueChange={(_value: number) => 1} />
+                  value={hydration}
+                  onValueChange={(value: number) => setHydration(value)} />
               </Box>
             }
             %
