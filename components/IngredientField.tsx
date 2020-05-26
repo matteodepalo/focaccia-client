@@ -14,6 +14,9 @@ interface Props {
 }
 
 export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues }) => {
+  const nameRequired = getIn(formValues, `${prefix}Ingredients.${index}.type`) === IngredientType.flour
+    || getIn(formValues, `${prefix}Ingredients.${index}.type`) === IngredientType.other
+
   return <>
     <Field name={`${prefix}Ingredients.${index}.type`}>
       {({ field }: FieldProps<IngredientType>) => (
@@ -26,8 +29,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
       )}
     </Field>
 
-    {getIn(formValues, `${prefix}Ingredients.${index}.type`) === IngredientType.flour &&
-      <Field as={InputGroup} placeholder="Name" name={`${prefix}Ingredients.${index}.name`} />}
+    {nameRequired && <Field as={InputGroup} placeholder="Name" name={`${prefix}Ingredients.${index}.name`} />}
 
     <Field name={`${prefix}Ingredients.${index}.weight`}>
       {({ field }: FieldProps<number>) => (
