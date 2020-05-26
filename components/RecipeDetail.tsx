@@ -48,20 +48,25 @@ export const ingredientTypeColor = (type: IngredientType): string => {
   }
 }
 
-const RecipeWeightTitle = styled.h3`
+const TitleWithNumericInput = styled.h3`
   display: flex;
   align-items: center;
 `
 
 const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
   const router = useRouter()
+
   const recipeOriginalWeight = recipeWeightInG(recipe)
   const [weight, setWeight] = useState(recipeOriginalWeight)
-  const scaleFactor = weight / recipeOriginalWeight
+  const weightScaleFactor = weight / recipeOriginalWeight
+
+  // const recipeOriginalHydration = recipeHydration(recipe)
+  // const [hydration, setHydration] = useState(recipeOriginalHydration)
+  // const hydrationScaleFactor = hydration / recipeOriginalHydration
 
   const ingredientItem = (ingredient: IngredientFieldsFragment) => {
     return <Ingredient
-      text={`${round(ingredient.weight * scaleFactor)}g ${ingredient.name ?? capitalize(ingredient.type)}`}
+      text={`${round(ingredient.weight * weightScaleFactor)}g ${ingredient.name ?? capitalize(ingredient.type)}`}
       icon={ingredientTypeIcon(ingredient.type)}
       color={ingredientTypeColor(ingredient.type)} />
   }
@@ -72,17 +77,31 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
         <div>
           <h1>{recipe.name}</h1>
 
-          <RecipeWeightTitle>
+          <TitleWithNumericInput>
             Recipe for
             {
-              <Box marginX={2}>
+              <Box marginX={2} width={100}>
                 <NumericInput
+                  fill={true}
                   value={round(weight / 1000, 2)}
                   onValueChange={(value: number) => setWeight(value * 1000)} />
               </Box>
             }
             kg
-          </RecipeWeightTitle>
+          </TitleWithNumericInput>
+
+          <TitleWithNumericInput>
+            Hydration
+            {
+              <Box marginX={2} width={100}>
+                <NumericInput
+                  fill={true}
+                  value={70}
+                  onValueChange={(_value: number) => 1} />
+              </Box>
+            }
+            %
+          </TitleWithNumericInput>
 
           <h2>Ingredients</h2>
 
