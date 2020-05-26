@@ -74,30 +74,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
   }
 
   const updateRecipe = async (data: UpdateRecipeMutationVariables['data']) => {
-    await updateRecipeMutation({
-      variables: { data },
-      update: (cache, { data }) => {
-        try {
-          const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
-            query: GetRecipesDocument
-          })
-
-          const existingRecipes = getExistingRecipes?.recipes
-          const newRecipe = data?.updateRecipe
-
-          // TODO: need to update the fragment, we don't want to insert the array
-
-          if (existingRecipes) {
-            cache.writeQuery({
-              query: GetRecipesDocument,
-              data: {
-                recipes: [newRecipe, ...existingRecipes]
-              }
-            })
-          }
-        } catch {}
-      }
-    })
+    await updateRecipeMutation({ variables: { data } })
   }
 
   return (
