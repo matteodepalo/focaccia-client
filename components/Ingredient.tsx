@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { Flex } from 'reflexbox/styled-components'
+import { Flex } from 'rebass/styled-components'
 import { Icon, IconName } from '@blueprintjs/core'
 
 interface Props {

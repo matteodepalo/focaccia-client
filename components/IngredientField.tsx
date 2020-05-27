@@ -2,11 +2,11 @@ import { FunctionComponent } from "react";
 import { IngredientType } from "../graphql";
 import { Field, FieldProps, getIn } from "formik";
 import { HTMLSelect, InputGroup, Button } from "@blueprintjs/core";
-import { NumericInput } from "./NumericInput";
+import { WeightInput } from "./WeightInput";
 import { ingredientTypes } from "../lib/ingredients";
 import { FormValues } from "./RecipeForm";
 import { nameRequiredForType } from "../lib/recipe";
-import { Flex, Box } from "reflexbox/styled-components";
+import { Flex, Box } from "rebass/styled-components";
 
 interface Props {
   prefix: string,
@@ -22,7 +22,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
   return (
     <Flex mb={2} key={index} alignItems="center">
       <Box>
-        <Flex flexWrap="wrap">
+        <Flex flexDirection={["column", "row"]}>
           <Box mb={1} mr={1}>
             <Flex>
               <Box mr={1}>
@@ -38,22 +38,24 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
                 </Field>
               </Box>
 
-              {nameRequired &&
-                <Field name={`${prefix}Ingredients.${index}.name`}>
-                  {({ field }: FieldProps<string>) => (
-                    <InputGroup value={field.value ?? ''} onChange={field.onChange} name={field.name} placeholder="Name" />
+              <Box>
+                <Field name={`${prefix}Ingredients.${index}.weight`}>
+                  {({ field }: FieldProps<number>) => (
+                    <WeightInput setFieldValue={setFieldValue} value={field.value} name={field.name} />
                   )}
-                </Field>}
+                </Field>
+              </Box>
             </Flex>
           </Box>
 
-          <Box>
-            <Field name={`${prefix}Ingredients.${index}.weight`}>
-              {({ field }: FieldProps<number>) => (
-                <NumericInput setFieldValue={setFieldValue} value={field.value} name={field.name} />
-              )}
-            </Field>
-          </Box>
+          {nameRequired &&
+            <Box>
+              <Field name={`${prefix}Ingredients.${index}.name`}>
+                {({ field }: FieldProps<string>) => (
+                  <InputGroup value={field.value ?? ''} onChange={field.onChange} name={field.name} placeholder="Name" />
+                )}
+              </Field>
+            </Box>}
         </Flex>
       </Box>
 

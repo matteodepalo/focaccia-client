@@ -1,7 +1,7 @@
 import { Navbar, Alignment, AnchorButton, Menu, Popover } from "@blueprintjs/core"
 import Head from "next/head"
 import { FunctionComponent } from "react"
-import { Box } from "reflexbox/styled-components"
+import { Box } from "rebass/styled-components"
 import Link from "next/link"
 import { useRouter } from 'next/router'
 import { User } from "../lib/user"

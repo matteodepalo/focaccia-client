@@ -1,13 +1,14 @@
-import { Button, IconName, NumericInput } from '@blueprintjs/core'
+import { Button, IconName } from '@blueprintjs/core'
 import { FunctionComponent, useState } from 'react'
 import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientType, IngredientFieldsFragment } from '../graphql'
-import { Box, Flex } from 'reflexbox/styled-components'
+import { Box, Flex } from 'rebass/styled-components'
 import { labelForIngredientGroup } from '../lib/ingredients'
 import { starterIngredients, doughIngredients, recipeWeightInG, recipeHydration } from '../lib/recipe'
 import Ingredient from './Ingredient'
 import { capitalize, round } from 'lodash'
+import { NumericInput } from './NumericInput'
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -80,12 +81,12 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
           <Flex as="h3" mb={2} alignItems="center">
             Recipe for
             {
-              <Box marginX={2} width={100}>
-                <NumericInput
-                  fill={true}
-                  value={round(weight / 1000, 2)}
-                  onValueChange={(value: number) => setWeight(value * 1000)} />
-              </Box>
+              <NumericInput
+                boxProps={{ marginX: 2, width: 100 }}
+                inputProps={{
+                  value: round(weight / 1000, 2),
+                  onValueChange: (value: number) => setWeight(value * 1000)
+                }}/>
             }
             kg
           </Flex>
@@ -93,12 +94,12 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
           <Flex as="h3" alignItems="center">
             Hydration
             {
-              <Box marginX={2} width={100}>
-                <NumericInput
-                  fill={true}
-                  value={hydration}
-                  onValueChange={(value: number) => setHydration(value)} />
-              </Box>
+              <NumericInput
+                boxProps={{ marginX: 2, width: 100 }}
+                inputProps={{
+                  value: hydration,
+                  onValueChange: (value: number) => setHydration(value)
+                }}/>
             }
             %
           </Flex>

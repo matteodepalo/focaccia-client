@@ -1,25 +1,20 @@
-import { NumericInput as BPNumericInput, Tag } from '@blueprintjs/core'
+import { NumericInput as BPNumericInput } from '@blueprintjs/core'
 import { FunctionComponent } from "react"
+import { Box, BoxProps } from "rebass/styled-components"
 
 interface Props {
-  value: number
-  setFieldValue: Function
-  name: string
+  boxProps?: BoxProps
+  inputProps: BPNumericInput['props']
 }
 
-const handleNumericInputChange = (setFieldValue: Function, name: string) => (valueAsNumber: number, valueAsString: string) => {
-  if (!isNaN(valueAsNumber) && valueAsString.length > 0) {
-    setFieldValue(name, valueAsNumber)
-  } else {
-    setFieldValue(name, undefined)
-  }
-}
 
-export const NumericInput: FunctionComponent<Props> = ({ value, setFieldValue, name }) => {
-  return <BPNumericInput
-    allowNumericCharactersOnly={true}
-    value={value}
-    onValueChange={handleNumericInputChange(setFieldValue, name)}
-    rightElement={<Tag minimal={true}>g</Tag>}
-    name={name} />
+export const NumericInput: FunctionComponent<Props> = ({ boxProps, inputProps }) => {
+  return (
+    <Box sx={{ touchAction: 'manipulation' }} {...boxProps}>
+      <BPNumericInput
+        allowNumericCharactersOnly={true}
+        fill={true}
+        {...inputProps} />
+    </Box>
+  )
 }

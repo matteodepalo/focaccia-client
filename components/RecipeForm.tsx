@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { labelForIngredientGroup } from '../lib/ingredients';
 import { IngredientField } from './IngredientField';
 import { starterIngredients, doughIngredients, nameRequiredForType } from '../lib/recipe';
-import { Box } from 'reflexbox/styled-components';
+import { Box } from 'rebass/styled-components';
 
 const IngredientSchema = Yup.lazy(value => {
   const shape = {
