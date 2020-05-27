@@ -28,3 +28,7 @@ export function starterIngredients(recipe: RecipeFieldsFragment) {
 export function doughIngredients(recipe: RecipeFieldsFragment) {
   return recipe.ingredients.filter(i => i.group === IngredientGroup.dough)
 }
+
+export function nameRequiredForType(type: IngredientType) {
+  return [IngredientType.flour, IngredientType.other].includes(type)
+}

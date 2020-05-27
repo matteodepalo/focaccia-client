@@ -1,27 +1,34 @@
-import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../graphql'
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, IngredientFieldsFragment } from '../graphql'
 import { Button, EditableText, ControlGroup } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray } from 'formik'
 import { FunctionComponent } from 'react'
 import * as Yup from 'yup';
 import { labelForIngredientGroup } from '../lib/ingredients';
 import { IngredientField } from './IngredientField';
-import { starterIngredients, doughIngredients } from '../lib/recipe';
+import { starterIngredients, doughIngredients, nameRequiredForType } from '../lib/recipe';
 import { Box } from 'reflexbox/styled-components';
+
+const IngredientSchema = Yup.lazy(value => {
+  const shape = {
+    weight: Yup.number().moreThan(0)
+  }
+
+  if (nameRequiredForType((value as IngredientFieldsFragment).type)) {
+    return Yup.object().shape({
+      name: Yup.string().required(),
+      ...shape
+    })
+  } else {
+    return Yup.object().shape(shape)
+  }
+})
 
 const CreateRecipeSchema = Yup.object().shape({
   name: Yup.string().required('Required'),
   starterIngredients: Yup.array()
-    .of(
-      Yup.object().shape({
-        weight: Yup.number().moreThan(0)
-      })
-    ),
+    .of(IngredientSchema),
   doughIngredients: Yup.array()
-    .of(
-      Yup.object().shape({
-        weight: Yup.number().moreThan(0)
-      })
-    )
+    .of(IngredientSchema)
     .required('Must have doughIngredients')
 });
 

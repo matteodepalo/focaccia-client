@@ -5,6 +5,7 @@ import { HTMLSelect, InputGroup } from "@blueprintjs/core";
 import { NumericInput } from "./NumericInput";
 import { ingredientTypes } from "../lib/ingredients";
 import { FormValues } from "./RecipeForm";
+import { nameRequiredForType } from "../lib/recipe";
 
 interface Props {
   prefix: string,
@@ -14,8 +15,7 @@ interface Props {
 }
 
 export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues }) => {
-  const nameRequired = getIn(formValues, `${prefix}Ingredients.${index}.type`) === IngredientType.flour
-    || getIn(formValues, `${prefix}Ingredients.${index}.type`) === IngredientType.other
+  const nameRequired = nameRequiredForType(getIn(formValues, `${prefix}Ingredients.${index}.type`))
 
   return <>
     <Field name={`${prefix}Ingredients.${index}.type`}>
@@ -30,9 +30,9 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
     </Field>
 
     {nameRequired &&
-      <Field placeholder="Name" name={`${prefix}Ingredients.${index}.name`}>
+      <Field name={`${prefix}Ingredients.${index}.name`}>
         {({ field }: FieldProps<string>) => (
-          <InputGroup value={field.value ?? ''} onChange={field.onChange} name={field.name} />
+          <InputGroup value={field.value ?? ''} onChange={field.onChange} name={field.name} placeholder="Name" />
         )}
       </Field>}
 
