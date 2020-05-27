@@ -1,16 +1,10 @@
 import { Navbar, Alignment, AnchorButton, Menu, Popover } from "@blueprintjs/core"
 import Head from "next/head"
 import { FunctionComponent } from "react"
-import styled from "styled-components"
 import { Box } from "reflexbox/styled-components"
 import Link from "next/link"
 import { useRouter } from 'next/router'
 import { User } from "../lib/user"
-
-const Container = styled(Box)`
-  max-width: 1024px;
-  height: 100%;
-`
 
 interface Props {
   user: User | null
@@ -49,13 +43,13 @@ const Layout: FunctionComponent<Props> = ({ user, children }) => {
         </Navbar.Group>
       </Navbar>
 
-      <Container p={4}>
+      <Box maxWidth={1024} height={1} p={4}>
         <Head>
           <title>Focaccia</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
         </Head>
         {children}
-      </Container>
+      </Box>
     </>
   )
 }

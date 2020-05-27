@@ -9,20 +9,16 @@ interface Props {
   color: string
 }
 
-const Wrapper = styled(Flex)`
-  padding: 10px 0
-`
-
 const IngredientIcon = styled(Icon)`
   margin-right: 15px
 `
 
 const Ingredient: FunctionComponent<Props> = ({ text, icon, color }) => {
   return (
-    <Wrapper alignItems="center">
+    <Flex paddingY={2} alignItems="center">
       <IngredientIcon icon={icon} color={color} />
       <div>{text}</div>
-    </Wrapper>
+    </Flex>
   )
 }
 

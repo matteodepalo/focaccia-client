@@ -8,7 +8,6 @@ import { labelForIngredientGroup } from '../lib/ingredients'
 import { starterIngredients, doughIngredients, recipeWeightInG, recipeHydration } from '../lib/recipe'
 import Ingredient from './Ingredient'
 import { capitalize, round } from 'lodash'
-import styled from 'styled-components'
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -48,11 +47,6 @@ export const ingredientTypeColor = (type: IngredientType): string => {
   }
 }
 
-const TitleWithNumericInput = styled.h3`
-  display: flex;
-  align-items: center;
-`
-
 const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
   const router = useRouter()
 
@@ -83,7 +77,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
         <div>
           <h1>{recipe.name}</h1>
 
-          <TitleWithNumericInput>
+          <Flex as="h3" mb={2} alignItems="center">
             Recipe for
             {
               <Box marginX={2} width={100}>
@@ -94,9 +88,9 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
               </Box>
             }
             kg
-          </TitleWithNumericInput>
+          </Flex>
 
-          <TitleWithNumericInput>
+          <Flex as="h3" alignItems="center">
             Hydration
             {
               <Box marginX={2} width={100}>
@@ -107,7 +101,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
               </Box>
             }
             %
-          </TitleWithNumericInput>
+          </Flex>
 
           <h2>Ingredients</h2>
 

@@ -1,5 +1,5 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, IngredientFieldsFragment } from '../graphql'
-import { Button, EditableText, ControlGroup } from '@blueprintjs/core'
+import { Button, EditableText } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray } from 'formik'
 import { FunctionComponent } from 'react'
 import * as Yup from 'yup';
@@ -133,16 +133,17 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
               <div>
                 {values.starterIngredients.length > 0 && (
                   values.starterIngredients.map((_ingredient, index) => (
-                    <Box mb={2} key={index}>
-                      <ControlGroup>
-                        <IngredientField prefix="starter" index={index} setFieldValue={setFieldValue} formValues={values} />
-                        <Button icon="remove" onClick={() => arrayHelpers.remove(index)} />
-                      </ControlGroup>
-                    </Box>
+                    <IngredientField
+                      key={index}
+                      prefix="starter"
+                      index={index}
+                      setFieldValue={setFieldValue}
+                      formValues={values}
+                      onRemove={() => arrayHelpers.remove(index)} />
                   ))
                 )}
 
-                <Button icon="add" onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.starter))} />
+                <Button icon="add" onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.starter))} minimal={true} />
               </div>
             )}
           />
@@ -155,16 +156,17 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
               <div>
                 {values.doughIngredients.length > 0 && (
                   values.doughIngredients.map((_ingredient, index) => (
-                    <Box mb={2} key={index}>
-                      <ControlGroup>
-                        <IngredientField prefix="dough" index={index} setFieldValue={setFieldValue} formValues={values} />
-                        <Button icon="remove" onClick={() => arrayHelpers.remove(index)} />
-                      </ControlGroup>
-                    </Box>
+                    <IngredientField
+                      key={index}
+                      prefix="dough"
+                      index={index}
+                      setFieldValue={setFieldValue}
+                      formValues={values}
+                      onRemove={() => arrayHelpers.remove(index)} />
                   ))
                 )}
 
-                <Button icon="add" onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough))} />
+                <Button icon="add" onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough))} minimal={true} />
               </div>
             )}
           />
