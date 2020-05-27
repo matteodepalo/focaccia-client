@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useRouter } from "next/router"
 import { recipeHydration, recipeFlourList } from '../lib/recipe'
 import Ingredient from './Ingredient'
-import { ingredientTypeIcon, ingredientTypeColor } from './RecipeDetail'
+import { ingredientTypeIcon } from './RecipeDetail'
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -25,13 +25,11 @@ const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
       <div>
         <Ingredient
           text={`${recipeHydration(recipe)}%`}
-          icon={ingredientTypeIcon(IngredientType.water)}
-          color={ingredientTypeColor(IngredientType.water)} />
+          icon={ingredientTypeIcon(IngredientType.water)} />
 
         <Ingredient
           text={recipeFlourList(recipe).join(', ')}
-          icon={ingredientTypeIcon(IngredientType.flour)}
-          color={ingredientTypeColor(IngredientType.flour)} />
+          icon={ingredientTypeIcon(IngredientType.flour)} />
       </div>
     </RecipeCard>
   )

@@ -1,22 +1,15 @@
 import { FunctionComponent } from 'react'
-import styled from 'styled-components'
 import { Flex } from 'rebass/styled-components'
-import { Icon, IconName } from '@blueprintjs/core'
 
 interface Props {
-  icon: IconName
+  icon: JSX.Element
   text: string
-  color: string
 }
 
-const IngredientIcon = styled(Icon)`
-  margin-right: 15px
-`
-
-const Ingredient: FunctionComponent<Props> = ({ text, icon, color }) => {
+const Ingredient: FunctionComponent<Props> = ({ text, icon }) => {
   return (
     <Flex paddingY={2} alignItems="center">
-      <IngredientIcon icon={icon} color={color} />
+      {icon}
       <div>{text}</div>
     </Flex>
   )

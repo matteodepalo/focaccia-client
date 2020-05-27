@@ -1,4 +1,4 @@
-import { Button, IconName } from '@blueprintjs/core'
+import { Button } from '@blueprintjs/core'
 import { FunctionComponent, useState } from 'react'
 import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
@@ -9,40 +9,26 @@ import { starterIngredients, doughIngredients, recipeWeightInG, recipeHydration 
 import Ingredient from './Ingredient'
 import { capitalize, round } from 'lodash'
 import { NumericInput } from './NumericInput'
+import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiChiliPepper } from 'react-icons/gi'
 
 interface Props {
   recipe: RecipeFieldsFragment
 }
 
-export const ingredientTypeIcon = (type: IngredientType): IconName => {
-  switch (type) {
-    case IngredientType.yeast:
-      return "arrow-up"
-    case IngredientType.flour:
-      return "properties"
-    case IngredientType.water:
-      return "tint"
-    case IngredientType.salt:
-      return "square"
-    case IngredientType.other:
-      return "symbol-triangle-up"
-    default:
-      throw "No icon for type"
-  }
-}
+export const ingredientTypeIcon = (type: IngredientType)  => {
+  const style = { size: 25, style: { marginRight: 15 } }
 
-export const ingredientTypeColor = (type: IngredientType): string => {
   switch (type) {
     case IngredientType.yeast:
-      return "brown"
+      return <GiBubbles color="brown" {...style} />
     case IngredientType.flour:
-      return "brown"
+      return <GiWheat color="brown" {...style} />
     case IngredientType.water:
-      return "blue"
+      return <GiWaterDrop color="blue" {...style} />
     case IngredientType.salt:
-      return "grey"
+      return <GiSaltShaker color="grey" {...style} />
     case IngredientType.other:
-      return "grey"
+      return <GiChiliPepper color="grey" {...style} />
     default:
       throw "No icon for type"
   }
@@ -68,8 +54,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
 
     return <Ingredient
       text={`${round(ingredientWeight)}g ${ingredient.name ?? capitalize(ingredient.type)}`}
-      icon={ingredientTypeIcon(ingredient.type)}
-      color={ingredientTypeColor(ingredient.type)} />
+      icon={ingredientTypeIcon(ingredient.type)} />
   }
 
   return (
