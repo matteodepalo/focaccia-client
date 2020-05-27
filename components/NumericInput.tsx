@@ -7,9 +7,11 @@ interface Props {
   name: string
 }
 
-const handleNumericInputChange = (setFieldValue: Function, name: string) => (value: number) => {
-  if (!isNaN(value)) {
-    setFieldValue(name, value)
+const handleNumericInputChange = (setFieldValue: Function, name: string) => (valueAsNumber: number, valueAsString: string) => {
+  if (!isNaN(valueAsNumber) && valueAsString.length > 0) {
+    setFieldValue(name, valueAsNumber)
+  } else {
+    setFieldValue(name, undefined)
   }
 }
 

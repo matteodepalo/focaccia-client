@@ -10,7 +10,7 @@ import { Box } from 'reflexbox/styled-components';
 
 const IngredientSchema = Yup.lazy(value => {
   const shape = {
-    weight: Yup.number().moreThan(0)
+    weight: Yup.number().moreThan(0).required()
   }
 
   if (nameRequiredForType((value as IngredientFieldsFragment).type)) {
