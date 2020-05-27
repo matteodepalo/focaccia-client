@@ -9,7 +9,7 @@ import { starterIngredients, doughIngredients, recipeWeightInG, recipeHydration 
 import Ingredient from './Ingredient'
 import { capitalize, round } from 'lodash'
 import { NumericInput } from './NumericInput'
-import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiChiliPepper } from 'react-icons/gi'
+import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiCoolSpices } from 'react-icons/gi'
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -24,11 +24,11 @@ export const ingredientTypeIcon = (type: IngredientType)  => {
     case IngredientType.flour:
       return <GiWheat color="brown" {...style} />
     case IngredientType.water:
-      return <GiWaterDrop color="blue" {...style} />
+      return <GiWaterDrop color="teal" {...style} />
     case IngredientType.salt:
-      return <GiSaltShaker color="grey" {...style} />
+      return <GiSaltShaker {...style} />
     case IngredientType.other:
-      return <GiChiliPepper color="grey" {...style} />
+      return <GiCoolSpices {...style} />
     default:
       throw "No icon for type"
   }
