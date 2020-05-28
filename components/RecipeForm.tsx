@@ -1,4 +1,4 @@
-import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, IngredientFieldsFragment } from '../graphql'
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../graphql'
 import { Button, EditableText } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray } from 'formik'
 import { FunctionComponent } from 'react'
@@ -13,7 +13,7 @@ const IngredientSchema = Yup.lazy(value => {
     weight: Yup.number().moreThan(0).required()
   }
 
-  if (nameRequiredForType((value as IngredientFieldsFragment).type)) {
+  if (nameRequiredForType((value as IngredientInput).type)) {
     return Yup.object().shape({
       name: Yup.string().required(),
       ...shape

@@ -86,8 +86,8 @@ export type IngredientInput = {
   id?: Maybe<Scalars['Int']>;
   weight: Scalars['Float'];
   name?: Maybe<Scalars['String']>;
-  type: Scalars['String'];
-  group: Scalars['String'];
+  type: IngredientType;
+  group: IngredientGroup;
 };
 
 export type UpdateRecipeInput = {
