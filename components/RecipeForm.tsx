@@ -8,23 +8,26 @@ import { IngredientField } from './IngredientField';
 import { starterIngredients, doughIngredients, nameRequiredForType } from '../lib/recipe';
 import { Box } from 'rebass/styled-components';
 
-const IngredientSchema = Yup.lazy(value => {
-  const shape = {
-    weight: Yup.number().moreThan(0).required()
-  }
+// TODO: figure out why this is called for every ingredient twice
+
+const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
+  const object = Yup.object({
+    weight: Yup.number().moreThan(0).required(),
+    group: Yup.mixed<IngredientGroup>().oneOf(Object.values(IngredientGroup)).required(),
+    type: Yup.mixed<IngredientType>().oneOf(Object.values(IngredientType)).required()
+  })
 
   if (nameRequiredForType((value as IngredientInput).type)) {
-    return Yup.object().shape({
-      name: Yup.string().required(),
-      ...shape
+    return object.shape({
+      name: Yup.string().required()
     })
   } else {
-    return Yup.object().shape(shape)
+    return object
   }
 })
 
-const CreateRecipeSchema = Yup.object().shape({
-  name: Yup.string().required('Required'),
+const RecipeSchema = Yup.object().shape({
+  name: Yup.string().required(),
   starterIngredients: Yup.array()
     .of(IngredientSchema),
   doughIngredients: Yup.array()
@@ -89,7 +92,10 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
   return (
     <Formik<FormValues>
       initialValues={initialValues}
-      validationSchema={CreateRecipeSchema}
+      validationSchema={RecipeSchema}
+      validateOnBlur={true}
+      validateOnChange={false}
+      validateOnMount={false}
       onSubmit={async (values) => {
         const recipeInput = {
           name: values.name,
@@ -109,14 +115,17 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
 
         onSave()
       }}>
-      {({ values, isSubmitting, setFieldValue }) => (
+      {({ values, isSubmitting, setFieldValue, isValid, validateField }) => (
         <FormikForm>
           <Field name="name">
             {({ field }: FieldProps<string>) => (
               <h1>
                 <EditableText
                   value={field.value}
+                  confirmOnEnterKey={true}
                   onChange={(value: string) => setFieldValue('name', value)}
+                  onConfirm={() => validateField(field.name)}
+                  onCancel={() => validateField(field.name)}
                   multiline={true}
                   placeholder="Edit name..." />
               </h1>
@@ -172,7 +181,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
           />
 
           <Box mt={4}>
-            <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || !CreateRecipeSchema.isValidSync(values)}>Save</Button>
+            <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || !isValid}>Save</Button>
           </Box>
         </FormikForm>
       )}

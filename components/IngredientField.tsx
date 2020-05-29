@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { IngredientType } from "../graphql";
-import { Field, FieldProps, getIn } from "formik";
+import { Field, FieldProps, getIn, FormikHelpers } from "formik";
 import { HTMLSelect, InputGroup, Button } from "@blueprintjs/core";
 import { WeightInput } from "./WeightInput";
 import { ingredientTypes } from "../lib/ingredients";
@@ -11,7 +11,7 @@ import { Flex, Box } from "rebass/styled-components";
 interface Props {
   prefix: string,
   index: number,
-  setFieldValue: Function,
+  setFieldValue: FormikHelpers<any>['setFieldValue'],
   formValues: FormValues,
   onRemove: Function
 }
@@ -31,6 +31,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
                     <HTMLSelect
                       value={field.value}
                       onChange={field.onChange}
+                      onBlur={field.onBlur}
                       name={field.name}>
                         {ingredientTypes.map((type, index) => <option key={index} value={type.value}>{type.label}</option>)}
                     </HTMLSelect>
@@ -41,7 +42,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
               <Box>
                 <Field name={`${prefix}Ingredients.${index}.weight`}>
                   {({ field }: FieldProps<number>) => (
-                    <WeightInput setFieldValue={setFieldValue} value={field.value} name={field.name} />
+                    <WeightInput setFieldValue={setFieldValue} onBlur={field.onBlur} value={field.value} name={field.name} />
                   )}
                 </Field>
               </Box>
@@ -52,7 +53,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
             <Box>
               <Field name={`${prefix}Ingredients.${index}.name`}>
                 {({ field }: FieldProps<string>) => (
-                  <InputGroup value={field.value ?? ''} onChange={field.onChange} name={field.name} placeholder="Name" />
+                  <InputGroup value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} name={field.name} placeholder="Name" />
                 )}
               </Field>
             </Box>}
