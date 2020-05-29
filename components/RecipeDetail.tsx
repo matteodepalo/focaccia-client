@@ -109,7 +109,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
 
           <Flex mt={4}>
             <Box mr={2}>
-              <Button icon="edit" onClick={() => router.push(`/recipes/${recipe.id}/edit`)} />
+              <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)} />
             </Box>
 
             <Box>

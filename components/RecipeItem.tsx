@@ -20,7 +20,7 @@ const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
   const router = useRouter()
 
   return (
-    <RecipeCard elevation={Elevation.TWO} interactive={true} onClick={() => router.push(`/recipes/${recipe.id}`)}>
+    <RecipeCard elevation={Elevation.TWO} interactive={true} onClick={() => router.push('/recipes/[id]', `/recipes/${recipe.id}`)}>
       <h1>{recipe.name}</h1>
       <div>
         <Ingredient
