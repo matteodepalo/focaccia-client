@@ -4,10 +4,10 @@ import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientType, IngredientFieldsFragment } from '../graphql'
 import { Box, Flex } from 'rebass/styled-components'
-import { labelForIngredientGroup, ingredientTypeIcon } from '../lib/ingredients'
+import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType } from '../lib/ingredients'
 import { starterIngredients, doughIngredients, recipeWeightInG, recipeHydration } from '../lib/recipe'
 import Ingredient from './Ingredient'
-import { capitalize, round } from 'lodash'
+import { capitalize, round, lowerCase } from 'lodash'
 import { NumericInput } from './NumericInput'
 
 interface Props {
@@ -33,7 +33,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
     }
 
     return <Ingredient
-      text={`${round(ingredientWeight)}g ${ingredient.name ?? capitalize(ingredient.type)}`}
+      text={`${round(ingredientWeight)}g of ${ingredient.name ?? lowerCase(labelForIngredientType(ingredient.type))}`}
       icon={ingredientTypeIcon(ingredient.type, { size: 25, style: { marginRight: 15 } })} />
   }
 
@@ -41,7 +41,9 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
     <>
       {recipe &&
         <div>
-          <H1>{recipe.name}</H1>
+          <Box mb={4}>
+            <H1>{recipe.name}</H1>
+          </Box>
 
           <Flex as="h3" mb={2} alignItems="center">
             Recipe for
@@ -69,34 +71,47 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
             %
           </Flex>
 
-          <H2>Ingredients</H2>
+          <Box mt={4}>
+            <H2>Ingredients</H2>
+          </Box>
 
-          {starterIngredients(recipe).length > 0 && <H3>{labelForIngredientGroup(IngredientGroup.starter)}</H3>}
+          {starterIngredients(recipe).length > 0 &&
+            <Box mt={4}>
+              <H3>{labelForIngredientGroup(IngredientGroup.starter)}</H3>
 
-          {starterIngredients(recipe).map((ingredient, index) => {
-            return <div key={index}>
-              {ingredientItem(ingredient)}
-            </div>
-          })}
+              <Box mt={3}>
+                {starterIngredients(recipe).map((ingredient, index) => {
+                  return <div key={index}>
+                    {ingredientItem(ingredient)}
+                  </div>
+                })}
+              </Box>
+            </Box>
+          }
 
+
+        <Box mt={4}>
           <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
 
-          {doughIngredients(recipe).map((ingredient, index) => {
-            return <div key={index}>
-              {ingredientItem(ingredient)}
-            </div>
-          })}
+          <Box mt={3}>
+            {doughIngredients(recipe).map((ingredient, index) => {
+              return <div key={index}>
+                {ingredientItem(ingredient)}
+              </div>
+            })}
+          </Box>
+        </Box>
 
-          <Flex mt={4}>
-            <Box mr={2}>
-              <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)} />
-            </Box>
+        <Flex mt={4}>
+          <Box mr={2}>
+            <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)} />
+          </Box>
 
-            <Box>
-              <DeleteButton recipeId={recipe.id} redirect={true} />
-            </Box>
-          </Flex>
-        </div>}
+          <Box>
+            <DeleteButton recipeId={recipe.id} redirect={true} />
+          </Box>
+        </Flex>
+      </div>}
     </>
   )
 }

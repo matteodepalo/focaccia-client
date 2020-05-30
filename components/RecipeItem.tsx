@@ -18,6 +18,7 @@ const RecipeCard = styled(Card)`
 
 const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
   const router = useRouter()
+  const iconProps = { size: 25, style: { marginRight: 15 } }
 
   return (
     <RecipeCard elevation={Elevation.TWO} interactive={true} onClick={() => router.push('/recipes/[id]', `/recipes/${recipe.id}`)}>
@@ -25,11 +26,11 @@ const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
       <div>
         <Ingredient
           text={`${recipeHydration(recipe)}%`}
-          icon={ingredientTypeIcon(IngredientType.water)} />
+          icon={ingredientTypeIcon(IngredientType.water, iconProps)} />
 
         <Ingredient
           text={recipeFlourList(recipe).join(', ')}
-          icon={ingredientTypeIcon(IngredientType.flour)} />
+          icon={ingredientTypeIcon(IngredientType.flour, iconProps)} />
       </div>
     </RecipeCard>
   )
