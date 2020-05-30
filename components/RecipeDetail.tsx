@@ -1,4 +1,4 @@
-import { Button } from '@blueprintjs/core'
+import { Button, H1, H2, H3 } from '@blueprintjs/core'
 import { FunctionComponent, useState } from 'react'
 import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
@@ -61,7 +61,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
     <>
       {recipe &&
         <div>
-          <h1>{recipe.name}</h1>
+          <H1>{recipe.name}</H1>
 
           <Flex as="h3" mb={2} alignItems="center">
             Recipe for
@@ -89,9 +89,9 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
             %
           </Flex>
 
-          <h2>Ingredients</h2>
+          <H2>Ingredients</H2>
 
-          <h3>{labelForIngredientGroup(IngredientGroup.starter)}</h3>
+          {starterIngredients(recipe).length > 0 && <H3>{labelForIngredientGroup(IngredientGroup.starter)}</H3>}
 
           {starterIngredients(recipe).map((ingredient, index) => {
             return <div key={index}>
@@ -99,7 +99,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
             </div>
           })}
 
-          <h3>{labelForIngredientGroup(IngredientGroup.dough)}</h3>
+          <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
 
           {doughIngredients(recipe).map((ingredient, index) => {
             return <div key={index}>
