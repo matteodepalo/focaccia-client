@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useRouter } from "next/router"
 import { recipeHydration, recipeFlourList } from '../lib/recipe'
 import Ingredient from './Ingredient'
-import { ingredientTypeIcon } from './RecipeDetail'
+import { ingredientTypeIcon } from '../lib/ingredients'
 
 interface Props {
   recipe: RecipeFieldsFragment
