@@ -63,8 +63,8 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
       newIngredient(IngredientGroup.starter, IngredientType.yeast)
     ],
     doughIngredients: recipe ? doughIngredients(recipe) : [
-      newIngredient(IngredientGroup.starter, IngredientType.water),
-      newIngredient(IngredientGroup.starter, IngredientType.flour)
+      newIngredient(IngredientGroup.dough, IngredientType.water),
+      newIngredient(IngredientGroup.dough, IngredientType.flour)
     ]
   }
 
