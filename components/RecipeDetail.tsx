@@ -7,7 +7,7 @@ import { Box, Flex } from 'rebass/styled-components'
 import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType } from '../lib/ingredients'
 import { starterIngredients, doughIngredients, recipeWeightInG, recipeHydration } from '../lib/recipe'
 import Ingredient from './Ingredient'
-import { capitalize, round, lowerCase } from 'lodash'
+import { round, lowerCase } from 'lodash'
 import { NumericInput } from './NumericInput'
 
 interface Props {

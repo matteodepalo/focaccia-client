@@ -46,7 +46,7 @@ export interface FormValues {
   doughIngredients: IngredientInput[]
 }
 
-function newIngredient(group: IngredientGroup, type: IngredientType = IngredientType.flour): IngredientInput {
+function newIngredient(group: IngredientGroup, type: IngredientType): IngredientInput {
   return { type, group, weight: 0 }
 }
 
@@ -105,15 +105,9 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
       validateOnChange={false}
       validateOnMount={true}
       onSubmit={async (values) => {
-        let ingredients = values.doughIngredients
-
-        if (starterEnabled) {
-          ingredients.concat(values.starterIngredients)
-        }
-
         const recipeInput = {
           name: values.name,
-          ingredients: ingredients
+          ingredients: starterEnabled ? values.doughIngredients.concat(values.starterIngredients) : values.doughIngredients
         }
 
         if (recipe?.id) {
