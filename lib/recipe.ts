@@ -32,3 +32,5 @@ export function doughIngredients(recipe: RecipeFieldsFragment) {
 export function nameRequiredForType(type: IngredientType) {
   return [IngredientType.flour, IngredientType.other].includes(type)
 }
+
+export const uniqueIngredientTypes = [IngredientType.water, IngredientType.yeast, IngredientType.salt]
