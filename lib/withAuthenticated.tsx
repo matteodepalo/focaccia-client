@@ -3,7 +3,7 @@ import { User, CurrentUser } from "./user"
 import Layout from "../components/Layout"
 import { setCookie, destroyCookie } from "nookies"
 
-export interface Props {
+interface Props {
   user: User | null
 }
 
