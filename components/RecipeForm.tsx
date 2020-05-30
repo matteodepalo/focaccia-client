@@ -3,7 +3,7 @@ import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, Menu
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
-import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypes, uniqueIngredientTypes } from '../lib/ingredients';
+import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypes, doughIngredientRequired, ingredientTypeUnavailable } from '../lib/ingredients';
 import { IngredientField } from './IngredientField';
 import { starterIngredients, doughIngredients } from '../lib/recipe';
 import { Box, Flex } from 'rebass/styled-components';
@@ -194,14 +194,14 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                   <div>
                     <Box mb={3}>
                       {values.doughIngredients.length > 0 && (
-                        values.doughIngredients.map((_ingredient, index) => (
+                        values.doughIngredients.map((ingredient, index) => (
                           <IngredientField
                             key={index}
                             prefix="dough"
                             index={index}
                             setFieldValue={setFieldValue}
                             formValues={values}
-                            onRemove={() => arrayHelpers.remove(index)} />
+                            onRemove={doughIngredientRequired(ingredient, values.doughIngredients) ? undefined : () => arrayHelpers.remove(index)} />
                         ))
                       )}
                     </Box>
@@ -217,7 +217,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                               icon={ingredientTypeIcon(type.value)}
                               onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough, type.value))}
                               text={type.label}
-                              disabled={uniqueIngredientTypes.includes(type.value) && values.doughIngredients.map(i => i.type).includes(type.value)}/>
+                              disabled={ingredientTypeUnavailable(type.value, values.doughIngredients)}/>
                           })}
                         </Menu>}>
                         <Button icon="add" text="Add Ingredient" minimal={true} />

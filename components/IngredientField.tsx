@@ -13,7 +13,7 @@ interface Props {
   index: number,
   setFieldValue: FormikHelpers<any>['setFieldValue'],
   formValues: FormValues,
-  onRemove?: Function,
+  onRemove?: Function
 }
 
 
@@ -23,10 +23,9 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
 
   return (
     <Flex mb={2} alignItems="center">
-      {onRemove &&
-        <Box mr={2}>
-          <Button icon="remove" onClick={() => onRemove()} minimal={true}  />
-        </Box>}
+      <Box mr={2}>
+        <Button icon="remove" disabled={typeof onRemove === 'undefined'} onClick={() => onRemove?.()} minimal={true}  />
+      </Box>
 
       <Box>
         <Flex flexDirection={["column", "row"]}>
