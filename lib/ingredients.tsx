@@ -1,5 +1,6 @@
-import { IngredientGroup, IngredientType } from "../graphql"
+import { IngredientGroup, IngredientType, IngredientInput } from "../graphql"
 import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiCoolSpices } from 'react-icons/gi'
+import { CSSProperties } from "react"
 
 const ingredientGroups = [
   {
@@ -47,27 +48,40 @@ export function labelForIngredientType(type: IngredientType) {
   return ingredientTypes.find((t) => t.value === type)?.label
 }
 
-export const uniqueIngredientTypes = [IngredientType.water, IngredientType.yeast, IngredientType.salt]
-
-type IconStyle = {
-  size: number
-  style: {
-    marginRight: number
+export function doughIngredientRequired(ingredient: IngredientInput, doughIngredients: IngredientInput[]) {
+  switch (ingredient.type) {
+    case IngredientType.flour:
+      return doughIngredients.map(i => i.type).includes(ingredient.type) && doughIngredients.indexOf(ingredient) === 1
+    case IngredientType.water:
+      return doughIngredients.map(i => i.type).includes(ingredient.type)
+    default:
+      return false
   }
 }
 
-export const ingredientTypeIcon = (type: IngredientType, style?: IconStyle)  => {
+const uniqueIngredientTypes = [IngredientType.water, IngredientType.yeast, IngredientType.salt]
+
+export function ingredientTypeUnavailable(type: IngredientType, ingredients: IngredientInput[]) {
+  return uniqueIngredientTypes.includes(type) && ingredients.map(i => i.type).includes(type)
+}
+
+type IconProps = {
+  size: number
+  style: CSSProperties
+}
+
+export const ingredientTypeIcon = (type: IngredientType, props?: IconProps)  => {
   switch (type) {
     case IngredientType.yeast:
-      return <GiBubbles color="brown" {...style} />
+      return <GiBubbles color="brown" {...props} />
     case IngredientType.flour:
-      return <GiWheat color="brown" {...style} />
+      return <GiWheat color="brown" {...props} />
     case IngredientType.water:
-      return <GiWaterDrop color="teal" {...style} />
+      return <GiWaterDrop color="teal" {...props} />
     case IngredientType.salt:
-      return <GiSaltShaker {...style} />
+      return <GiSaltShaker {...props} />
     case IngredientType.other:
-      return <GiCoolSpices {...style} />
+      return <GiCoolSpices {...props} />
     default:
       throw "No icon for type"
   }
