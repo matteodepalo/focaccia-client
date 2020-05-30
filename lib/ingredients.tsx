@@ -12,7 +12,7 @@ const ingredientGroups = [
   }
 ]
 
-const ingredientTypes = [
+export const ingredientTypes = [
   {
     label: 'Flour',
     value: IngredientType.flour
@@ -48,10 +48,6 @@ export function labelForIngredientType(type: IngredientType) {
 }
 
 export const uniqueIngredientTypes = [IngredientType.water, IngredientType.yeast, IngredientType.salt]
-
-export const selectableIngredientTypes = ingredientTypes.filter(i => {
-  return !uniqueIngredientTypes.includes(i.value)
-})
 
 type IconStyle = {
   size: number
