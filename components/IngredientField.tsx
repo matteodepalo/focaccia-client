@@ -1,13 +1,12 @@
 import { FunctionComponent } from "react";
 import { IngredientType } from "../graphql";
 import { Field, FieldProps, getIn, FormikHelpers } from "formik";
-import { HTMLSelect, InputGroup, Button } from "@blueprintjs/core";
+import { InputGroup, Button } from "@blueprintjs/core";
 import { WeightInput } from "./WeightInput";
-import { ingredientTypes, labelForIngredientType } from "../lib/ingredients";
+import { labelForIngredientType, nameRequiredForType } from "../lib/ingredients";
 import { FormValues } from "./RecipeForm";
-import { nameRequiredForType, uniqueIngredientTypes } from "../lib/recipe";
 import { Flex, Box } from "rebass/styled-components";
-import styled from "styled-components";
+import { lowerCase } from "lodash";
 
 interface Props {
   prefix: string,
@@ -15,23 +14,25 @@ interface Props {
   setFieldValue: FormikHelpers<any>['setFieldValue'],
   formValues: FormValues,
   onRemove?: Function,
-  type: IngredientType
 }
 
-const HiddenField = styled(Field)`
-  display: none
-`
 
-export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues, onRemove, type }) => {
-  const nameRequired = nameRequiredForType(type || getIn(formValues, `${prefix}Ingredients.${index}.type`))
+export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues, onRemove }) => {
+  const type = getIn(formValues, `${prefix}Ingredients.${index}.type`) as IngredientType
+  const nameRequired = nameRequiredForType(type)
 
   return (
     <Flex mb={2} alignItems="center">
+      {onRemove &&
+        <Box mr={2}>
+          <Button icon="remove" onClick={() => onRemove()} minimal={true}  />
+        </Box>}
+
       <Box>
         <Flex flexDirection={["column", "row"]}>
           <Box mb={1} mr={1}>
             <Flex alignItems="center">
-              <Box mr={2}>
+              <Box>
                 <Field name={`${prefix}Ingredients.${index}.weight`}>
                   {({ field }: FieldProps<number>) => (
                     <WeightInput setFieldValue={setFieldValue} onBlur={field.onBlur} value={field.value} name={field.name} />
@@ -39,26 +40,11 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
                 </Field>
               </Box>
 
-              <span> of </span>
+              {type !== IngredientType.other &&
+                <Box ml={2}>
+                  of {lowerCase(labelForIngredientType(type))}
+                </Box>}
 
-              <Box ml={2}>
-                {uniqueIngredientTypes.includes(type) ?
-                  <>
-                    {labelForIngredientType(type)}
-                    <HiddenField value={type} name={`${prefix}Ingredients.${index}.type`}/>
-                  </> :
-                  <Field name={`${prefix}Ingredients.${index}.type`}>
-                    {({ field }: FieldProps<IngredientType>) => (
-                      <HTMLSelect
-                        value={field.value}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        name={field.name}>
-                          {ingredientTypes.map((type, index) => <option key={index} value={type.value}>{type.label}</option>)}
-                      </HTMLSelect>
-                    )}
-                  </Field>}
-              </Box>
 
               {nameRequired &&
                 <Box ml={2}>
@@ -72,11 +58,6 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
           </Box>
         </Flex>
       </Box>
-
-      {onRemove &&
-        <Box>
-          <Button icon="remove" onClick={() => onRemove()} minimal={true}  />
-        </Box>}
     </Flex>
   )
 }

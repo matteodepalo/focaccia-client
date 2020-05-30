@@ -4,34 +4,14 @@ import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientType, IngredientFieldsFragment } from '../graphql'
 import { Box, Flex } from 'rebass/styled-components'
-import { labelForIngredientGroup } from '../lib/ingredients'
+import { labelForIngredientGroup, ingredientTypeIcon } from '../lib/ingredients'
 import { starterIngredients, doughIngredients, recipeWeightInG, recipeHydration } from '../lib/recipe'
 import Ingredient from './Ingredient'
 import { capitalize, round } from 'lodash'
 import { NumericInput } from './NumericInput'
-import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiCoolSpices } from 'react-icons/gi'
 
 interface Props {
   recipe: RecipeFieldsFragment
-}
-
-export const ingredientTypeIcon = (type: IngredientType)  => {
-  const style = { size: 25, style: { marginRight: 15 } }
-
-  switch (type) {
-    case IngredientType.yeast:
-      return <GiBubbles color="brown" {...style} />
-    case IngredientType.flour:
-      return <GiWheat color="brown" {...style} />
-    case IngredientType.water:
-      return <GiWaterDrop color="teal" {...style} />
-    case IngredientType.salt:
-      return <GiSaltShaker {...style} />
-    case IngredientType.other:
-      return <GiCoolSpices {...style} />
-    default:
-      throw "No icon for type"
-  }
 }
 
 const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
@@ -54,7 +34,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
 
     return <Ingredient
       text={`${round(ingredientWeight)}g ${ingredient.name ?? capitalize(ingredient.type)}`}
-      icon={ingredientTypeIcon(ingredient.type)} />
+      icon={ingredientTypeIcon(ingredient.type, { size: 25, style: { marginRight: 15 } })} />
   }
 
   return (

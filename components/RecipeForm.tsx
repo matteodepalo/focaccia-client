@@ -1,11 +1,11 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../graphql'
-import { Button, EditableText, Switch, H3, H2, H1 } from '@blueprintjs/core'
-import { Formik, Form as FormikForm, Field, FieldProps, FieldArray } from 'formik'
+import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem } from '@blueprintjs/core'
+import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FieldArrayRenderProps } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
-import { labelForIngredientGroup } from '../lib/ingredients';
+import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, labelForIngredientType } from '../lib/ingredients';
 import { IngredientField } from './IngredientField';
-import { starterIngredients, doughIngredients, nameRequiredForType } from '../lib/recipe';
+import { starterIngredients, doughIngredients } from '../lib/recipe';
 import { Box, Flex } from 'rebass/styled-components';
 
 // TODO: figure out why this is called for every ingredient twice
@@ -97,6 +97,18 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
     await updateRecipeMutation({ variables: { data } })
   }
 
+  const buttonMenu = (arrayHelpers: FieldArrayRenderProps) => <Menu>
+    <MenuItem icon={ingredientTypeIcon(IngredientType.flour)} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough, IngredientType.flour))} text={labelForIngredientType(IngredientType.flour)} />
+
+    <MenuItem icon={ingredientTypeIcon(IngredientType.water)} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough, IngredientType.water))} text={labelForIngredientType(IngredientType.water)} />
+
+    <MenuItem icon={ingredientTypeIcon(IngredientType.yeast)} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough, IngredientType.yeast))} text={labelForIngredientType(IngredientType.yeast)} />
+
+    <MenuItem icon={ingredientTypeIcon(IngredientType.salt)} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough, IngredientType.salt))} text={labelForIngredientType(IngredientType.salt)} />
+
+    <MenuItem icon={ingredientTypeIcon(IngredientType.other)} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough, IngredientType.other))} text={labelForIngredientType(IngredientType.other)} />
+  </Menu>
+
   return (
     <Formik<FormValues>
       initialValues={initialValues}
@@ -105,9 +117,15 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
       validateOnChange={false}
       validateOnMount={true}
       onSubmit={async (values) => {
+        let ingredients = values.doughIngredients
+
+        if (starterEnabled) {
+          ingredients.concat(values.starterIngredients)
+        }
+
         const recipeInput = {
           name: values.name,
-          ingredients: values.starterIngredients.concat(values.doughIngredients)
+          ingredients: ingredients
         }
 
         if (recipe?.id) {
@@ -163,14 +181,13 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                 render={() => (
                   <div>
                     {values.starterIngredients.length > 0 && (
-                      values.starterIngredients.map((ingredient, index) => (
+                      values.starterIngredients.map((_ingredient, index) => (
                         <IngredientField
                           key={index}
                           prefix="starter"
                           index={index}
                           setFieldValue={setFieldValue}
-                          formValues={values}
-                          type={ingredient.type} />
+                          formValues={values} />
                       ))
                     )}
                   </div>
@@ -188,21 +205,20 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                   render={arrayHelpers => (
                     <div>
                       {values.doughIngredients.length > 0 && (
-                        values.doughIngredients.map((ingredient, index) => (
+                        values.doughIngredients.map((_ingredient, index) => (
                           <IngredientField
                             key={index}
                             prefix="dough"
                             index={index}
                             setFieldValue={setFieldValue}
                             formValues={values}
-                            type={ingredient.type}
                             onRemove={() => arrayHelpers.remove(index)} />
                         ))
                       )}
 
-                      <Button icon="add" onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough))} minimal={true}>
-                        Add Ingredient
-                      </Button>
+                      <Popover content={buttonMenu(arrayHelpers)} position={Position.RIGHT_TOP}>
+                          <Button icon="add" text="Add Ingredient" minimal={true} />
+                      </Popover>
                     </div>
                   )}
                 />
