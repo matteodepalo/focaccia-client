@@ -33,7 +33,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
     }
 
     return <Ingredient
-      text={`${round(ingredientWeight)}g of ${ingredient.name ?? lowerCase(labelForIngredientType(ingredient.type))}`}
+      text={`${round(ingredientWeight)} g of ${ingredient.name ?? lowerCase(labelForIngredientType(ingredient.type))}`}
       icon={ingredientTypeIcon(ingredient.type, { size: 25, style: { marginRight: 15 } })} />
   }
 
