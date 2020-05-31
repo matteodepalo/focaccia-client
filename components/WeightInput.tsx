@@ -25,13 +25,14 @@ export const WeightInput: FunctionComponent<Props> = ({ value, setFieldValue, na
     boxProps={{ width: 120 }}
     inputProps={{
       allowNumericCharactersOnly: true,
-      value: value,
+      value: value === 0 ? undefined : value,
       onBlur: onBlur,
       onValueChange: handleNumericInputChange(setFieldValue, name),
       rightElement: <Tag minimal={true}>g</Tag>,
       name: name,
       min: 0,
       intent: intent,
+      placeholder: '0',
       //TODO: Investigate how the field can validate correctly even if the validatio is called before the value setting
       onButtonClick: () => validateField(name)
     }} />
