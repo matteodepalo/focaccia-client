@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { IngredientType } from "../graphql";
-import { Field, FieldProps, getIn, FormikHelpers, FormikErrors } from "formik";
+import { Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { InputGroup, Button } from "@blueprintjs/core";
 import { WeightInput } from "./WeightInput";
 import { labelForIngredientType, nameRequiredForType } from "../lib/ingredients";
@@ -15,14 +15,15 @@ interface Props {
   formValues: FormValues,
   onRemove?: Function,
   errors: FormikErrors<FormValues>,
-  validateField: FormikHelpers<any>['validateField']
+  validateField: FormikHelpers<any>['validateField'],
+  touched: FormikTouched<FormValues>
 }
 
-export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues, onRemove, errors, validateField }) => {
+export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues, onRemove, errors, validateField, touched }) => {
   const type = getIn(formValues, `${prefix}Ingredients.${index}.type`) as IngredientType
   const nameRequired = nameRequiredForType(type)
-  const weightIntent = getIn(errors, `${prefix}Ingredients.${index}.weight`) ? "danger" : "none"
-  const nameIntent = getIn(errors, `${prefix}Ingredients.${index}.name`) ? "danger" : "none"
+  const weightIntent = getIn(errors, `${prefix}Ingredients.${index}.weight`) && getIn(touched,  `${prefix}Ingredients.${index}.weight`) ? "danger" : "none"
+  const nameIntent = getIn(errors, `${prefix}Ingredients.${index}.name`) && getIn(touched, `${prefix}Ingredients.${index}.name`) ? "danger" : "none"
 
   return (
     <Flex mb={2} alignItems="center">
@@ -60,7 +61,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
                     {({ field }: FieldProps<string>) => (
                       <InputGroup
                         intent={nameIntent}
-                        value={field.value ?? ''}
+                        value={field.value}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         name={field.name}

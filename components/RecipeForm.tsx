@@ -46,7 +46,7 @@ export interface FormValues {
 }
 
 function newIngredient(group: IngredientGroup, type: IngredientType): IngredientInput {
-  return { type, group, weight: 0 }
+  return { type, group, weight: 0, name: nameRequiredForType(type) ? '' : undefined }
 }
 
 const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
@@ -132,12 +132,12 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
 
         onSave()
       }}>
-      {({ values, isSubmitting, setFieldValue, validateField, errors }) => (
+      {({ values, isSubmitting, setFieldValue, validateField, errors, touched }) => (
         <FormikForm>
           <Field name="name">
             {({ field }: FieldProps<string>) => (
               <H1>
-                <FormGroup intent={errors.name ? "danger" : "none"} helperText={<ErrorMessage name="name"/>}>
+                <FormGroup intent={errors.name && touched.name ? "danger" : "none"} helperText={<ErrorMessage name="name"/>}>
                   <EditableText
                     value={field.value}
                     confirmOnEnterKey={true}
@@ -172,10 +172,10 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
           {starterEnabled && <Box mt={3}>
             <FieldArray
               name="starterIngredients"
-              render={() => (
+              render={arrayHelpers => (
                 <div>
                   {values.starterIngredients.length > 0 && (
-                    values.starterIngredients.map((_ingredient, index) => (
+                    values.starterIngredients.map((ingredient, index) => (
                       <IngredientField
                         key={index}
                         prefix="starter"
@@ -183,9 +183,13 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                         setFieldValue={setFieldValue}
                         formValues={values}
                         errors={errors}
-                        validateField={validateField} />
+                        validateField={validateField}
+                        touched={touched}
+                        onRemove={ingredient.type === IngredientType.other ? () => arrayHelpers.remove(index) : undefined} />
                     ))
                   )}
+
+                  <Button icon="add" text="Add Ingredient" minimal={true} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.starter, IngredientType.other))} />
                 </div>
               )}
             />
@@ -209,6 +213,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                             setFieldValue={setFieldValue}
                             formValues={values}
                             errors={errors}
+                            touched={touched}
                             onRemove={doughIngredientRequired(ingredient, values.doughIngredients) ? undefined : () => arrayHelpers.remove(index)}
                             validateField={validateField} />
                         ))
