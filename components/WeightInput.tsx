@@ -1,4 +1,4 @@
-import { Tag } from '@blueprintjs/core'
+import { Tag, Intent } from '@blueprintjs/core'
 import { FunctionComponent } from "react"
 import { NumericInput } from './NumericInput'
 import { FieldProps, FormikHelpers } from 'formik'
@@ -8,6 +8,8 @@ interface Props {
   setFieldValue: FormikHelpers<any>['setFieldValue']
   name: string
   onBlur: FieldProps<number>['field']['onBlur']
+  intent: Intent,
+  validateField: FormikHelpers<any>['validateField']
 }
 
 const handleNumericInputChange = (setFieldValue: FormikHelpers<any>['setFieldValue'], name: string) => (valueAsNumber: number, valueAsString: string) => {
@@ -18,7 +20,7 @@ const handleNumericInputChange = (setFieldValue: FormikHelpers<any>['setFieldVal
   }
 }
 
-export const WeightInput: FunctionComponent<Props> = ({ value, setFieldValue, name, onBlur }) => {
+export const WeightInput: FunctionComponent<Props> = ({ value, setFieldValue, name, onBlur, intent, validateField }) => {
   return <NumericInput
     boxProps={{ width: 120 }}
     inputProps={{
@@ -27,6 +29,10 @@ export const WeightInput: FunctionComponent<Props> = ({ value, setFieldValue, na
       onBlur: onBlur,
       onValueChange: handleNumericInputChange(setFieldValue, name),
       rightElement: <Tag minimal={true}>g</Tag>,
-      name: name
+      name: name,
+      min: 0,
+      intent: intent,
+      //TODO: Investigate how the field can validate correctly even if the validatio is called before the value setting
+      onButtonClick: () => validateField(name)
     }} />
 }

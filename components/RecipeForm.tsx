@@ -1,6 +1,6 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../graphql'
-import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem } from '@blueprintjs/core'
-import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers } from 'formik'
+import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup } from '@blueprintjs/core'
+import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
 import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypes, doughIngredientRequired, ingredientTypeUnavailable } from '../lib/ingredients';
@@ -12,14 +12,14 @@ import { Box, Flex } from 'rebass/styled-components';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
   const object = Yup.object({
-    weight: Yup.number().moreThan(0).required(),
+    weight: Yup.number().moreThan(0, 'must be greater than 0').required(),
     group: Yup.mixed<IngredientGroup>().oneOf(Object.values(IngredientGroup)).required(),
     type: Yup.mixed<IngredientType>().oneOf(Object.values(IngredientType)).required()
   })
 
   if (nameRequiredForType((value as IngredientInput).type)) {
     return object.shape({
-      name: Yup.string().required()
+      name: Yup.string().required('Name is required')
     })
   } else {
     return object
@@ -27,12 +27,11 @@ const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => 
 })
 
 const RecipeSchema = Yup.object().shape({
-  name: Yup.string().required(),
+  name: Yup.string().required('Name is required'),
   starterIngredients: Yup.array()
     .of(IngredientSchema),
   doughIngredients: Yup.array()
     .of(IngredientSchema)
-    .required('Must have doughIngredients')
 });
 
 interface Props {
@@ -113,7 +112,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
       validationSchema={RecipeSchema}
       validateOnBlur={true}
       validateOnChange={false}
-      validateOnMount={true}
+      validateOnMount={false}
       onSubmit={async (values) => {
         const recipeInput = {
           name: values.name,
@@ -133,19 +132,21 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
 
         onSave()
       }}>
-      {({ values, isSubmitting, setFieldValue, validateField }) => (
+      {({ values, isSubmitting, setFieldValue, validateField, errors }) => (
         <FormikForm>
           <Field name="name">
             {({ field }: FieldProps<string>) => (
               <H1>
-                <EditableText
-                  value={field.value}
-                  confirmOnEnterKey={true}
-                  onChange={(value: string) => setFieldValue('name', value)}
-                  onConfirm={() => validateField(field.name)}
-                  onCancel={() => validateField(field.name)}
-                  multiline={true}
-                  placeholder="Edit name..." />
+                <FormGroup intent={errors.name ? "danger" : "none"} helperText={<ErrorMessage name="name"/>}>
+                  <EditableText
+                    value={field.value}
+                    confirmOnEnterKey={true}
+                    onChange={(value: string) => setFieldValue('name', value)}
+                    onConfirm={() => validateField(field.name)}
+                    onCancel={() => validateField(field.name)}
+                    multiline={true}
+                    placeholder="Edit name..." />
+                </FormGroup>
               </H1>
             )}
           </Field>
@@ -180,7 +181,9 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                         prefix="starter"
                         index={index}
                         setFieldValue={setFieldValue}
-                        formValues={values} />
+                        formValues={values}
+                        errors={errors}
+                        validateField={validateField} />
                     ))
                   )}
                 </div>
@@ -205,7 +208,9 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                             index={index}
                             setFieldValue={setFieldValue}
                             formValues={values}
-                            onRemove={doughIngredientRequired(ingredient, values.doughIngredients) ? undefined : () => arrayHelpers.remove(index)} />
+                            errors={errors}
+                            onRemove={doughIngredientRequired(ingredient, values.doughIngredients) ? undefined : () => arrayHelpers.remove(index)}
+                            validateField={validateField} />
                         ))
                       )}
                     </Box>
