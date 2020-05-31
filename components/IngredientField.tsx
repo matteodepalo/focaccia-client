@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { IngredientType } from "../graphql";
-import { Field, FieldProps, getIn, FormikHelpers } from "formik";
+import { Field, FieldProps, getIn, FormikHelpers, FormikErrors } from "formik";
 import { InputGroup, Button } from "@blueprintjs/core";
 import { WeightInput } from "./WeightInput";
 import { labelForIngredientType, nameRequiredForType } from "../lib/ingredients";
@@ -13,13 +13,16 @@ interface Props {
   index: number,
   setFieldValue: FormikHelpers<any>['setFieldValue'],
   formValues: FormValues,
-  onRemove?: Function
+  onRemove?: Function,
+  errors: FormikErrors<FormValues>,
+  validateField: FormikHelpers<any>['validateField']
 }
 
-
-export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues, onRemove }) => {
+export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues, onRemove, errors, validateField }) => {
   const type = getIn(formValues, `${prefix}Ingredients.${index}.type`) as IngredientType
   const nameRequired = nameRequiredForType(type)
+  const weightIntent = getIn(errors, `${prefix}Ingredients.${index}.weight`) ? "danger" : "none"
+  const nameIntent = getIn(errors, `${prefix}Ingredients.${index}.name`) ? "danger" : "none"
 
   return (
     <Flex mb={2} alignItems="center">
@@ -34,7 +37,13 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
               <Box>
                 <Field name={`${prefix}Ingredients.${index}.weight`}>
                   {({ field }: FieldProps<number>) => (
-                    <WeightInput setFieldValue={setFieldValue} onBlur={field.onBlur} value={field.value} name={field.name} />
+                    <WeightInput
+                      intent={weightIntent}
+                      setFieldValue={setFieldValue}
+                      onBlur={field.onBlur}
+                      value={field.value}
+                      name={field.name}
+                      validateField={validateField} />
                   )}
                 </Field>
               </Box>
@@ -49,7 +58,13 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
                 <Box ml={2}>
                   <Field name={`${prefix}Ingredients.${index}.name`}>
                     {({ field }: FieldProps<string>) => (
-                      <InputGroup value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} name={field.name} placeholder="Name" />
+                      <InputGroup
+                        intent={nameIntent}
+                        value={field.value ?? ''}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        name={field.name}
+                        placeholder="Name" />
                     )}
                   </Field>
                 </Box>}
