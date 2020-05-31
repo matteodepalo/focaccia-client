@@ -1,6 +1,6 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../graphql'
 import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem } from '@blueprintjs/core'
-import { Formik, Form as FormikForm, Field, FieldProps, FieldArray } from 'formik'
+import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
 import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypes, doughIngredientRequired, ingredientTypeUnavailable } from '../lib/ingredients';
@@ -57,11 +57,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
 
   const initialValues = {
     name: recipe?.name ?? '',
-    starterIngredients: recipe ? starterIngredients(recipe) : [
-      newIngredient(IngredientGroup.starter, IngredientType.water),
-      newIngredient(IngredientGroup.starter, IngredientType.flour),
-      newIngredient(IngredientGroup.starter, IngredientType.yeast)
-    ],
+    starterIngredients: recipe ? starterIngredients(recipe) : [],
     doughIngredients: recipe ? doughIngredients(recipe) : [
       newIngredient(IngredientGroup.dough, IngredientType.water),
       newIngredient(IngredientGroup.dough, IngredientType.flour)
@@ -97,6 +93,20 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
     await updateRecipeMutation({ variables: { data } })
   }
 
+  const toggleStarterEnabled = (enabled: boolean, setFieldValue: FormikHelpers<any>['setFieldValue']) => {
+    if (enabled) {
+      setFieldValue('starterIngredients', [
+        newIngredient(IngredientGroup.starter, IngredientType.water),
+        newIngredient(IngredientGroup.starter, IngredientType.flour),
+        newIngredient(IngredientGroup.starter, IngredientType.yeast)
+      ])
+    } else {
+      setFieldValue('starterIngredients', [])
+    }
+
+    setStarterEnabled(enabled)
+  }
+
   return (
     <Formik<FormValues>
       initialValues={initialValues}
@@ -107,7 +117,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
       onSubmit={async (values) => {
         const recipeInput = {
           name: values.name,
-          ingredients: starterEnabled ? values.doughIngredients.concat(values.starterIngredients) : values.doughIngredients
+          ingredients: values.doughIngredients.concat(values.starterIngredients)
         }
 
         if (recipe?.id) {
@@ -123,7 +133,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
 
         onSave()
       }}>
-      {({ values, isSubmitting, setFieldValue, isValid, validateField }) => (
+      {({ values, isSubmitting, setFieldValue, validateField }) => (
         <FormikForm>
           <Field name="name">
             {({ field }: FieldProps<string>) => (
@@ -153,30 +163,30 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                 large={true}
                 style={{ marginLeft: 10 }}
                 onChange={(event) => {
-                  setStarterEnabled(event.currentTarget.checked)
+                  toggleStarterEnabled(event.currentTarget.checked, setFieldValue)
                 }} />
             </Flex>
-
-            {starterEnabled && <Box mt={3}>
-              <FieldArray
-                name="starterIngredients"
-                render={() => (
-                  <div>
-                    {values.starterIngredients.length > 0 && (
-                      values.starterIngredients.map((_ingredient, index) => (
-                        <IngredientField
-                          key={index}
-                          prefix="starter"
-                          index={index}
-                          setFieldValue={setFieldValue}
-                          formValues={values} />
-                      ))
-                    )}
-                  </div>
-                )}
-              />
-            </Box>}
           </Box>
+
+          {starterEnabled && <Box mt={3}>
+            <FieldArray
+              name="starterIngredients"
+              render={() => (
+                <div>
+                  {values.starterIngredients.length > 0 && (
+                    values.starterIngredients.map((_ingredient, index) => (
+                      <IngredientField
+                        key={index}
+                        prefix="starter"
+                        index={index}
+                        setFieldValue={setFieldValue}
+                        formValues={values} />
+                    ))
+                  )}
+                </div>
+              )}
+            />
+          </Box>}
 
           <Box mt={4}>
             <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
@@ -199,7 +209,6 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                         ))
                       )}
                     </Box>
-
 
                     <Popover
                       position={Position.RIGHT_TOP}
@@ -224,7 +233,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
 
 
           <Box mt={4}>
-            <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting || !isValid}>Save</Button>
+            <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
           </Box>
         </FormikForm>
       )}
