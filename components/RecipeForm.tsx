@@ -3,9 +3,8 @@ import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, Menu
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage, getIn } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
-import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypes, doughIngredientRequired, ingredientTypeUnavailable } from '../lib/ingredients';
+import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypes, doughIngredientRequired, ingredientTypeUnavailable, DoughIngredients, starterIngredients, doughIngredients, Ingredient } from '../lib/ingredients';
 import { IngredientField } from './IngredientField';
-import { starterIngredients, doughIngredients } from '../lib/recipe';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
 import { round } from 'lodash';
@@ -42,10 +41,10 @@ interface Props {
 export interface FormValues {
   name: string,
   starterIngredients: IngredientInput[],
-  doughIngredients: IngredientInput[]
+  doughIngredients: DoughIngredients<IngredientInput>
 }
 
-function newIngredient(group: IngredientGroup, type: IngredientType): IngredientInput {
+function newIngredient<T extends IngredientType>(group: IngredientGroup, type: T): Ingredient<IngredientInput, T> {
   return { type, group, weight: 0, name: nameRequiredForType(type) ? '' : undefined }
 }
 
@@ -56,15 +55,15 @@ function weightWithDefault(weight: number) {
 const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
   const [createRecipeMutation] = useCreateRecipeMutation()
   const [updateRecipeMutation] = useUpdateRecipeMutation()
-  const [starterEnabled, setStarterEnabled] = useState(!!recipe && starterIngredients(recipe).length > 0)
+  const [starterEnabled, setStarterEnabled] = useState(!!recipe && starterIngredients(recipe.ingredients).length > 0)
 
   const initialValues = {
     name: recipe?.name ?? '',
-    starterIngredients: recipe ? starterIngredients(recipe) : [],
-    doughIngredients: recipe ? doughIngredients(recipe) : [
+    starterIngredients: recipe ? starterIngredients(recipe.ingredients) : [],
+    doughIngredients: recipe ? doughIngredients(recipe.ingredients) : [
       newIngredient(IngredientGroup.dough, IngredientType.water),
       newIngredient(IngredientGroup.dough, IngredientType.flour)
-    ]
+    ] as DoughIngredients<IngredientInput>
   }
 
   const createRecipe = async (data: CreateRecipeMutationVariables['data']) => {
@@ -171,7 +170,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                     ...ingredient,
                     weight: round(weightWithDefault(ingredient.weight) * scaleFactor)
                   }
-                })
+                }) as DoughIngredients<IngredientInput>
               }
 
               setValues(newValues)
@@ -180,8 +179,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
 
             onHydrationScaleFactorChange={(scaleFactor: number) => {
               let doughWaterIndex = values.doughIngredients.indexOf(
-                // dough water can't be removed so it's safe to assume it's always there
-                values.doughIngredients.find(i => i.type === IngredientType.water)!
+                values.doughIngredients[0]
               )
 
               setFieldValue(`doughIngredients.${doughWaterIndex}.weight`, round(scaleFactor * getIn(values, `doughIngredients.${doughWaterIndex}.weight`)))

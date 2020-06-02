@@ -1,8 +1,49 @@
 import { IngredientGroup, IngredientType, IngredientInput } from "../graphql"
 import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiCoolSpices } from 'react-icons/gi'
 import { CSSProperties } from "react"
-import { uniq } from "lodash"
+import { uniq, without } from "lodash"
 import { safeDivide } from "./utils"
+
+type BaseIngredient = {
+  type: IngredientType,
+  group: IngredientGroup
+}
+
+export type Ingredient<T extends BaseIngredient, S extends IngredientType> = T & {
+  type: S
+}
+
+type Water<T extends BaseIngredient> = Ingredient<T, IngredientType.water>
+type Flour<T extends BaseIngredient> = Ingredient<T, IngredientType.flour>
+
+type DoughIngredient<T extends BaseIngredient> = Water<T> | Flour<T> | T
+export type DoughIngredients<T extends BaseIngredient> = [Water<T>, Flour<T>, ...T[]]
+
+export function starterIngredients<T extends BaseIngredient>(ingredients: T[]): T[] {
+  return ingredients.filter(i => i.group === IngredientGroup.starter)
+}
+
+export function doughIngredients<T extends BaseIngredient>(ingredients: T[]): DoughIngredients<T> {
+  let doughIngredients = ingredients.filter(i => i.group === IngredientGroup.dough)
+  let water = findIngredient(ingredients, IngredientType.water)
+  let flour = findIngredient(ingredients, IngredientType.flour)
+
+  return [
+    water,
+    flour,
+    ...without(doughIngredients, water, flour)
+  ]
+}
+
+function findIngredient<T extends BaseIngredient, S extends IngredientType>(ingredients: T[], type: S)  {
+  for (let ingredient of ingredients) {
+    if (ingredient.type === type) {
+      return ingredient as Ingredient<T, S>
+    }
+  }
+
+  throw new Error(`Ingredient of type ${type} not found`)
+}
 
 const ingredientGroups = [
   {
@@ -50,15 +91,8 @@ export function labelForIngredientType(type: IngredientType) {
   return ingredientTypes.find((t) => t.value === type)?.label
 }
 
-export function doughIngredientRequired(ingredient: IngredientInput, doughIngredients: IngredientInput[]) {
-  switch (ingredient.type) {
-    case IngredientType.flour:
-      return doughIngredients.filter(i => i.type === IngredientType.flour).indexOf(ingredient) === 0
-    case IngredientType.water:
-      return doughIngredients.map(i => i.type).includes(ingredient.type)
-    default:
-      return false
-  }
+export function doughIngredientRequired(ingredient: DoughIngredient<IngredientInput>, doughIngredients: DoughIngredients<IngredientInput>) {
+  return doughIngredients[0] === ingredient || doughIngredients[1] === ingredient
 }
 
 const uniqueIngredientTypes = [IngredientType.water, IngredientType.yeast, IngredientType.salt]

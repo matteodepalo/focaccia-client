@@ -4,8 +4,7 @@ import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from '../graphql'
 import { Box, Flex } from 'rebass/styled-components'
-import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, isDoughWater } from '../lib/ingredients'
-import { starterIngredients, doughIngredients } from '../lib/recipe'
+import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, isDoughWater, starterIngredients, doughIngredients } from '../lib/ingredients'
 import Ingredient from './Ingredient'
 import { round, lowerCase } from 'lodash'
 import Totals from './Totals'
@@ -49,12 +48,12 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
             <H2>Ingredients</H2>
           </Box>
 
-          {starterIngredients(recipe).length > 0 &&
+          {starterIngredients(recipe.ingredients).length > 0 &&
             <Box mt={4}>
               <H3>{labelForIngredientGroup(IngredientGroup.starter)}</H3>
 
               <Box mt={3}>
-                {starterIngredients(recipe).map((ingredient, index) => {
+                {starterIngredients(recipe.ingredients).map((ingredient, index) => {
                   return <div key={index}>
                     {ingredientItem(ingredient)}
                   </div>
@@ -68,7 +67,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
           <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
 
           <Box mt={3}>
-            {doughIngredients(recipe).map((ingredient, index) => {
+            {doughIngredients(recipe.ingredients).map((ingredient, index) => {
               return <div key={index}>
                 {ingredientItem(ingredient)}
               </div>
