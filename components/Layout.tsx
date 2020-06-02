@@ -43,7 +43,7 @@ const Layout: FunctionComponent<Props> = ({ user, children }) => {
         </Navbar.Group>
       </Navbar>
 
-      <Box maxWidth={1024} height={1} p={4}>
+      <Box maxWidth={1024} height="100%" p={4}>
         <Head>
           <title>Focaccia</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
