@@ -51,7 +51,7 @@ export function labelForIngredientType(type: IngredientType) {
 export function doughIngredientRequired(ingredient: IngredientInput, doughIngredients: IngredientInput[]) {
   switch (ingredient.type) {
     case IngredientType.flour:
-      return doughIngredients.map(i => i.type).includes(ingredient.type) && doughIngredients.filter(i => i.type === IngredientType.flour).indexOf(ingredient) === 0
+      return doughIngredients.filter(i => i.type === IngredientType.flour).indexOf(ingredient) === 0
     case IngredientType.water:
       return doughIngredients.map(i => i.type).includes(ingredient.type)
     default:
