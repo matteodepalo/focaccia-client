@@ -1,6 +1,6 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../graphql'
 import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup } from '@blueprintjs/core'
-import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage, getIn } from 'formik'
+import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
 import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypes, doughIngredientRequired, ingredientTypeUnavailable, DoughIngredients, starterIngredients, doughIngredients, Ingredient } from '../lib/ingredients';
@@ -178,11 +178,11 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
             }}
 
             onHydrationScaleFactorChange={(scaleFactor: number) => {
-              let doughWaterIndex = values.doughIngredients.indexOf(
-                values.doughIngredients[0]
-              )
+              const doughWater = values.doughIngredients[0]
+              const doughWaterIndex = values.doughIngredients.indexOf(doughWater)
+              const newWaterWeight = round(scaleFactor * weightWithDefault(doughWater.weight))
 
-              setFieldValue(`doughIngredients.${doughWaterIndex}.weight`, round(scaleFactor * getIn(values, `doughIngredients.${doughWaterIndex}.weight`)))
+              setFieldValue(`doughIngredients.${doughWaterIndex}.weight`, newWaterWeight)
             }} />
 
           <Box mt={4}>
