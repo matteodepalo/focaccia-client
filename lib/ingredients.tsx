@@ -9,14 +9,14 @@ type BaseIngredient = {
   group: IngredientGroup
 }
 
-export type Ingredient<T extends BaseIngredient, S extends IngredientType> = T & {
+export type Ingredient<T extends BaseIngredient, S extends IngredientType = IngredientType> = T & {
   type: S
 }
 
 type Water<T extends BaseIngredient> = Ingredient<T, IngredientType.water>
 type Flour<T extends BaseIngredient> = Ingredient<T, IngredientType.flour>
 
-type DoughIngredient<T extends BaseIngredient> = Water<T> | Flour<T> | T
+type DoughIngredient<T extends BaseIngredient> = Water<T> | Flour<T> | Ingredient<T>
 export type DoughIngredients<T extends BaseIngredient> = [Water<T>, Flour<T>, ...T[]]
 
 export function starterIngredients<T extends BaseIngredient>(ingredients: T[]): T[] {
