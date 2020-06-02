@@ -12,9 +12,11 @@ export const NumericInput: FunctionComponent<Props> = ({ boxProps, inputProps })
   return (
     <Box sx={{ touchAction: 'manipulation' }} {...boxProps}>
       <BPNumericInput
+        {...inputProps}
         allowNumericCharactersOnly={true}
         fill={true}
-        {...inputProps} />
+        value={inputProps.value === 0 ? undefined : inputProps.value}
+        placeholder='0'/>
     </Box>
   )
 }

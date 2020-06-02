@@ -1,6 +1,8 @@
 import { IngredientGroup, IngredientType, IngredientInput } from "../graphql"
 import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiCoolSpices } from 'react-icons/gi'
 import { CSSProperties } from "react"
+import { uniq } from "lodash"
+import { safeDivide } from "./utils"
 
 const ingredientGroups = [
   {
@@ -85,4 +87,28 @@ export const ingredientTypeIcon = (type: IngredientType, props?: IconProps)  => 
     default:
       throw "No icon for type"
   }
+}
+
+export function ingredientsWeightInG(ingredients: IngredientInput[]) {
+  return ingredients
+    .reduce((memo, i) => memo += i.weight, 0)
+}
+
+export function ingredientsHydration(ingredients: IngredientInput[]) {
+  const flourWeight = ingredients.filter(i => i.type === IngredientType.flour)
+    .reduce((memo, i) => memo += i.weight, 0)
+
+  const waterWeight = ingredients.filter(i => i.type === IngredientType.water)
+    .reduce((memo, i) => memo += i.weight, 0)
+
+  return Math.floor(safeDivide(waterWeight, flourWeight) * 100)
+}
+
+export function flourList(ingredients: IngredientInput[]) {
+  return uniq(ingredients.filter(i => i.type === IngredientType.flour)
+    .map(i => i.name))
+}
+
+export function isDoughWater(ingredient: IngredientInput) {
+  return ingredient.type === IngredientType.water && ingredient.group === IngredientGroup.dough
 }

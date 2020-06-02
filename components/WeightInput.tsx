@@ -5,35 +5,34 @@ import { FieldProps, FormikHelpers } from 'formik'
 
 interface Props {
   value: number
-  setFieldValue: FormikHelpers<any>['setFieldValue']
+  onChange: (value: number) => void
   name: string
   onBlur: FieldProps<number>['field']['onBlur']
   intent: Intent,
   validateField: FormikHelpers<any>['validateField']
 }
 
-const handleNumericInputChange = (setFieldValue: FormikHelpers<any>['setFieldValue'], name: string) => (valueAsNumber: number, valueAsString: string) => {
-  if (!isNaN(valueAsNumber) && valueAsString.length > 0) {
-    setFieldValue(name, valueAsNumber)
-  } else {
-    setFieldValue(name, undefined)
-  }
-}
+export const WeightInput: FunctionComponent<Props> = ({ value, onChange, name, onBlur, intent, validateField }) => {
+  const handleNumericInputChange = (valueAsNumber: number, valueAsString: string) => {
+    if (!isNaN(valueAsNumber) && valueAsString.length > 0) {
+      onChange(valueAsNumber)
+    } else {
+      onChange(0)
+    }
 
-export const WeightInput: FunctionComponent<Props> = ({ value, setFieldValue, name, onBlur, intent, validateField }) => {
+    validateField(name)
+  }
+
   return <NumericInput
     boxProps={{ width: 120 }}
     inputProps={{
       allowNumericCharactersOnly: true,
-      value: value === 0 ? undefined : value,
+      value: value,
       onBlur: onBlur,
-      onValueChange: handleNumericInputChange(setFieldValue, name),
+      onValueChange: handleNumericInputChange,
       rightElement: <Tag minimal={true}>g</Tag>,
       name: name,
       min: 0,
-      intent: intent,
-      placeholder: '0',
-      //TODO: Investigate how the field can validate correctly even if the validatio is called before the value setting
-      onButtonClick: () => validateField(name)
+      intent: intent
     }} />
 }

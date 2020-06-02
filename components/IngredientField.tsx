@@ -40,7 +40,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
                   {({ field }: FieldProps<number>) => (
                     <WeightInput
                       intent={weightIntent}
-                      setFieldValue={setFieldValue}
+                      onChange={(value) => setFieldValue(field.name, value)}
                       onBlur={field.onBlur}
                       value={field.value}
                       name={field.name}

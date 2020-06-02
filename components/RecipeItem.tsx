@@ -3,9 +3,8 @@ import { Card, Elevation, H1 } from '@blueprintjs/core'
 import { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { useRouter } from "next/router"
-import { recipeHydration, recipeFlourList } from '../lib/recipe'
 import Ingredient from './Ingredient'
-import { ingredientTypeIcon } from '../lib/ingredients'
+import { ingredientTypeIcon, ingredientsHydration, flourList } from '../lib/ingredients'
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -25,11 +24,11 @@ const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
       <H1>{recipe.name}</H1>
       <div>
         <Ingredient
-          text={`${recipeHydration(recipe)}%`}
+          text={`${ingredientsHydration(recipe.ingredients)}%`}
           icon={ingredientTypeIcon(IngredientType.water, iconProps)} />
 
         <Ingredient
-          text={recipeFlourList(recipe).join(', ')}
+          text={flourList(recipe.ingredients).join(', ')}
           icon={ingredientTypeIcon(IngredientType.flour, iconProps)} />
       </div>
     </RecipeCard>

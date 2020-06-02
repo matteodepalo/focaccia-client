@@ -1,14 +1,14 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../graphql'
 import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup } from '@blueprintjs/core'
-import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
+import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage, getIn } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
 import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypes, doughIngredientRequired, ingredientTypeUnavailable } from '../lib/ingredients';
 import { IngredientField } from './IngredientField';
 import { starterIngredients, doughIngredients } from '../lib/recipe';
 import { Box, Flex } from 'rebass/styled-components';
-
-// TODO: figure out why this is called for every ingredient twice
+import Totals from './Totals';
+import { round } from 'lodash';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
   const object = Yup.object({
@@ -47,6 +47,10 @@ export interface FormValues {
 
 function newIngredient(group: IngredientGroup, type: IngredientType): IngredientInput {
   return { type, group, weight: 0, name: nameRequiredForType(type) ? '' : undefined }
+}
+
+function weightWithDefault(weight: number) {
+  return weight === 0 ? 1 : weight
 }
 
 const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
@@ -132,7 +136,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
 
         onSave()
       }}>
-      {({ values, isSubmitting, setFieldValue, validateField, errors, touched }) => (
+      {({ values, isSubmitting, setFieldValue, validateField, errors, touched, setValues, validateForm }) => (
         <FormikForm>
           <Field name="name">
             {({ field }: FieldProps<string>) => (
@@ -150,6 +154,38 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
               </H1>
             )}
           </Field>
+
+          <Totals
+            ingredients={values.doughIngredients.concat(values.starterIngredients)}
+            onWeightScaleFactorChange={(scaleFactor: number) => {
+              let newValues = {
+                ...values,
+                starterIngredients: values.starterIngredients.map((ingredient) => {
+                  return {
+                    ...ingredient,
+                    weight: round(weightWithDefault(ingredient.weight) * scaleFactor)
+                  }
+                }),
+                doughIngredients: values.doughIngredients.map((ingredient) => {
+                  return {
+                    ...ingredient,
+                    weight: round(weightWithDefault(ingredient.weight) * scaleFactor)
+                  }
+                })
+              }
+
+              setValues(newValues)
+              validateForm(newValues)
+            }}
+
+            onHydrationScaleFactorChange={(scaleFactor: number) => {
+              let doughWaterIndex = values.doughIngredients.indexOf(
+                // dough water can't be removed so it's safe to assume it's always there
+                values.doughIngredients.find(i => i.type === IngredientType.water)!
+              )
+
+              setFieldValue(`doughIngredients.${doughWaterIndex}.weight`, round(scaleFactor * getIn(values, `doughIngredients.${doughWaterIndex}.weight`)))
+            }} />
 
           <Box mt={4}>
             <H2>Ingredients</H2>

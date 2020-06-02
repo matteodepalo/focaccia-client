@@ -2,13 +2,13 @@ import { Button, H1, H2, H3 } from '@blueprintjs/core'
 import { FunctionComponent, useState } from 'react'
 import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
-import { RecipeFieldsFragment, IngredientGroup, IngredientType, IngredientFieldsFragment } from '../graphql'
+import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from '../graphql'
 import { Box, Flex } from 'rebass/styled-components'
-import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType } from '../lib/ingredients'
-import { starterIngredients, doughIngredients, recipeWeightInG, recipeHydration } from '../lib/recipe'
+import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, isDoughWater } from '../lib/ingredients'
+import { starterIngredients, doughIngredients } from '../lib/recipe'
 import Ingredient from './Ingredient'
 import { round, lowerCase } from 'lodash'
-import { NumericInput } from './NumericInput'
+import Totals from './Totals'
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -17,18 +17,13 @@ interface Props {
 const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
   const router = useRouter()
 
-  const recipeOriginalWeight = recipeWeightInG(recipe)
-  const [weight, setWeight] = useState(recipeOriginalWeight)
-  const weightScaleFactor = weight / recipeOriginalWeight
-
-  const recipeOriginalHydration = recipeHydration(recipe)
-  const [hydration, setHydration] = useState(recipeOriginalHydration)
-  const hydrationScaleFactor = hydration / recipeOriginalHydration
+  const [weightScaleFactor, setWeightScaleFactor] = useState(1)
+  const [hydrationScaleFactor, setHydrationScaleFactor] = useState(1)
 
   const ingredientItem = (ingredient: IngredientFieldsFragment) => {
     let ingredientWeight = ingredient.weight * weightScaleFactor
 
-    if (ingredient.type === IngredientType.water && ingredient.group === IngredientGroup.dough) {
+    if (isDoughWater(ingredient)) {
       ingredientWeight *= hydrationScaleFactor
     }
 
@@ -45,31 +40,10 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
             <H1>{recipe.name}</H1>
           </Box>
 
-          <Flex as="h3" mb={2} alignItems="center">
-            Recipe for
-            {
-              <NumericInput
-                boxProps={{ marginX: 2, width: 100 }}
-                inputProps={{
-                  value: round(weight / 1000, 2),
-                  onValueChange: (value: number) => setWeight(value * 1000)
-                }}/>
-            }
-            kg
-          </Flex>
-
-          <Flex as="h3" alignItems="center">
-            Hydration
-            {
-              <NumericInput
-                boxProps={{ marginX: 2, width: 100 }}
-                inputProps={{
-                  value: hydration,
-                  onValueChange: (value: number) => setHydration(value)
-                }}/>
-            }
-            %
-          </Flex>
+          <Totals
+            ingredients={recipe.ingredients}
+            onWeightScaleFactorChange={setWeightScaleFactor}
+            onHydrationScaleFactorChange={setHydrationScaleFactor} />
 
           <Box mt={4}>
             <H2>Ingredients</H2>
