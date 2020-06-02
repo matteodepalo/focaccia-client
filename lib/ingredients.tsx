@@ -4,10 +4,7 @@ import { CSSProperties } from "react"
 import { uniq, without } from "lodash"
 import { safeDivide } from "./utils"
 
-type BaseIngredient = {
-  type: IngredientType,
-  group: IngredientGroup
-}
+export type BaseIngredient = IngredientInput
 
 export type Ingredient<T extends BaseIngredient, S extends IngredientType = IngredientType> = T & {
   type: S
@@ -97,7 +94,7 @@ export function doughIngredientRequired(ingredient: DoughIngredient<IngredientIn
 
 const uniqueIngredientTypes = [IngredientType.water, IngredientType.yeast, IngredientType.salt]
 
-export function ingredientTypeUnavailable(type: IngredientType, ingredients: IngredientInput[]) {
+export function ingredientTypeUnavailable(type: IngredientType, ingredients: Ingredient<IngredientInput>[]) {
   return uniqueIngredientTypes.includes(type) && ingredients.map(i => i.type).includes(type)
 }
 
@@ -123,12 +120,12 @@ export const ingredientTypeIcon = (type: IngredientType, props?: IconProps)  => 
   }
 }
 
-export function ingredientsWeightInG(ingredients: IngredientInput[]) {
+export function ingredientsWeightInG<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
   return ingredients
     .reduce((memo, i) => memo += i.weight, 0)
 }
 
-export function ingredientsHydration(ingredients: IngredientInput[]) {
+export function ingredientsHydration<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
   const flourWeight = ingredients.filter(i => i.type === IngredientType.flour)
     .reduce((memo, i) => memo += i.weight, 0)
 
@@ -138,11 +135,11 @@ export function ingredientsHydration(ingredients: IngredientInput[]) {
   return Math.floor(safeDivide(waterWeight, flourWeight) * 100)
 }
 
-export function flourList(ingredients: IngredientInput[]) {
+export function flourList<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
   return uniq(ingredients.filter(i => i.type === IngredientType.flour)
     .map(i => i.name))
 }
 
-export function isDoughWater(ingredient: IngredientInput) {
+export function isDoughWater<T extends BaseIngredient>(ingredient: Ingredient<T>) {
   return ingredient.type === IngredientType.water && ingredient.group === IngredientGroup.dough
 }

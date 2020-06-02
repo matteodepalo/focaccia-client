@@ -1,18 +1,15 @@
-import { FunctionComponent } from "react"
 import { Flex } from "rebass/styled-components"
 import { round } from "lodash"
 import { NumericInput } from "./NumericInput"
-import { IngredientInput } from "../graphql"
-import { ingredientsWeightInG, ingredientsHydration } from "../lib/ingredients"
+import { ingredientsWeightInG, ingredientsHydration, BaseIngredient } from "../lib/ingredients"
 import { safeDivide } from "../lib/utils"
 
-interface Props {
-  ingredients: IngredientInput[]
+
+const Totals = <T extends BaseIngredient>({ ingredients, onWeightScaleFactorChange, onHydrationScaleFactorChange }: {
+  ingredients: T[],
   onWeightScaleFactorChange: (weight: number) => void
   onHydrationScaleFactorChange: (hydration: number) => void
-}
-
-const Totals: FunctionComponent<Props> = ({ ingredients, onWeightScaleFactorChange, onHydrationScaleFactorChange }) => {
+}) => {
   const totalWeight = ingredientsWeightInG(ingredients) || ingredients.length
   const totalHydration = ingredientsHydration(ingredients)
 
