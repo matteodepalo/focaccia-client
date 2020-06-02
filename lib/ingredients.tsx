@@ -35,7 +35,7 @@ export function doughIngredients<T extends BaseIngredient>(ingredients: T[]): Do
   ]
 }
 
-function findIngredient<T extends BaseIngredient, S extends IngredientType>(ingredients: T[], type: S)  {
+function findIngredient<T extends BaseIngredient, S extends IngredientType>(ingredients: T[], type: S) {
   for (let ingredient of ingredients) {
     if (ingredient.type === type) {
       return ingredient as Ingredient<T, S>
