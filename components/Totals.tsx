@@ -1,7 +1,7 @@
 import { Flex } from "rebass/styled-components"
 import { round } from "lodash"
 import { NumericInput } from "./NumericInput"
-import { ingredientsWeightInG, ingredientsHydration, BaseIngredient, DoughIngredients, isDoughWater, ingredientsByGroup, doughWaterWeight } from "../lib/ingredients"
+import { ingredientsWeightInG, ingredientsHydration, BaseIngredient, DoughIngredients, isDoughWater, ingredientsByGroup, doughWaterWeightForHydration } from "../lib/ingredients"
 import { safeDivide } from "../lib/utils"
 
 const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients, onTotalsChange }: {
@@ -38,7 +38,7 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
       if (isDoughWater(ingredient)) {
         return {
           ...ingredient,
-          weight: round(doughWaterWeight(updatedHydration, ingredients))
+          weight: round(doughWaterWeightForHydration(updatedHydration, ingredients))
         }
       } else {
         return ingredient

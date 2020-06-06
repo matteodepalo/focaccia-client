@@ -161,6 +161,6 @@ export function ingredientsByGroup<T extends BaseIngredient>(ingredients: Ingred
   }
 }
 
-export function doughWaterWeight<T extends BaseIngredient>(hydration: number, ingredients: Ingredient<T>[]) {
+export function doughWaterWeightForHydration<T extends BaseIngredient>(hydration: number, ingredients: Ingredient<T>[]) {
   return ((hydration * flourWeight(ingredients)) / 100) - (waterWeight(ingredients.filter((i) => !isDoughWater(i))))
 }
