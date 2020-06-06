@@ -33,7 +33,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
 
       <Box>
         <Flex flexDirection={["column", "row"]}>
-          <Box mb={1} mr={1}>
+          <Box>
             <Flex alignItems="center">
               <Box>
                 <Field name={`${prefix}Ingredients.${index}.weight`}>
@@ -50,27 +50,26 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
               </Box>
 
               {type !== IngredientType.other &&
-                <Box ml={2}>
+                <Box ml={2} mr={2}>
                   of {lowerCase(labelForIngredientType(type))}
-                </Box>}
-
-
-              {nameRequired &&
-                <Box ml={2}>
-                  <Field name={`${prefix}Ingredients.${index}.name`}>
-                    {({ field }: FieldProps<string>) => (
-                      <InputGroup
-                        intent={nameIntent}
-                        value={field.value}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        name={field.name}
-                        placeholder="Name" />
-                    )}
-                  </Field>
                 </Box>}
             </Flex>
           </Box>
+
+          {nameRequired &&
+            <Box pt={[1, 0]}>
+              <Field name={`${prefix}Ingredients.${index}.name`}>
+                {({ field }: FieldProps<string>) => (
+                  <InputGroup
+                    intent={nameIntent}
+                    value={field.value}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    placeholder="Name" />
+                )}
+              </Field>
+            </Box>}
         </Flex>
       </Box>
     </Flex>
