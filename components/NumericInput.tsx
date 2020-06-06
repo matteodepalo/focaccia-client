@@ -1,6 +1,7 @@
 import { NumericInput as BPNumericInput } from '@blueprintjs/core'
 import { FunctionComponent } from "react"
 import { Box, BoxProps } from "rebass/styled-components"
+import { lte } from 'lodash'
 
 interface Props {
   boxProps?: BoxProps
@@ -15,7 +16,7 @@ export const NumericInput: FunctionComponent<Props> = ({ boxProps, inputProps })
         {...inputProps}
         allowNumericCharactersOnly={true}
         fill={true}
-        value={inputProps.value === 0 ? undefined : inputProps.value}
+        value={lte(inputProps.value, 0) ? undefined : inputProps.value}
         placeholder='0'/>
     </Box>
   )

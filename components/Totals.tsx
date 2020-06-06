@@ -38,7 +38,7 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
       if (isDoughWater(ingredient)) {
         return {
           ...ingredient,
-          weight: doughWaterWeight(updatedHydration, ingredients)
+          weight: round(doughWaterWeight(updatedHydration, ingredients))
         }
       } else {
         return ingredient
@@ -71,9 +71,9 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
           <NumericInput
             boxProps={{ marginX: 2, width: 100 }}
             inputProps={{
-              value: hydration,
+              value: round(hydration),
               onValueChange: (value: number) => hydrationChange(value),
-              min: hydrationMinimum
+              min: round(hydrationMinimum)
             }}/>
         }
         %

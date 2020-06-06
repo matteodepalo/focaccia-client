@@ -142,7 +142,7 @@ function waterWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
 }
 
 export function ingredientsHydration<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  return Math.floor(safeDivide(waterWeight(ingredients), flourWeight(ingredients)) * 100)
+  return safeDivide(waterWeight(ingredients), flourWeight(ingredients)) * 100
 }
 
 export function flourList<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
@@ -162,5 +162,5 @@ export function ingredientsByGroup<T extends BaseIngredient>(ingredients: Ingred
 }
 
 export function doughWaterWeight<T extends BaseIngredient>(hydration: number, ingredients: Ingredient<T>[]) {
-  return Math.floor((hydration * flourWeight(ingredients)) / 100) - (waterWeight(ingredients.filter((i) => !isDoughWater(i))))
+  return ((hydration * flourWeight(ingredients)) / 100) - (waterWeight(ingredients.filter((i) => !isDoughWater(i))))
 }
