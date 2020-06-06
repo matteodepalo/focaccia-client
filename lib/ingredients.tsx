@@ -42,7 +42,20 @@ function findDoughIngredient<T extends BaseIngredient, S extends IngredientType>
   throw new Error(`Ingredient of type ${type} not found`)
 }
 
-const ingredientGroups = [
+type ingredientGroupLabelObject<T extends IngredientGroup> = {
+  label: string,
+  value: T
+}
+
+type ingredientTypeLabelObject<T extends IngredientType> = {
+  label: string,
+  value: T
+}
+
+const ingredientGroups: [
+  ingredientGroupLabelObject<IngredientGroup.starter>,
+  ingredientGroupLabelObject<IngredientGroup.dough>,
+] = [
   {
     label: 'Starter',
     value: IngredientGroup.starter
@@ -53,7 +66,13 @@ const ingredientGroups = [
   }
 ]
 
-export const ingredientTypes = [
+export const ingredientTypes: [
+  ingredientTypeLabelObject<IngredientType.flour>,
+  ingredientTypeLabelObject<IngredientType.yeast>,
+  ingredientTypeLabelObject<IngredientType.water>,
+  ingredientTypeLabelObject<IngredientType.salt>,
+  ingredientTypeLabelObject<IngredientType.other>,
+] = [
   {
     label: 'Flour',
     value: IngredientType.flour
@@ -81,11 +100,23 @@ export function nameRequiredForType(type: IngredientType) {
 }
 
 export function labelForIngredientGroup(group: IngredientGroup) {
-  return ingredientGroups.find((g) => g.value === group)?.label
+  for (let ingredient of ingredientGroups) {
+    if (ingredient.value === group) {
+      return ingredient.label
+    }
+  }
+
+  throw new Error(`Label for group ${group} not found`)
 }
 
 export function labelForIngredientType(type: IngredientType) {
-  return ingredientTypes.find((t) => t.value === type)?.label
+  for (let ingredient of ingredientTypes) {
+    if (ingredient.value === type) {
+      return ingredient.label
+    }
+  }
+
+  throw new Error(`Label for type ${type} not found`)
 }
 
 export function doughIngredientRequired(ingredient: DoughIngredient<IngredientInput>, doughIngredients: DoughIngredients<IngredientInput>) {
@@ -116,7 +147,7 @@ export function ingredientTypeIcon(type: IngredientType, props?: IconProps) {
     case IngredientType.other:
       return <GiCoolSpices {...props} />
     default:
-      throw "No icon for type"
+      throw new Error(`No icon for type ${type}`)
   }
 }
 
