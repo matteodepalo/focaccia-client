@@ -24,11 +24,12 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
   const nameRequired = nameRequiredForType(type)
   const weightIntent = getIn(errors, `${prefix}Ingredients.${index}.weight`) && getIn(touched, `${prefix}Ingredients.${index}.weight`) ? "danger" : "none"
   const nameIntent = getIn(errors, `${prefix}Ingredients.${index}.name`) && getIn(touched, `${prefix}Ingredients.${index}.name`) ? "danger" : "none"
+  const disabled = typeof onRemove === 'undefined'
 
   return (
     <Flex mb={2} alignItems="center">
       <Box mr={2}>
-        <Button icon="remove" disabled={typeof onRemove === 'undefined'} onClick={() => onRemove?.()} minimal={true}  />
+        <Button icon="remove" disabled={disabled} onClick={() => onRemove?.()} minimal={true}  />
       </Box>
 
       <Box>
