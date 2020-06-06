@@ -1,5 +1,5 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../graphql'
-import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup } from '@blueprintjs/core'
+import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup, HTMLTable } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
@@ -8,6 +8,14 @@ import { IngredientField } from './IngredientField';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
 import DeleteButton from './DeleteButton';
+import styled from 'styled-components';
+import { TimePicker } from "@blueprintjs/datetime";
+
+const TD = styled.td`
+  && {
+    vertical-align: middle;
+  }
+`
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
   const object = Yup.object({
@@ -252,6 +260,37 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                 )}
               />
             </Box>
+          </Box>
+
+          <Box mt={4}>
+            <H2>Steps</H2>
+
+            <HTMLTable striped={true}>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Description</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <TD><Button icon="remove" onClick={() => {}} minimal={true} /></TD>
+                  <TD>Impastare</TD>
+                  <TD><TimePicker /></TD>
+                </tr>
+                <tr>
+                  <TD><Button icon="remove" onClick={() => {}} minimal={true} /></TD>
+                  <TD>Lievitare</TD>
+                  <TD><TimePicker /></TD>
+                </tr>
+                <tr>
+                  <TD><Button icon="remove" onClick={() => {}} minimal={true} /></TD>
+                  <TD>Cucinare</TD>
+                  <TD><TimePicker /></TD>
+                </tr>
+              </tbody>
+            </HTMLTable>
           </Box>
 
           <Box mt={4}>
