@@ -146,8 +146,7 @@ export function ingredientsHydration<T extends BaseIngredient>(ingredients: Ingr
 }
 
 export function flourList<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  return uniq(ingredients.filter(i => i.type === IngredientType.flour)
-    .map(i => i.name))
+  return uniq(flours(ingredients)).map(i => i.name)
 }
 
 export function isDoughWater<T extends BaseIngredient>(ingredient: Ingredient<T>) {
