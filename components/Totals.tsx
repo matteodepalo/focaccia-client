@@ -10,15 +10,15 @@ const Totals = <T extends BaseIngredient>({ ingredients, onWeightScaleFactorChan
   onWeightScaleFactorChange: (weight: number) => void
   onHydrationScaleFactorChange: (hydration: number) => void
 }) => {
-  const totalWeight = ingredientsWeightInG(ingredients) || ingredients.length
-  const totalHydration = ingredientsHydration(ingredients)
+  const originalWeight = ingredientsWeightInG(ingredients) || ingredients.length
+  const originalHydration = ingredientsHydration(ingredients)
 
   const weightChange = (weight: number) => {
-    onWeightScaleFactorChange(safeDivide(weight, totalWeight))
+    onWeightScaleFactorChange(safeDivide(weight, originalWeight))
   }
 
   const hydrationChange = (hydration: number) => {
-    onHydrationScaleFactorChange(safeDivide(hydration, totalHydration))
+    onHydrationScaleFactorChange(safeDivide(hydration, originalHydration))
   }
 
   return (
@@ -29,8 +29,9 @@ const Totals = <T extends BaseIngredient>({ ingredients, onWeightScaleFactorChan
           <NumericInput
             boxProps={{ marginX: 2, width: 100 }}
             inputProps={{
-              value: round((totalWeight / 1000) * 2) / 2,
+              value: round(originalWeight / 1000, 1),
               onValueChange: (value: number) => weightChange(value * 1000),
+              stepSize: 0.1,
               min: 0
             }}/>
         }
@@ -43,7 +44,7 @@ const Totals = <T extends BaseIngredient>({ ingredients, onWeightScaleFactorChan
           <NumericInput
             boxProps={{ marginX: 2, width: 100 }}
             inputProps={{
-              value: totalHydration,
+              value: originalHydration,
               onValueChange: (value: number) => hydrationChange(value)
             }}/>
         }
