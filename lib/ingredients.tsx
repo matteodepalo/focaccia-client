@@ -121,8 +121,7 @@ export function ingredientTypeIcon(type: IngredientType, props?: IconProps) {
 }
 
 export function ingredientsWeightInG<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  return ingredients
-    .reduce((memo, i) => memo += i.weight, 0)
+  return ingredients.reduce((memo, i) => memo += i.weight, 0)
 }
 
 function flours<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
