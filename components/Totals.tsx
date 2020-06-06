@@ -58,8 +58,7 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
             inputProps={{
               value: round(totalWeight / 1000, 1),
               onValueChange: (value: number) => totalWeightChange(value * 1000),
-              stepSize: 0.1,
-              min: 0
+              stepSize: 0.1
             }}/>
         }
         kg

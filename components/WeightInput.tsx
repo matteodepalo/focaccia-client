@@ -32,7 +32,6 @@ export const WeightInput: FunctionComponent<Props> = ({ value, onChange, name, o
       onValueChange: handleNumericInputChange,
       rightElement: <Tag minimal={true}>g</Tag>,
       name: name,
-      min: 0,
       intent: intent
     }} />
 }

@@ -16,6 +16,7 @@ export const NumericInput: FunctionComponent<Props> = ({ boxProps, inputProps })
         {...inputProps}
         allowNumericCharactersOnly={true}
         fill={true}
+        min={inputProps.min ?? 0}
         value={lte(inputProps.value, 0) ? undefined : inputProps.value}
         placeholder='0'/>
     </Box>
