@@ -22,8 +22,8 @@ export function starterIngredients<T extends BaseIngredient>(ingredients: T[]): 
 
 export function doughIngredients<T extends BaseIngredient>(ingredients: T[]): DoughIngredients<T> {
   let doughIngredients = ingredients.filter(i => i.group === IngredientGroup.dough)
-  let water = findIngredient(ingredients, IngredientType.water)
-  let flour = findIngredient(ingredients, IngredientType.flour)
+  let water = findIngredient(doughIngredients, IngredientType.water)
+  let flour = findIngredient(doughIngredients, IngredientType.flour)
 
   return [
     water,
@@ -125,14 +125,18 @@ export function ingredientsWeightInG<T extends BaseIngredient>(ingredients: Ingr
     .reduce((memo, i) => memo += i.weight, 0)
 }
 
+function flourWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+  return ingredients.filter(i => i.type === IngredientType.flour)
+    .reduce((memo, i) => memo += i.weight, 0)
+}
+
+function waterWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+  return ingredients.filter(i => i.type === IngredientType.water)
+    .reduce((memo, i) => memo += i.weight, 0)
+}
+
 export function ingredientsHydration<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  const flourWeight = ingredients.filter(i => i.type === IngredientType.flour)
-    .reduce((memo, i) => memo += i.weight, 0)
-
-  const waterWeight = ingredients.filter(i => i.type === IngredientType.water)
-    .reduce((memo, i) => memo += i.weight, 0)
-
-  return Math.floor(safeDivide(waterWeight, flourWeight) * 100)
+  return Math.floor(safeDivide(waterWeight(ingredients), flourWeight(ingredients)) * 100)
 }
 
 export function flourList<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
@@ -142,4 +146,15 @@ export function flourList<T extends BaseIngredient>(ingredients: Ingredient<T>[]
 
 export function isDoughWater<T extends BaseIngredient>(ingredient: Ingredient<T>) {
   return ingredient.type === IngredientType.water && ingredient.group === IngredientGroup.dough
+}
+
+export function groupByGroup<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+  return {
+    starterIngredients: starterIngredients(ingredients),
+    doughIngredients: doughIngredients(ingredients)
+  }
+}
+
+export function doughWaterWeightFromHydration<T extends BaseIngredient>(hydration: number, ingredients: Ingredient<T>[]) {
+  return flourWeight(ingredients) * (hydration / 100)
 }

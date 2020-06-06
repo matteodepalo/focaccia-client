@@ -4,7 +4,7 @@ import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from '../graphql'
 import { Box, Flex } from 'rebass/styled-components'
-import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, isDoughWater, starterIngredients, doughIngredients } from '../lib/ingredients'
+import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, starterIngredients as filterStarterIngredients, doughIngredients as filterDoughIngredients } from '../lib/ingredients'
 import Ingredient from './Ingredient'
 import { round, lowerCase } from 'lodash'
 import Totals from './Totals'
@@ -16,18 +16,13 @@ interface Props {
 const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
   const router = useRouter()
 
-  const [weightScaleFactor, setWeightScaleFactor] = useState(1)
-  const [hydrationScaleFactor, setHydrationScaleFactor] = useState(1)
+  const [ingredients, setIngredients] = useState(recipe.ingredients)
+  const starterIngredients = filterStarterIngredients(ingredients)
+  const doughIngredients = filterDoughIngredients(ingredients)
 
   const ingredientItem = (ingredient: IngredientFieldsFragment) => {
-    let ingredientWeight = ingredient.weight * weightScaleFactor
-
-    if (isDoughWater(ingredient)) {
-      ingredientWeight *= hydrationScaleFactor
-    }
-
     return <Ingredient
-      text={`${round(ingredientWeight)} g of ${ingredient.name ?? lowerCase(labelForIngredientType(ingredient.type))}`}
+      text={`${round(ingredient.weight)} g of ${ingredient.name ?? lowerCase(labelForIngredientType(ingredient.type))}`}
       icon={ingredientTypeIcon(ingredient.type, { size: 25, style: { marginRight: 15 } })} />
   }
 
@@ -40,20 +35,22 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
           </Box>
 
           <Totals
-            ingredients={recipe.ingredients}
-            onWeightScaleFactorChange={setWeightScaleFactor}
-            onHydrationScaleFactorChange={setHydrationScaleFactor} />
+            starterIngredients={starterIngredients}
+            doughIngredients={doughIngredients}
+            onIngredientsChange={({ starterIngredients, doughIngredients }) => {
+              setIngredients(starterIngredients.concat(doughIngredients))
+            }} />
 
           <Box mt={4}>
             <H2>Ingredients</H2>
           </Box>
 
-          {starterIngredients(recipe.ingredients).length > 0 &&
+          {starterIngredients.length > 0 &&
             <Box mt={4}>
               <H3>{labelForIngredientGroup(IngredientGroup.starter)}</H3>
 
               <Box mt={3}>
-                {starterIngredients(recipe.ingredients).map((ingredient, index) => {
+                {starterIngredients.map((ingredient, index) => {
                   return <div key={index}>
                     {ingredientItem(ingredient)}
                   </div>
@@ -67,7 +64,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
           <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
 
           <Box mt={3}>
-            {doughIngredients(recipe.ingredients).map((ingredient, index) => {
+            {doughIngredients.map((ingredient, index) => {
               return <div key={index}>
                 {ingredientItem(ingredient)}
               </div>

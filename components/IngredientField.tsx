@@ -22,7 +22,7 @@ interface Props {
 export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFieldValue, formValues, onRemove, errors, validateField, touched }) => {
   const type = getIn(formValues, `${prefix}Ingredients.${index}.type`) as IngredientType
   const nameRequired = nameRequiredForType(type)
-  const weightIntent = getIn(errors, `${prefix}Ingredients.${index}.weight`) && getIn(touched,  `${prefix}Ingredients.${index}.weight`) ? "danger" : "none"
+  const weightIntent = getIn(errors, `${prefix}Ingredients.${index}.weight`) && getIn(touched, `${prefix}Ingredients.${index}.weight`) ? "danger" : "none"
   const nameIntent = getIn(errors, `${prefix}Ingredients.${index}.name`) && getIn(touched, `${prefix}Ingredients.${index}.name`) ? "danger" : "none"
 
   return (

@@ -1,24 +1,65 @@
 import { Flex } from "rebass/styled-components"
 import { round } from "lodash"
 import { NumericInput } from "./NumericInput"
-import { ingredientsWeightInG, ingredientsHydration, BaseIngredient } from "../lib/ingredients"
+import { ingredientsWeightInG, ingredientsHydration, BaseIngredient, DoughIngredients, isDoughWater, groupByGroup, doughWaterWeightFromHydration } from "../lib/ingredients"
 import { safeDivide } from "../lib/utils"
+import { useState } from "react"
 
-
-const Totals = <T extends BaseIngredient>({ ingredients, onWeightScaleFactorChange, onHydrationScaleFactorChange }: {
-  ingredients: T[],
-  onWeightScaleFactorChange: (weight: number) => void
-  onHydrationScaleFactorChange: (hydration: number) => void
+const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients, onIngredientsChange }: {
+  starterIngredients: T[],
+  doughIngredients: DoughIngredients<T>
+  onIngredientsChange: ({ starterIngredients, doughIngredients }: { starterIngredients: T[], doughIngredients: DoughIngredients<T>}) => void
 }) => {
-  const originalWeight = ingredientsWeightInG(ingredients) || ingredients.length
-  const originalHydration = ingredientsHydration(ingredients)
+  const ingredients = starterIngredients.concat(doughIngredients)
+  const [totalWeight, setTotalWeight] = useState(ingredientsWeightInG(ingredients))
+  const [hydration, setHydration] = useState(ingredientsHydration(ingredients))
 
-  const weightChange = (weight: number) => {
-    onWeightScaleFactorChange(safeDivide(weight, originalWeight))
+  const totalWeightChange = (newTotalWeight: number) => {
+    const scaleFactor = safeDivide(newTotalWeight, totalWeight)
+
+    const updatedIngredientWeight = (ingredientWeight: number) => {
+      if (totalWeight === 0) {
+        return newTotalWeight / ingredients.length
+      } else {
+        return round(ingredientWeight * scaleFactor)
+      }
+    }
+
+    const updatedIngredients = ingredients.map((ingredient) => {
+      return {
+        ...ingredient,
+        weight: updatedIngredientWeight(ingredient.weight)
+      }
+    })
+
+    setTotalWeight(newTotalWeight)
+    onIngredientsChange(groupByGroup(updatedIngredients))
   }
 
-  const hydrationChange = (hydration: number) => {
-    onHydrationScaleFactorChange(safeDivide(hydration, originalHydration))
+  const hydrationChange = (newHydration: number) => {
+    const scaleFactor = safeDivide(newHydration, hydration)
+
+    const updatedDoughWaterWeight = (doughWaterWeight: number) => {
+      if (hydration === 0) {
+        return doughWaterWeightFromHydration(newHydration, ingredients)
+      } else {
+        return round(doughWaterWeight * scaleFactor)
+      }
+    }
+
+    const updatedIngredients = ingredients.map((ingredient) => {
+      if (isDoughWater(ingredient)) {
+        return {
+          ...ingredient,
+          weight: updatedDoughWaterWeight(ingredient.weight)
+        }
+      } else {
+        return ingredient
+      }
+    })
+
+    setHydration(newHydration)
+    onIngredientsChange(groupByGroup(updatedIngredients))
   }
 
   return (
@@ -29,8 +70,8 @@ const Totals = <T extends BaseIngredient>({ ingredients, onWeightScaleFactorChan
           <NumericInput
             boxProps={{ marginX: 2, width: 100 }}
             inputProps={{
-              value: round(originalWeight / 1000, 1),
-              onValueChange: (value: number) => weightChange(value * 1000),
+              value: round(totalWeight / 1000, 1),
+              onValueChange: (value: number) => totalWeightChange(value * 1000),
               stepSize: 0.1,
               min: 0
             }}/>
@@ -44,8 +85,9 @@ const Totals = <T extends BaseIngredient>({ ingredients, onWeightScaleFactorChan
           <NumericInput
             boxProps={{ marginX: 2, width: 100 }}
             inputProps={{
-              value: originalHydration,
-              onValueChange: (value: number) => hydrationChange(value)
+              value: hydration,
+              onValueChange: (value: number) => hydrationChange(value),
+              min: 0
             }}/>
         }
         %

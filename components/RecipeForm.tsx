@@ -7,7 +7,6 @@ import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingre
 import { IngredientField } from './IngredientField';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
-import { round } from 'lodash';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
   const object = Yup.object({
@@ -46,10 +45,6 @@ export interface FormValues {
 
 function newIngredient<T extends IngredientType>(group: IngredientGroup, type: T): Ingredient<IngredientInput, T> {
   return { type, group, weight: 0, name: nameRequiredForType(type) ? '' : undefined }
-}
-
-function weightWithDefault(weight: number) {
-  return weight === 0 ? 1 : weight
 }
 
 const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
@@ -155,35 +150,18 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
           </Field>
 
           <Totals
-            ingredients={values.doughIngredients.concat(values.starterIngredients)}
-            onWeightScaleFactorChange={(scaleFactor: number) => {
+            starterIngredients={values.starterIngredients}
+            doughIngredients={values.doughIngredients}
+            onIngredientsChange={({ starterIngredients, doughIngredients }) => {
               let newValues = {
                 ...values,
-                starterIngredients: values.starterIngredients.map((ingredient) => {
-                  return {
-                    ...ingredient,
-                    weight: round(weightWithDefault(ingredient.weight) * scaleFactor)
-                  }
-                }),
-                doughIngredients: values.doughIngredients.map((ingredient) => {
-                  return {
-                    ...ingredient,
-                    weight: round(weightWithDefault(ingredient.weight) * scaleFactor)
-                  }
-                }) as DoughIngredients<IngredientInput>
+                starterIngredients,
+                doughIngredients
               }
 
               setValues(newValues)
               validateForm(newValues)
-            }}
-
-            onHydrationScaleFactorChange={(scaleFactor: number) => {
-              const doughWater = values.doughIngredients[0]
-              const doughWaterIndex = values.doughIngredients.indexOf(doughWater)
-              const newWaterWeight = round(scaleFactor * weightWithDefault(doughWater.weight))
-
-              setFieldValue(`doughIngredients.${doughWaterIndex}.weight`, newWaterWeight)
-            }} />
+            }}/>
 
           <Box mt={4}>
             <H2>Ingredients</H2>
