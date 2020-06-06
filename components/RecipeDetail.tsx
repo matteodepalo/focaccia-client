@@ -1,9 +1,8 @@
 import { Button, H1, H2, H3 } from '@blueprintjs/core'
 import { FunctionComponent, useState } from 'react'
-import DeleteButton from './DeleteButton'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from '../graphql'
-import { Box, Flex } from 'rebass/styled-components'
+import { Box } from 'rebass/styled-components'
 import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, starterIngredients as filterStarterIngredients, doughIngredients as filterDoughIngredients } from '../lib/ingredients'
 import Ingredient from './Ingredient'
 import { round, lowerCase } from 'lodash'
@@ -72,15 +71,11 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
           </Box>
         </Box>
 
-        <Flex mt={4}>
-          <Box mr={2}>
-            <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)} />
-          </Box>
-
-          <Box>
-            <DeleteButton recipeId={recipe.id} redirect={true} />
-          </Box>
-        </Flex>
+        <Box mt={4}>
+          <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)}>
+            Edit
+          </Button>
+        </Box>
       </div>}
     </>
   )

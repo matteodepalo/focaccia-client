@@ -1,20 +1,20 @@
-import { Recipe, useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument } from "../graphql"
-import { FunctionComponent } from "react"
-import { Button } from "@blueprintjs/core"
+import { useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument, RecipeFieldsFragment } from "../graphql"
+import { FunctionComponent, useState } from "react"
+import { Button, Classes, Dialog } from "@blueprintjs/core"
 import { useRouter } from "next/router"
 
 interface Props {
-  recipeId: Recipe['id'],
-  redirect?: boolean
+  recipe: RecipeFieldsFragment
 }
 
-const DeleteButton: FunctionComponent<Props> = ({ recipeId, redirect }) => {
+const DeleteButton: FunctionComponent<Props> = ({ recipe }) => {
   const [removeRecipe, { loading }] = useRemoveRecipeMutation()
   const router = useRouter()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const handleRemoveClick = () => {
     removeRecipe({
-      variables: { id: recipeId },
+      variables: { id: recipe.id },
       update: (cache, { data }) => {
         try {
           const getExistingRecipes = cache.readQuery<GetRecipesQuery>({
@@ -32,15 +32,38 @@ const DeleteButton: FunctionComponent<Props> = ({ recipeId, redirect }) => {
           })
         } catch {}
 
-        if (redirect) {
-          router.push('/recipes')
-        }
+        router.push('/recipes')
       }
     })
   }
 
   return (
-    <Button icon="trash" loading={loading} intent="danger" onClick={handleRemoveClick} />
+    <>
+      <Button icon="trash" intent="danger" onClick={() => setIsDialogOpen(true)}>
+        Delete
+      </Button>
+
+      <Dialog
+        icon="warning-sign"
+        onClose={() => setIsDialogOpen(false)}
+        title="Confirm Deletion"
+        isOpen={isDialogOpen}
+      >
+        <div className={Classes.DIALOG_BODY}>
+          <p>Are you sure you want to delete the recipe {recipe.name}?</p>
+        </div>
+
+        <div className={Classes.DIALOG_FOOTER}>
+          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+
+            <Button icon="trash" loading={loading} intent="danger" onClick={handleRemoveClick}>
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+    </>
   )
 }
 

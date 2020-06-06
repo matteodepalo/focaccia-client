@@ -7,6 +7,7 @@ import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingre
 import { IngredientField } from './IngredientField';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
+import DeleteButton from './DeleteButton';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
   const object = Yup.object({
@@ -253,10 +254,15 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
             </Box>
           </Box>
 
-
           <Box mt={4}>
-            <Button intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
+            <Button icon="floppy-disk" intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
           </Box>
+
+          {recipe &&
+            <Box mt={1}>
+              <DeleteButton recipe={recipe} />
+            </Box>
+          }
         </FormikForm>
       )}
     </Formik>
