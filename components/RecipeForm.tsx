@@ -152,7 +152,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
           <Totals
             starterIngredients={values.starterIngredients}
             doughIngredients={values.doughIngredients}
-            onIngredientsChange={({ starterIngredients, doughIngredients }) => {
+            onTotalsChange={({ starterIngredients, doughIngredients }) => {
               let newValues = {
                 ...values,
                 starterIngredients,

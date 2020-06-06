@@ -22,8 +22,8 @@ export function starterIngredients<T extends BaseIngredient>(ingredients: T[]): 
 
 export function doughIngredients<T extends BaseIngredient>(ingredients: T[]): DoughIngredients<T> {
   let doughIngredients = ingredients.filter(i => i.group === IngredientGroup.dough)
-  let water = findIngredient(doughIngredients, IngredientType.water)
-  let flour = findIngredient(doughIngredients, IngredientType.flour)
+  let water = findDoughIngredient(doughIngredients, IngredientType.water)
+  let flour = findDoughIngredient(doughIngredients, IngredientType.flour)
 
   return [
     water,
@@ -32,7 +32,7 @@ export function doughIngredients<T extends BaseIngredient>(ingredients: T[]): Do
   ]
 }
 
-function findIngredient<T extends BaseIngredient, S extends IngredientType>(ingredients: T[], type: S) {
+function findDoughIngredient<T extends BaseIngredient, S extends IngredientType>(ingredients: T[], type: S) {
   for (let ingredient of ingredients) {
     if (ingredient.type === type) {
       return ingredient as Ingredient<T, S>
@@ -103,7 +103,7 @@ type IconProps = {
   style: CSSProperties
 }
 
-export const ingredientTypeIcon = (type: IngredientType, props?: IconProps)  => {
+export function ingredientTypeIcon(type: IngredientType, props?: IconProps) {
   switch (type) {
     case IngredientType.yeast:
       return <GiBubbles color="brown" {...props} />
@@ -125,14 +125,20 @@ export function ingredientsWeightInG<T extends BaseIngredient>(ingredients: Ingr
     .reduce((memo, i) => memo += i.weight, 0)
 }
 
-function flourWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+function flours<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
   return ingredients.filter(i => i.type === IngredientType.flour)
-    .reduce((memo, i) => memo += i.weight, 0)
+}
+
+function flourWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+  return flours(ingredients).reduce((memo, i) => memo += i.weight, 0)
+}
+
+function water<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+  return ingredients.filter(i => i.type === IngredientType.water)
 }
 
 function waterWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  return ingredients.filter(i => i.type === IngredientType.water)
-    .reduce((memo, i) => memo += i.weight, 0)
+  return water(ingredients).reduce((memo, i) => memo += i.weight, 0)
 }
 
 export function ingredientsHydration<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
@@ -148,13 +154,13 @@ export function isDoughWater<T extends BaseIngredient>(ingredient: Ingredient<T>
   return ingredient.type === IngredientType.water && ingredient.group === IngredientGroup.dough
 }
 
-export function groupByGroup<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+export function ingredientsByGroup<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
   return {
     starterIngredients: starterIngredients(ingredients),
     doughIngredients: doughIngredients(ingredients)
   }
 }
 
-export function doughWaterWeightFromHydration<T extends BaseIngredient>(hydration: number, ingredients: Ingredient<T>[]) {
-  return flourWeight(ingredients) * (hydration / 100)
+export function doughWaterWeight<T extends BaseIngredient>(hydration: number, ingredients: Ingredient<T>[]) {
+  return Math.floor((hydration * flourWeight(ingredients)) / 100) - (waterWeight(ingredients.filter((i) => !isDoughWater(i))))
 }

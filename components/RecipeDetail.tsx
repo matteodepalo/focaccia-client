@@ -37,7 +37,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
           <Totals
             starterIngredients={starterIngredients}
             doughIngredients={doughIngredients}
-            onIngredientsChange={({ starterIngredients, doughIngredients }) => {
+            onTotalsChange={({ starterIngredients, doughIngredients }) => {
               setIngredients(starterIngredients.concat(doughIngredients))
             }} />
 

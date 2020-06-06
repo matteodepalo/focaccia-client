@@ -1,27 +1,25 @@
 import { Flex } from "rebass/styled-components"
 import { round } from "lodash"
 import { NumericInput } from "./NumericInput"
-import { ingredientsWeightInG, ingredientsHydration, BaseIngredient, DoughIngredients, isDoughWater, groupByGroup, doughWaterWeightFromHydration } from "../lib/ingredients"
+import { ingredientsWeightInG, ingredientsHydration, BaseIngredient, DoughIngredients, isDoughWater, ingredientsByGroup, doughWaterWeight } from "../lib/ingredients"
 import { safeDivide } from "../lib/utils"
-import { useState } from "react"
 
-const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients, onIngredientsChange }: {
+const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients, onTotalsChange }: {
   starterIngredients: T[],
   doughIngredients: DoughIngredients<T>
-  onIngredientsChange: ({ starterIngredients, doughIngredients }: { starterIngredients: T[], doughIngredients: DoughIngredients<T>}) => void
+  onTotalsChange: ({ starterIngredients, doughIngredients }: { starterIngredients: T[], doughIngredients: DoughIngredients<T>}) => void
 }) => {
   const ingredients = starterIngredients.concat(doughIngredients)
-  const [totalWeight, setTotalWeight] = useState(ingredientsWeightInG(ingredients))
-  const [hydration, setHydration] = useState(ingredientsHydration(ingredients))
+  const totalWeight = ingredientsWeightInG(ingredients)
+  const hydration = ingredientsHydration(ingredients)
+  const hydrationMinimum = ingredientsHydration(ingredients.filter((i) => !isDoughWater(i)))
 
-  const totalWeightChange = (newTotalWeight: number) => {
-    const scaleFactor = safeDivide(newTotalWeight, totalWeight)
-
+  const totalWeightChange = (updatedTotalWeight: number) => {
     const updatedIngredientWeight = (ingredientWeight: number) => {
       if (totalWeight === 0) {
-        return newTotalWeight / ingredients.length
+        return round(updatedTotalWeight / ingredients.length)
       } else {
-        return round(ingredientWeight * scaleFactor)
+        return round(ingredientWeight * safeDivide(updatedTotalWeight, totalWeight))
       }
     }
 
@@ -32,34 +30,22 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
       }
     })
 
-    setTotalWeight(newTotalWeight)
-    onIngredientsChange(groupByGroup(updatedIngredients))
+    onTotalsChange(ingredientsByGroup(updatedIngredients))
   }
 
-  const hydrationChange = (newHydration: number) => {
-    const scaleFactor = safeDivide(newHydration, hydration)
-
-    const updatedDoughWaterWeight = (doughWaterWeight: number) => {
-      if (hydration === 0) {
-        return doughWaterWeightFromHydration(newHydration, ingredients)
-      } else {
-        return round(doughWaterWeight * scaleFactor)
-      }
-    }
-
+  const hydrationChange = (updatedHydration: number) => {
     const updatedIngredients = ingredients.map((ingredient) => {
       if (isDoughWater(ingredient)) {
         return {
           ...ingredient,
-          weight: updatedDoughWaterWeight(ingredient.weight)
+          weight: doughWaterWeight(updatedHydration, ingredients)
         }
       } else {
         return ingredient
       }
     })
 
-    setHydration(newHydration)
-    onIngredientsChange(groupByGroup(updatedIngredients))
+    onTotalsChange(ingredientsByGroup(updatedIngredients))
   }
 
   return (
@@ -87,7 +73,7 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
             inputProps={{
               value: hydration,
               onValueChange: (value: number) => hydrationChange(value),
-              min: 0
+              min: hydrationMinimum
             }}/>
         }
         %
