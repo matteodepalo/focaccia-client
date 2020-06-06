@@ -42,19 +42,19 @@ function findDoughIngredient<T extends BaseIngredient, S extends IngredientType>
   throw new Error(`Ingredient of type ${type} not found`)
 }
 
-type ingredientGroupLabelObject<T extends IngredientGroup> = {
+type IngredientGroupLabelObject<T extends IngredientGroup> = {
   label: string,
   value: T
 }
 
-type ingredientTypeLabelObject<T extends IngredientType> = {
+type IngredientTypeLabelObject<T extends IngredientType> = {
   label: string,
   value: T
 }
 
-const ingredientGroups: [
-  ingredientGroupLabelObject<IngredientGroup.starter>,
-  ingredientGroupLabelObject<IngredientGroup.dough>,
+const ingredientGroupsWithLabels: [
+  IngredientGroupLabelObject<IngredientGroup.starter>,
+  IngredientGroupLabelObject<IngredientGroup.dough>,
 ] = [
   {
     label: 'Starter',
@@ -66,12 +66,12 @@ const ingredientGroups: [
   }
 ]
 
-export const ingredientTypes: [
-  ingredientTypeLabelObject<IngredientType.flour>,
-  ingredientTypeLabelObject<IngredientType.yeast>,
-  ingredientTypeLabelObject<IngredientType.water>,
-  ingredientTypeLabelObject<IngredientType.salt>,
-  ingredientTypeLabelObject<IngredientType.other>,
+export const ingredientTypesWithLabels: [
+  IngredientTypeLabelObject<IngredientType.flour>,
+  IngredientTypeLabelObject<IngredientType.yeast>,
+  IngredientTypeLabelObject<IngredientType.water>,
+  IngredientTypeLabelObject<IngredientType.salt>,
+  IngredientTypeLabelObject<IngredientType.other>,
 ] = [
   {
     label: 'Flour',
@@ -100,7 +100,7 @@ export function nameRequiredForType(type: IngredientType) {
 }
 
 export function labelForIngredientGroup(group: IngredientGroup) {
-  for (let ingredient of ingredientGroups) {
+  for (let ingredient of ingredientGroupsWithLabels) {
     if (ingredient.value === group) {
       return ingredient.label
     }
@@ -110,7 +110,7 @@ export function labelForIngredientGroup(group: IngredientGroup) {
 }
 
 export function labelForIngredientType(type: IngredientType) {
-  for (let ingredient of ingredientTypes) {
+  for (let ingredient of ingredientTypesWithLabels) {
     if (ingredient.value === type) {
       return ingredient.label
     }

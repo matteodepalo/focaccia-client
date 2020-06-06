@@ -3,7 +3,7 @@ import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, Menu
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
-import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypes, doughIngredientRequired, ingredientTypeUnavailable, DoughIngredients, starterIngredients, doughIngredients, Ingredient } from '../lib/ingredients';
+import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypesWithLabels, doughIngredientRequired, ingredientTypeUnavailable, DoughIngredients, starterIngredients, doughIngredients, Ingredient } from '../lib/ingredients';
 import { IngredientField } from './IngredientField';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
@@ -236,7 +236,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                       position={Position.RIGHT_TOP}
                       content={
                         <Menu>
-                          {ingredientTypes.map((type, index) => {
+                          {ingredientTypesWithLabels.map((type, index) => {
                             return <MenuItem
                               key={index}
                               icon={ingredientTypeIcon(type.value)}
