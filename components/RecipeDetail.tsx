@@ -1,11 +1,11 @@
-import { Button, H1, H2, H3 } from '@blueprintjs/core'
+import { Button, H1, H2, H3, HTMLTable } from '@blueprintjs/core'
 import { FunctionComponent, useState } from 'react'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from '../graphql'
 import { Box } from 'rebass/styled-components'
 import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, starterIngredients as filterStarterIngredients, doughIngredients as filterDoughIngredients } from '../lib/ingredients'
 import Ingredient from './Ingredient'
-import { round, lowerCase } from 'lodash'
+import { round, lowerCase, orderBy } from 'lodash'
 import Totals from './form/Totals'
 
 interface Props {
@@ -58,25 +58,50 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
             </Box>
           }
 
+          <Box mt={4}>
+            <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
 
-        <Box mt={4}>
-          <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
-
-          <Box mt={3}>
-            {doughIngredients.map((ingredient, index) => {
-              return <div key={index}>
-                {ingredientItem(ingredient)}
-              </div>
-            })}
+            <Box mt={3}>
+              {doughIngredients.map((ingredient, index) => {
+                return <div key={index}>
+                  {ingredientItem(ingredient)}
+                </div>
+              })}
+            </Box>
           </Box>
-        </Box>
 
-        <Box mt={4}>
-          <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)}>
-            Edit
-          </Button>
-        </Box>
-      </div>}
+          <Box mt={4}>
+            <H2>Steps</H2>
+          </Box>
+
+          <Box mt={4}>
+            <HTMLTable striped={true}>
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Seconds</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {recipe.steps.length > 0 && (
+                  orderBy(recipe.steps, 'position').map((step, index) => (
+                    <tr key={index}>
+                      <td>{step.description}</td>
+                      <td>{step.duration}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </HTMLTable>
+          </Box>
+
+          <Box mt={4}>
+            <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)}>
+              Edit
+            </Button>
+          </Box>
+        </div>}
     </>
   )
 }
