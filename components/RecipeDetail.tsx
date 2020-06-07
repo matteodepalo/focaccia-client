@@ -6,7 +6,7 @@ import { Box } from 'rebass/styled-components'
 import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, starterIngredients as filterStarterIngredients, doughIngredients as filterDoughIngredients } from '../lib/ingredients'
 import Ingredient from './Ingredient'
 import { round, lowerCase } from 'lodash'
-import Totals from './Totals'
+import Totals from './form/Totals'
 
 interface Props {
   recipe: RecipeFieldsFragment

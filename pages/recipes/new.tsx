@@ -1,4 +1,4 @@
-import RecipeForm from '../../components/RecipeForm'
+import RecipeForm from '../../components/form/RecipeForm'
 import { useRouter } from 'next/router'
 import { withAuthenticated } from '../../lib/withAuthenticated'
 import { getDataFromTree } from '@apollo/react-ssr';
