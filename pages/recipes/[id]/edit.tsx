@@ -20,7 +20,7 @@ const EditRecipe = () => {
 
   const recipe = data?.recipe
 
-  return <RecipeForm recipe={recipe} onSave={() => router.push('/recipes')} />
+  return <RecipeForm recipe={recipe} />
 }
 
 export default withApollo(withAuthenticated()(EditRecipe), { getDataFromTree })

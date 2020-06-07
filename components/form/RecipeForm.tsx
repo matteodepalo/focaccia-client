@@ -10,6 +10,7 @@ import Totals from './Totals';
 import DeleteButton from './DeleteButton';
 import { StepField } from './StepField';
 import { orderBy } from 'lodash';
+import { useRouter } from 'next/router';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
   const object = Yup.object({
@@ -45,7 +46,6 @@ const RecipeSchema = Yup.object().shape({
 
 interface Props {
   recipe?: RecipeFieldsFragment
-  onSave: () => void
 }
 
 export interface FormValues {
@@ -63,10 +63,11 @@ function newStep(values: FormValues): StepInput {
   return { position: values.steps.length + 1, description: '' }
 }
 
-const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
+const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
   const [createRecipeMutation] = useCreateRecipeMutation()
   const [updateRecipeMutation] = useUpdateRecipeMutation()
   const [starterEnabled, setStarterEnabled] = useState(!!recipe && starterIngredients(recipe.ingredients).length > 0)
+  const router = useRouter()
 
   const initialValues = {
     name: recipe?.name ?? '',
@@ -79,7 +80,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
   }
 
   const createRecipe = async (data: CreateRecipeMutationVariables['data']) => {
-    await createRecipeMutation({
+    return await createRecipeMutation({
       variables: { data },
       update: (cache, { data }) => {
         try {
@@ -104,7 +105,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
   }
 
   const updateRecipe = async (data: UpdateRecipeMutationVariables['data']) => {
-    await updateRecipeMutation({ variables: { data } })
+    return await updateRecipeMutation({ variables: { data } })
   }
 
   const toggleStarterEnabled = (enabled: boolean, setFieldValue: FormikHelpers<any>['setFieldValue']) => {
@@ -141,12 +142,16 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
             id: recipe.id
           }
 
-          await updateRecipe(updateRecipeInput)
+          const updatedRecipe = await updateRecipe(updateRecipeInput)
+          // TODO: handle possible server validation errors
+          const id = updatedRecipe.data!.updateRecipe.id
+          router.push('/recipes/[id]', `/recipes/${id}`)
         } else {
-          await createRecipe(recipeInput)
+          const createdRecipe = await createRecipe(recipeInput)
+          // TODO: handle possible server validation errors
+          const id = createdRecipe.data!.createRecipe.id
+          router.push('/recipes/[id]', `/recipes/${id}`)
         }
-
-        onSave()
       }}>
       {({ values, isSubmitting, setFieldValue, validateField, errors, touched, setValues, validateForm }) => (
         <FormikForm>
