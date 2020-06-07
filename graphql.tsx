@@ -37,6 +37,15 @@ export enum IngredientGroup {
   dough = 'dough'
 }
 
+export type Step = {
+  id: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  position: Scalars['Int'];
+  duration?: Maybe<Scalars['Int']>;
+  description: Scalars['String'];
+};
+
 export type Recipe = {
   id: Scalars['Int'];
   createdAt: Scalars['DateTime'];
@@ -44,6 +53,7 @@ export type Recipe = {
   userId: Scalars['String'];
   name: Scalars['String'];
   ingredients: Array<Ingredient>;
+  steps: Array<Step>;
 };
 
 export type Query = {
@@ -80,6 +90,7 @@ export type MutationRemoveRecipeArgs = {
 export type RecipeInput = {
   id?: Maybe<Scalars['Int']>;
   ingredients: Array<IngredientInput>;
+  steps: Array<StepInput>;
   name: Scalars['String'];
 };
 
@@ -89,6 +100,13 @@ export type IngredientInput = {
   name?: Maybe<Scalars['String']>;
   type: IngredientType;
   group: IngredientGroup;
+};
+
+export type StepInput = {
+  id?: Maybe<Scalars['Int']>;
+  position: Scalars['Int'];
+  duration?: Maybe<Scalars['Int']>;
+  description: Scalars['String'];
 };
 
 export type IngredientFieldsFragment = Pick<Ingredient, 'id' | 'name' | 'type' | 'group' | 'weight'>;
