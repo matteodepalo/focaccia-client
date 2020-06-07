@@ -14,7 +14,7 @@ import { getMainDefinition } from 'apollo-utilities';
 export default withApollo(
   ({ initialState, ctx }) => {
     const cleanTypenameLink = new ApolloLink((operation, forward) => {
-      const keysToOmit = ['__typename', 'createdAt', 'updatedAt', 'id']
+      const keysToOmit = ['__typename', 'createdAt', 'updatedAt']
 
       const def = getMainDefinition(operation.query)
       if (def && def.kind === 'OperationDefinition' && def.operation === 'mutation') {
