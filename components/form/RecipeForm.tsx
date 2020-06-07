@@ -27,8 +27,10 @@ const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => 
   }
 })
 
-const StepSchema = Yup.object({
-  description: Yup.string().required()
+const StepSchema: Yup.ObjectSchema<StepInput> = Yup.object({
+  description: Yup.string().required(),
+  duration: Yup.number().moreThan(0, 'must be greater than 0'),
+  position: Yup.number().moreThan(0, 'must be greater than 0')
 })
 
 const RecipeSchema = Yup.object().shape({
@@ -294,6 +296,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
                             setFieldValue={setFieldValue}
                             errors={errors}
                             touched={touched}
+                            validateField={validateField}
                             onRemove={() => arrayHelpers.remove(index)} />
                         ))
                       )}

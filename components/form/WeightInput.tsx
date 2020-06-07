@@ -13,25 +13,15 @@ interface Props {
 }
 
 export const WeightInput: FunctionComponent<Props> = ({ value, onChange, name, onBlur, intent, validateField }) => {
-  //TODO move this to numeric input
-  const handleNumericInputChange = (valueAsNumber: number, valueAsString: string) => {
-    if (!isNaN(valueAsNumber) && valueAsString.length > 0) {
-      onChange(valueAsNumber)
-    } else {
-      onChange(0)
-    }
-
-    validateField(name)
-  }
-
   return <NumericInput
+    onChange={onChange}
+    validateField={validateField}
+    name={name}
+    value={value}
     boxProps={{ width: 120 }}
+    onBlur={onBlur}
     inputProps={{
-      value: value,
-      onBlur: onBlur,
-      onValueChange: handleNumericInputChange,
       rightElement: <Tag minimal={true}>g</Tag>,
-      name: name,
       intent: intent
     }} />
 }

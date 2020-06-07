@@ -10,7 +10,8 @@ interface Props {
   setFieldValue: FormikHelpers<any>['setFieldValue'],
   onRemove: Function,
   errors: FormikErrors<FormValues>,
-  touched: FormikTouched<FormValues>
+  touched: FormikTouched<FormValues>,
+  validateField: FormikHelpers<any>['validateField']
 }
 
 const TD = styled.td`
@@ -19,7 +20,7 @@ const TD = styled.td`
   }
 `
 
-export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, onRemove, errors, touched }) => {
+export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, validateField, onRemove, errors, touched }) => {
   const durationIntent = getIn(errors, `steps.${index}.duration`) && getIn(touched, `steps.${index}.duration`) ? "danger" : "none"
   const descriptionIntent = getIn(errors, `steps.${index}.description`) && getIn(touched, `steps.${index}.description`) ? "danger" : "none"
 
@@ -43,12 +44,13 @@ export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, onRe
         <Field name={`steps.${index}.duration`}>
           {({ field }: FieldProps<number>) => (
             <NumericInput
+              value={field.value}
+              name={field.name}
+              onBlur={field.onBlur}
+              onChange={(value) => setFieldValue(field.name, value)}
+              validateField={validateField}
               inputProps={{
-                intent: durationIntent,
-                value: field.value,
-                onValueChange: (value) => setFieldValue(`steps.${index}.duration`, value),
-                onBlur: field.onBlur,
-                name: field.name
+                intent: durationIntent
               }} />
           )}
         </Field>
