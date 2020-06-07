@@ -6,11 +6,21 @@ fragment ingredientFields on Ingredient {
   weight
 }
 
+fragment stepsFields on Step {
+  id
+  description
+  duration
+  position
+}
+
 fragment recipeFields on Recipe {
   id
   name
   ingredients {
     ...ingredientFields
+  }
+  steps {
+    ...stepsFields
   }
 }
 

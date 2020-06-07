@@ -1,4 +1,4 @@
-import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput } from '../../graphql'
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, StepInput } from '../../graphql'
 import { Button, EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup, HTMLTable } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
@@ -8,14 +8,8 @@ import { IngredientField } from './IngredientField';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
 import DeleteButton from './DeleteButton';
-import styled from 'styled-components';
-import { TimePicker } from "@blueprintjs/datetime";
-
-const TD = styled.td`
-  && {
-    vertical-align: middle;
-  }
-`
+import { StepField } from './StepField';
+import { orderBy } from 'lodash';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
   const object = Yup.object({
@@ -33,12 +27,18 @@ const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => 
   }
 })
 
+const StepSchema = Yup.object({
+  description: Yup.string().required()
+})
+
 const RecipeSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   starterIngredients: Yup.array()
     .of(IngredientSchema),
   doughIngredients: Yup.array()
-    .of(IngredientSchema)
+    .of(IngredientSchema),
+  steps: Yup.array()
+    .of(StepSchema)
 });
 
 interface Props {
@@ -49,11 +49,16 @@ interface Props {
 export interface FormValues {
   name: string,
   starterIngredients: IngredientInput[],
-  doughIngredients: DoughIngredients<IngredientInput>
+  doughIngredients: DoughIngredients<IngredientInput>,
+  steps: StepInput[]
 }
 
 function newIngredient<T extends IngredientType>(group: IngredientGroup, type: T): Ingredient<IngredientInput, T> {
   return { type, group, weight: 0, name: nameRequiredForType(type) ? '' : undefined }
+}
+
+function newStep(values: FormValues): StepInput {
+  return { position: values.steps.length + 1, description: '' }
 }
 
 const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
@@ -67,7 +72,8 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
     doughIngredients: recipe ? doughIngredients(recipe.ingredients) : [
       newIngredient(IngredientGroup.dough, IngredientType.water),
       newIngredient(IngredientGroup.dough, IngredientType.flour)
-    ] as DoughIngredients<IngredientInput>
+    ] as DoughIngredients<IngredientInput>,
+    steps: recipe?.steps ?? []
   }
 
   const createRecipe = async (data: CreateRecipeMutationVariables['data']) => {
@@ -123,7 +129,8 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
       onSubmit={async (values) => {
         const recipeInput = {
           name: values.name,
-          ingredients: values.doughIngredients.concat(values.starterIngredients)
+          ingredients: values.doughIngredients.concat(values.starterIngredients),
+          steps: values.steps
         }
 
         if (recipe?.id) {
@@ -265,32 +272,37 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe, onSave }) => {
           <Box mt={4}>
             <H2>Steps</H2>
 
-            <HTMLTable striped={true}>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Description</th>
-                  <th>Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <TD><Button icon="remove" onClick={() => {}} minimal={true} /></TD>
-                  <TD>Impastare</TD>
-                  <TD><TimePicker /></TD>
-                </tr>
-                <tr>
-                  <TD><Button icon="remove" onClick={() => {}} minimal={true} /></TD>
-                  <TD>Lievitare</TD>
-                  <TD><TimePicker /></TD>
-                </tr>
-                <tr>
-                  <TD><Button icon="remove" onClick={() => {}} minimal={true} /></TD>
-                  <TD>Cucinare</TD>
-                  <TD><TimePicker /></TD>
-                </tr>
-              </tbody>
-            </HTMLTable>
+            <FieldArray
+              name="steps"
+              render={arrayHelpers => (
+                <>
+                  <HTMLTable striped={true}>
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Description</th>
+                        <th>Seconds</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {values.steps.length > 0 && (
+                        orderBy(values.steps, 'position').map((_step, index) => (
+                          <StepField
+                            key={index}
+                            index={index}
+                            setFieldValue={setFieldValue}
+                            errors={errors}
+                            touched={touched}
+                            onRemove={() => arrayHelpers.remove(index)} />
+                        ))
+                      )}
+                    </tbody>
+                  </HTMLTable>
+
+                  <Button icon="add" text="Add Step" minimal={true} onClick={() => arrayHelpers.push(newStep(values))} />
+                </>
+              )} />
           </Box>
 
           <Box mt={4}>

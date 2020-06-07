@@ -111,9 +111,11 @@ export type StepInput = {
 
 export type IngredientFieldsFragment = Pick<Ingredient, 'id' | 'name' | 'type' | 'group' | 'weight'>;
 
+export type StepsFieldsFragment = Pick<Step, 'id' | 'description' | 'duration' | 'position'>;
+
 export type RecipeFieldsFragment = (
   Pick<Recipe, 'id' | 'name'>
-  & { ingredients: Array<IngredientFieldsFragment> }
+  & { ingredients: Array<IngredientFieldsFragment>, steps: Array<StepsFieldsFragment> }
 );
 
 export type GetRecipesQueryVariables = {};
@@ -158,6 +160,14 @@ export const IngredientFieldsFragmentDoc = gql`
   weight
 }
     `;
+export const StepsFieldsFragmentDoc = gql`
+    fragment stepsFields on Step {
+  id
+  description
+  duration
+  position
+}
+    `;
 export const RecipeFieldsFragmentDoc = gql`
     fragment recipeFields on Recipe {
   id
@@ -165,8 +175,12 @@ export const RecipeFieldsFragmentDoc = gql`
   ingredients {
     ...ingredientFields
   }
+  steps {
+    ...stepsFields
+  }
 }
-    ${IngredientFieldsFragmentDoc}`;
+    ${IngredientFieldsFragmentDoc}
+${StepsFieldsFragmentDoc}`;
 export const GetRecipesDocument = gql`
     query getRecipes {
   recipes {
