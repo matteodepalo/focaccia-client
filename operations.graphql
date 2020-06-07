@@ -26,13 +26,13 @@ query getRecipe($id: Int!) {
   }
 }
 
-mutation createRecipe($data: CreateRecipeInput!) {
+mutation createRecipe($data: RecipeInput!) {
   createRecipe(data: $data) {
     ...recipeFields
   }
 }
 
-mutation updateRecipe($data: UpdateRecipeInput!) {
+mutation updateRecipe($data: RecipeInput!) {
   updateRecipe(data: $data) {
     ...recipeFields
   }

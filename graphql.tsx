@@ -64,12 +64,12 @@ export type Mutation = {
 
 
 export type MutationCreateRecipeArgs = {
-  data: CreateRecipeInput;
+  data: RecipeInput;
 };
 
 
 export type MutationUpdateRecipeArgs = {
-  data: UpdateRecipeInput;
+  data: RecipeInput;
 };
 
 
@@ -77,7 +77,8 @@ export type MutationRemoveRecipeArgs = {
   id: Scalars['Int'];
 };
 
-export type CreateRecipeInput = {
+export type RecipeInput = {
+  id?: Maybe<Scalars['Int']>;
   ingredients: Array<IngredientInput>;
   name: Scalars['String'];
 };
@@ -88,12 +89,6 @@ export type IngredientInput = {
   name?: Maybe<Scalars['String']>;
   type: IngredientType;
   group: IngredientGroup;
-};
-
-export type UpdateRecipeInput = {
-  ingredients: Array<IngredientInput>;
-  name: Scalars['String'];
-  id: Scalars['Int'];
 };
 
 export type IngredientFieldsFragment = Pick<Ingredient, 'id' | 'name' | 'type' | 'group' | 'weight'>;
@@ -116,14 +111,14 @@ export type GetRecipeQueryVariables = {
 export type GetRecipeQuery = { recipe: RecipeFieldsFragment };
 
 export type CreateRecipeMutationVariables = {
-  data: CreateRecipeInput;
+  data: RecipeInput;
 };
 
 
 export type CreateRecipeMutation = { createRecipe: RecipeFieldsFragment };
 
 export type UpdateRecipeMutationVariables = {
-  data: UpdateRecipeInput;
+  data: RecipeInput;
 };
 
 
@@ -220,7 +215,7 @@ export type GetRecipeQueryHookResult = ReturnType<typeof useGetRecipeQuery>;
 export type GetRecipeLazyQueryHookResult = ReturnType<typeof useGetRecipeLazyQuery>;
 export type GetRecipeQueryResult = ApolloReactCommon.QueryResult<GetRecipeQuery, GetRecipeQueryVariables>;
 export const CreateRecipeDocument = gql`
-    mutation createRecipe($data: CreateRecipeInput!) {
+    mutation createRecipe($data: RecipeInput!) {
   createRecipe(data: $data) {
     ...recipeFields
   }
@@ -252,7 +247,7 @@ export type CreateRecipeMutationHookResult = ReturnType<typeof useCreateRecipeMu
 export type CreateRecipeMutationResult = ApolloReactCommon.MutationResult<CreateRecipeMutation>;
 export type CreateRecipeMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateRecipeMutation, CreateRecipeMutationVariables>;
 export const UpdateRecipeDocument = gql`
-    mutation updateRecipe($data: UpdateRecipeInput!) {
+    mutation updateRecipe($data: RecipeInput!) {
   updateRecipe(data: $data) {
     ...recipeFields
   }
