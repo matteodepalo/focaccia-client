@@ -1,9 +1,9 @@
 import { FunctionComponent } from "react";
-import { IngredientType } from "../graphql";
+import { IngredientType } from "../../graphql";
 import { Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { InputGroup, Button } from "@blueprintjs/core";
 import { WeightInput } from "./WeightInput";
-import { labelForIngredientType, nameRequiredForType } from "../lib/ingredients";
+import { labelForIngredientType, nameRequiredForType } from "../../lib/ingredients";
 import { FormValues } from "./RecipeForm";
 import { Flex, Box } from "rebass/styled-components";
 import { lowerCase } from "lodash";
