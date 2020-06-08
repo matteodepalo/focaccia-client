@@ -19,8 +19,6 @@ export const DurationPicker: FunctionComponent<Props> = ({ field, setFieldValue,
   const hours = secondsToHours(field.value ?? 0)
   const minutes = secondsToMinutes(field.value ?? 0)
 
-  debugger
-
   const setHours = (hours: number) => {
     setFieldValue(field.name, minutesToSeconds(minutes) + hoursToSeconds(hours))
   }
