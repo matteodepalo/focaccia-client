@@ -7,7 +7,7 @@ import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, st
 import Ingredient from './Ingredient'
 import { round, lowerCase, orderBy } from 'lodash'
 import Totals from './form/Totals'
-import { secondsToHours } from '../lib/utils'
+import { secondsToHours, secondsToMinutes } from '../lib/utils'
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -94,7 +94,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
                           {secondsToHours(step.duration)}
                           <sub>h</sub>
                           &nbsp;
-                          {secondsToHours(step.duration)}
+                          {secondsToMinutes(step.duration)}
                           <sub>m</sub>
                         </span>}
                       </td>
