@@ -288,7 +288,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                       <tr>
                         <th></th>
                         <th>Description</th>
-                        <th>Seconds</th>
+                        <th>Time</th>
                       </tr>
                     </thead>
 
@@ -308,7 +308,9 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                     </tbody>
                   </HTMLTable>
 
-                  <Button icon="add" text="Add Step" minimal={true} onClick={() => arrayHelpers.push(newStep(values))} />
+                  <Box mt={2}>
+                    <Button icon="add" text="Add Step" minimal={true} onClick={() => arrayHelpers.push(newStep(values))} />
+                  </Box>
                 </>
               )} />
           </Box>

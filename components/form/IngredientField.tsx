@@ -1,12 +1,12 @@
 import { FunctionComponent } from "react";
 import { IngredientType } from "../../graphql";
 import { Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
-import { InputGroup, Button } from "@blueprintjs/core";
-import { WeightInput } from "./WeightInput";
+import { InputGroup, Button, Tag } from "@blueprintjs/core";
 import { labelForIngredientType, nameRequiredForType } from "../../lib/ingredients";
 import { FormValues } from "./RecipeForm";
 import { Flex, Box } from "rebass/styled-components";
 import { lowerCase } from "lodash";
+import { NumericInput } from "./NumericInput";
 
 interface Props {
   prefix: string,
@@ -39,13 +39,17 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
               <Box>
                 <Field name={`${prefix}Ingredients.${index}.weight`}>
                   {({ field }: FieldProps<number>) => (
-                    <WeightInput
-                      intent={weightIntent}
+                    <NumericInput
                       onChange={(value) => setFieldValue(field.name, value)}
-                      onBlur={field.onBlur}
-                      value={field.value}
+                      validateField={validateField}
                       name={field.name}
-                      validateField={validateField} />
+                      value={field.value}
+                      boxProps={{ width: 120 }}
+                      onBlur={field.onBlur}
+                      inputProps={{
+                        rightElement: <Tag minimal={true}>g</Tag>,
+                        intent: weightIntent
+                      }} />
                   )}
                 </Field>
               </Box>

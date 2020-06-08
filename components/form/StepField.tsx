@@ -3,7 +3,7 @@ import { Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } 
 import { Button, InputGroup } from "@blueprintjs/core";
 import { FormValues } from "./RecipeForm";
 import styled from "styled-components";
-import { NumericInput } from "./NumericInput";
+import { DurationPicker } from "./DurationPicker";
 
 interface Props {
   index: number,
@@ -21,7 +21,6 @@ const TD = styled.td`
 `
 
 export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, validateField, onRemove, errors, touched }) => {
-  const durationIntent = getIn(errors, `steps.${index}.duration`) && getIn(touched, `steps.${index}.duration`) ? "danger" : "none"
   const descriptionIntent = getIn(errors, `steps.${index}.description`) && getIn(touched, `steps.${index}.description`) ? "danger" : "none"
 
   return (
@@ -43,15 +42,12 @@ export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, vali
       <TD>
         <Field name={`steps.${index}.duration`}>
           {({ field }: FieldProps<number>) => (
-            <NumericInput
-              value={field.value}
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={(value) => setFieldValue(field.name, value)}
+            <DurationPicker
+              field={field}
+              setFieldValue={setFieldValue}
               validateField={validateField}
-              inputProps={{
-                intent: durationIntent
-              }} />
+              errors={errors}
+              touched={touched} />
           )}
         </Field>
       </TD>
