@@ -17,7 +17,7 @@ const theme: DefaultTheme = {
   whiteBackground: '#fffffe'
 }
 
-const GlobalStyle = createGlobalStyle<DefaultTheme>`
+const GlobalStyle = createGlobalStyle`
   body {
     background-color: ${(props) => props.theme.backgroundColor};
     color: ${(props => props.theme.textColor)};
@@ -37,7 +37,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <ProgressBar />
-      <GlobalStyle {...theme} />
+      <GlobalStyle />
       <Component {...pageProps} />
     </ThemeProvider>
   )
