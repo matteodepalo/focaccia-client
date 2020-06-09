@@ -1,5 +1,5 @@
 import { RecipeFieldsFragment, IngredientType } from '../graphql'
-import { Card, Elevation, H1 } from '@blueprintjs/core'
+import { Card, H1 } from '@blueprintjs/core'
 import { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { useRouter } from "next/router"
@@ -14,6 +14,7 @@ interface Props {
 const RecipeCard = styled(Card)`
   margin-bottom: 15px;
   width: 300px;
+  background-color: ${(props) => props.theme.cardBackground}
 `
 
 const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
@@ -21,7 +22,7 @@ const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
   const iconProps = { size: 25, style: { marginRight: 15 } }
 
   return (
-    <RecipeCard elevation={Elevation.TWO} interactive={true} onClick={() => router.push('/recipes/[id]', `/recipes/${recipe.id}`)}>
+    <RecipeCard interactive={true} onClick={() => router.push('/recipes/[id]', `/recipes/${recipe.id}`)}>
       <H1>{recipe.name}</H1>
       <div>
         <Ingredient

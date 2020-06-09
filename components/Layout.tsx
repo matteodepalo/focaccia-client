@@ -1,14 +1,19 @@
-import { Navbar, Alignment, AnchorButton, Menu, Popover } from "@blueprintjs/core"
+import { Navbar as BPNavbar, Alignment, AnchorButton, Menu, Popover } from "@blueprintjs/core"
 import Head from "next/head"
 import { FunctionComponent } from "react"
 import { Box } from "rebass/styled-components"
 import Link from "next/link"
 import { useRouter } from 'next/router'
 import { User } from "../lib/user"
+import styled from "styled-components"
 
 interface Props {
   user: User | null
 }
+
+const Navbar = styled(BPNavbar)`
+  background-color: ${(props) => props.theme.backgroundColor}
+`
 
 const Layout: FunctionComponent<Props> = ({ user, children }) => {
   const router = useRouter()

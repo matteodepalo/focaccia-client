@@ -1,6 +1,6 @@
 import { Flex } from "rebass/styled-components"
 import { round } from "lodash"
-import { NumericInput } from "./NumericInput"
+import { NumericInput } from "../base/NumericInput"
 import { ingredientsWeightInG, ingredientsHydration, BaseIngredient, DoughIngredients, isDoughWater, ingredientsByGroup, doughWaterWeightForHydration } from "../../lib/ingredients"
 import { safeDivide } from "../../lib/utils"
 

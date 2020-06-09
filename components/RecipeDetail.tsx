@@ -1,4 +1,4 @@
-import { Button, H1, H2, H3, HTMLTable } from '@blueprintjs/core'
+import { H1, H2, H3, HTMLTable } from '@blueprintjs/core'
 import { FunctionComponent, useState } from 'react'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from '../graphql'
@@ -8,6 +8,7 @@ import Ingredient from './Ingredient'
 import { round, lowerCase, orderBy } from 'lodash'
 import Totals from './form/Totals'
 import { secondsToHours, secondsToMinutes } from '../lib/utils'
+import { Button } from './base/Button'
 
 interface Props {
   recipe: RecipeFieldsFragment
