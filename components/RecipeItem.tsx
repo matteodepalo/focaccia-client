@@ -15,6 +15,7 @@ const RecipeCard = styled(Card)`
   margin-bottom: 15px;
   width: 300px;
   background-color: ${(props) => props.theme.whiteBackground}
+  box-shadow: none;
 `
 
 const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
