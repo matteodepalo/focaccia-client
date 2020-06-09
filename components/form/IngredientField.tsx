@@ -1,12 +1,13 @@
 import { FunctionComponent } from "react";
 import { IngredientType } from "../../graphql";
 import { Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
-import { InputGroup, Button, Tag } from "@blueprintjs/core";
+import { InputGroup, Tag } from "@blueprintjs/core";
 import { labelForIngredientType, nameRequiredForType } from "../../lib/ingredients";
 import { FormValues } from "./RecipeForm";
 import { Flex, Box } from "rebass/styled-components";
 import { lowerCase } from "lodash";
-import { NumericInput } from "./NumericInput";
+import { NumericInput } from "../base/NumericInput";
+import { Button } from "../base/Button";
 
 interface Props {
   prefix: string,

@@ -3,7 +3,7 @@ import { FormValues } from "./RecipeForm"
 import { FunctionComponent } from "react"
 import { Flex, Box } from "rebass/styled-components"
 import { Tag } from "@blueprintjs/core"
-import { NumericInput } from './NumericInput'
+import { NumericInput } from '../base/NumericInput'
 import { secondsToHours, secondsToMinutes, minutesToSeconds, hoursToSeconds } from "../../lib/utils"
 
 interface Props {

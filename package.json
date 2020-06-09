@@ -28,6 +28,7 @@
     "nookies": "^2.3.0",
     "nprogress": "^0.2.0",
     "omit-deep-lodash": "^1.1.4",
+    "polished": "^3.6.4",
     "react": "16.13.1",
     "react-apollo": "^3.1.5",
     "react-dom": "16.13.1",

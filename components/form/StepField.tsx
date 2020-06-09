@@ -1,9 +1,10 @@
 import { FunctionComponent } from "react";
 import { Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
-import { Button, InputGroup } from "@blueprintjs/core";
+import { InputGroup } from "@blueprintjs/core";
 import { FormValues } from "./RecipeForm";
 import styled from "styled-components";
 import { DurationPicker } from "./DurationPicker";
+import { Button } from "../base/Button";
 
 interface Props {
   index: number,

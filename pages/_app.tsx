@@ -1,17 +1,30 @@
 import '../styles/global.css'
 import { AppProps } from 'next/app'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
-import ProgressBar from '../components/ProgressBar'
+import ProgressBar from '../components/base/ProgressBar'
+import { DefaultTheme } from 'styled-components'
+import { Classes } from '@blueprintjs/core'
 
-const theme = {
-  backgroundColor: 'white'
+const theme: DefaultTheme = {
+  backgroundColor: '#faeee7',
+  headlineColor: '#33272a',
+  textColor: '#594a4e',
+  buttonTextColor: '#33272a',
+  borderColor: '#33272a',
+  primaryColor: '#faae2b',
+  secondaryColor: '#ffa8ba',
+  tertiaryColor: '#fa5246',
+  cardBackground: '#fffffe'
 }
 
-type Theme = typeof theme
-
-const GlobalStyle = createGlobalStyle<Theme>`
+const GlobalStyle = createGlobalStyle<DefaultTheme>`
   body {
-    background-color: ${(props) => props.backgroundColor}
+    background-color: ${(props) => props.theme.backgroundColor};
+    color: ${(props => props.theme.textColor)};
+  }
+
+  .${Classes.HEADING} {
+    color: ${(props) => props.theme.headlineColor};
   }
 `
 
@@ -19,7 +32,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <ProgressBar />
-      <GlobalStyle backgroundColor={theme.backgroundColor} />
+      <GlobalStyle {...theme} />
       <Component {...pageProps} />
     </ThemeProvider>
   )
