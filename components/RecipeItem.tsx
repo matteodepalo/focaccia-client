@@ -14,7 +14,7 @@ interface Props {
 const RecipeCard = styled(Card)`
   margin-bottom: 15px;
   width: 300px;
-  background-color: ${(props) => props.theme.cardBackground}
+  background-color: ${(props) => props.theme.whiteBackground}
 `
 
 const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {

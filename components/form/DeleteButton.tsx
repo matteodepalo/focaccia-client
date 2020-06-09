@@ -40,7 +40,7 @@ const DeleteButton: FunctionComponent<Props> = ({ recipe }) => {
 
   return (
     <>
-      <Button icon="trash" intent="danger" onClick={() => setIsDialogOpen(true)}>
+      <Button fill={true} icon="trash" intent="danger" onClick={() => setIsDialogOpen(true)}>
         Delete
       </Button>
 

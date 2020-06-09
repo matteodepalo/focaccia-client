@@ -316,12 +316,12 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
               )} />
           </Box>
 
-          <Box mt={4}>
-            <Button icon="floppy-disk" intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
+          <Box mt={4} width={80}>
+            <Button fill={true} icon="floppy-disk" intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
           </Box>
 
           {recipe &&
-            <Box mt={1}>
+            <Box mt={3} width={80}>
               <DeleteButton recipe={recipe} />
             </Box>
           }
