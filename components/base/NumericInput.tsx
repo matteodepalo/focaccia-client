@@ -7,7 +7,7 @@ import { FormikHelpers, FieldProps } from 'formik'
 interface Props {
   name?: string
   value: number
-  onChange: (value: number) => void
+  onChange: (value: number | undefined) => void
   onBlur?: FieldProps<number>['field']['onBlur']
   validateField?: FormikHelpers<any>['validateField']
   boxProps?: BoxProps
@@ -20,7 +20,7 @@ export const NumericInput: FunctionComponent<Props> = ({ value, name, onChange, 
     if (!isNaN(valueAsNumber) && valueAsString.length > 0) {
       onChange(valueAsNumber)
     } else {
-      onChange(0)
+      onChange(undefined)
     }
 
     name && validateField?.(name)

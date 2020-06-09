@@ -55,7 +55,7 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
         {
           <NumericInput
             value={round(totalWeight / 1000, 1)}
-            onChange={(value: number) => totalWeightChange(value * 1000)}
+            onChange={(value) => totalWeightChange((value ?? 0) * 1000)}
             boxProps={{ marginX: 2, width: 100 }}
             inputProps={{
               stepSize: 0.1
@@ -69,7 +69,7 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
         {
           <NumericInput
             value={round(hydration)}
-            onChange={(value: number) => hydrationChange(value)}
+            onChange={(value) => hydrationChange(value ?? 0)}
             boxProps={{ marginX: 2, width: 100 }}
             inputProps={{
               min: round(hydrationMinimum)

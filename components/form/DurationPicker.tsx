@@ -31,7 +31,7 @@ export const DurationPicker: FunctionComponent<Props> = ({ field, setFieldValue,
           value={hours}
           name={field.name}
           onBlur={field.onBlur}
-          onChange={(value) => setDuration(value, minutes)}
+          onChange={(value) => setDuration(value ?? 0, minutes)}
           validateField={validateField}
           boxProps={{ width: 100 }}
           inputProps={{
@@ -45,7 +45,7 @@ export const DurationPicker: FunctionComponent<Props> = ({ field, setFieldValue,
           value={minutes}
           name={field.name}
           onBlur={field.onBlur}
-          onChange={(value) => setDuration(hours, value)}
+          onChange={(value) => setDuration(hours, value ?? 0)}
           validateField={validateField}
           boxProps={{ width: 100 }}
           inputProps={{
