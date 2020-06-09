@@ -31,7 +31,7 @@ const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => 
 
 const StepSchema: Yup.ObjectSchema<StepInput> = Yup.object({
   description: Yup.string().required(),
-  duration: Yup.number().moreThan(0, 'must be greater than 0'),
+  duration: Yup.number().moreThan(0, 'must be greater than 0').notRequired(),
   position: Yup.number().moreThan(0, 'must be greater than 0')
 })
 
