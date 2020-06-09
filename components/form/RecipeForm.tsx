@@ -9,7 +9,6 @@ import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
 import DeleteButton from './DeleteButton';
 import { StepField } from './StepField';
-import { orderBy } from 'lodash';
 import { useRouter } from 'next/router';
 import { Button } from '../base/Button';
 
@@ -295,9 +294,9 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
 
                     <tbody>
                       {values.steps.length > 0 && (
-                        orderBy(values.steps, 'position').map((_step, index) => (
+                        values.steps.sort((a, b) => a.position - b.position).map((step, index) => (
                           <StepField
-                            key={index}
+                            key={step.position}
                             index={index}
                             setFieldValue={setFieldValue}
                             errors={errors}

@@ -5,7 +5,7 @@ import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from 
 import { Box } from 'rebass/styled-components'
 import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, starterIngredients as filterStarterIngredients, doughIngredients as filterDoughIngredients } from '../lib/ingredients'
 import Ingredient from './Ingredient'
-import { round, lowerCase, orderBy } from 'lodash'
+import { round, lowerCase } from 'lodash'
 import Totals from './form/Totals'
 import { secondsToHours, secondsToMinutes } from '../lib/utils'
 import { Button } from './base/Button'
@@ -87,8 +87,8 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
 
               <tbody>
                 {recipe.steps.length > 0 && (
-                  orderBy(recipe.steps, 'position').map((step, index) => (
-                    <tr key={index}>
+                  recipe.steps.sort((a, b) => a.position - b.position).map((step) => (
+                    <tr key={step.position}>
                       <td>{step.description}</td>
                       <td>{step.duration &&
                         <span>
