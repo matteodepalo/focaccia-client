@@ -10,6 +10,6 @@ declare module 'styled-components' {
     primaryColor: string,
     secondaryColor: string,
     tertiaryColor: string,
-    cardBackground: string
+    whiteBackground: string
   }
 }

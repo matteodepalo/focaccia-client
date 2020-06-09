@@ -7,11 +7,21 @@ export const Button = styled(BPButton)`
     background-image: none;
     background-color: ${(props) => props.theme.secondaryColor};
     color: ${(props) => props.theme.buttonTextColor};
+    border-radius: 3px;
 
     &:hover {
       color: ${(props) => props.theme.buttonTextColor};
       background-color: ${(props) => darken(0.1, props.theme.secondaryColor)};
     }
+
+    .${Classes.ICON} {
+      color: inherit;
+    }
+  }
+
+  &&,&&:hover {
+    border: none;
+    box-shadow: none;
   }
 
   &&.${Classes.MINIMAL} {

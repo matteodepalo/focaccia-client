@@ -14,7 +14,7 @@ const theme: DefaultTheme = {
   primaryColor: '#faae2b',
   secondaryColor: '#ffa8ba',
   tertiaryColor: '#fa5246',
-  cardBackground: '#fffffe'
+  whiteBackground: '#fffffe'
 }
 
 const GlobalStyle = createGlobalStyle<DefaultTheme>`
@@ -25,6 +25,10 @@ const GlobalStyle = createGlobalStyle<DefaultTheme>`
 
   .${Classes.HEADING} {
     color: ${(props) => props.theme.headlineColor};
+  }
+
+  .${Classes.INPUT} {
+    background-color: ${(props) => props.theme.whiteBackground};
   }
 `
 
