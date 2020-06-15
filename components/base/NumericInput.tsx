@@ -17,7 +17,7 @@ interface Props {
 
 export const NumericInput: FunctionComponent<Props> = ({ value, name, onChange, onBlur, validateField, boxProps, inputProps }) => {
   const handleNumericInputChange = (valueAsNumber: number, valueAsString: string) => {
-    if (!isNaN(valueAsNumber) && valueAsString.length > 0) {
+    if (!isNaN(valueAsNumber) && valueAsString.length > 0 && valueAsNumber > 0) {
       onChange(valueAsNumber)
     } else {
       onChange(undefined)
