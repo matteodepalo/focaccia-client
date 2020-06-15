@@ -1,4 +1,4 @@
-import { H1, H2, H3, HTMLTable } from '@blueprintjs/core'
+import { H1, H2, H3, HTMLTable, Dialog, Classes, ButtonGroup, InputGroup } from '@blueprintjs/core'
 import { FunctionComponent, useState } from 'react'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from '../graphql'
@@ -9,17 +9,21 @@ import { round, lowerCase } from 'lodash'
 import Totals from './form/Totals'
 import { secondsToHours, secondsToMinutes } from '../lib/utils'
 import { Button } from './base/Button'
+import CopyToClipboard from 'react-copy-to-clipboard'
+import { recipeShareUrl } from '../lib/url-helpers'
 
 interface Props {
-  recipe: RecipeFieldsFragment
+  recipe: RecipeFieldsFragment,
+  shared?: boolean
 }
 
-const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
+const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
   const router = useRouter()
 
   const [ingredients, setIngredients] = useState(recipe.ingredients)
   const starterIngredients = filterStarterIngredients(ingredients)
   const doughIngredients = filterDoughIngredients(ingredients)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const ingredientItem = (ingredient: IngredientFieldsFragment) => {
     return <Ingredient
@@ -106,11 +110,38 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe }) => {
             </HTMLTable>
           </Box>
 
-          <Box mt={4}>
-            <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)}>
-              Edit
-            </Button>
-          </Box>
+          {!shared &&
+            <Box mt={4}>
+              <ButtonGroup vertical={true}>
+                <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)}>
+                  Edit
+                </Button>
+
+                <Button icon="share" intent="primary" onClick={() => setIsDialogOpen(true)}>
+                  Share
+                </Button>
+              </ButtonGroup>
+
+              <Dialog
+                icon="share"
+                onClose={() => setIsDialogOpen(false)}
+                title={`Share ${recipe.name}`}
+                isOpen={isDialogOpen}
+              >
+                <div className={Classes.DIALOG_BODY}>
+                  <InputGroup readOnly={true} value={recipeShareUrl(recipe.token)}></InputGroup>
+                </div>
+
+                <div className={Classes.DIALOG_FOOTER}>
+                  <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                    <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
+                    <CopyToClipboard text={recipeShareUrl(recipe.token)} onCopy={() => setIsDialogOpen(false)}>
+                      <Button icon="document-share">Copy</Button>
+                    </CopyToClipboard>
+                  </div>
+                </div>
+              </Dialog>
+            </Box>}
         </div>}
     </>
   )

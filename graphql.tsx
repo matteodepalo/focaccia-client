@@ -54,6 +54,7 @@ export type Recipe = {
   name: Scalars['String'];
   ingredients: Array<Ingredient>;
   steps: Array<Step>;
+  token: Scalars['String'];
 };
 
 export type Query = {
@@ -63,7 +64,8 @@ export type Query = {
 
 
 export type QueryRecipeArgs = {
-  id: Scalars['Int'];
+  id?: Maybe<Scalars['Int']>;
+  token?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -114,7 +116,7 @@ export type IngredientFieldsFragment = Pick<Ingredient, 'id' | 'name' | 'type' |
 export type StepsFieldsFragment = Pick<Step, 'id' | 'description' | 'duration' | 'position'>;
 
 export type RecipeFieldsFragment = (
-  Pick<Recipe, 'id' | 'name'>
+  Pick<Recipe, 'id' | 'name' | 'token'>
   & { ingredients: Array<IngredientFieldsFragment>, steps: Array<StepsFieldsFragment> }
 );
 
@@ -124,7 +126,8 @@ export type GetRecipesQueryVariables = {};
 export type GetRecipesQuery = { recipes: Array<RecipeFieldsFragment> };
 
 export type GetRecipeQueryVariables = {
-  id: Scalars['Int'];
+  id?: Maybe<Scalars['Int']>;
+  token?: Maybe<Scalars['String']>;
 };
 
 
@@ -172,6 +175,7 @@ export const RecipeFieldsFragmentDoc = gql`
     fragment recipeFields on Recipe {
   id
   name
+  token
   ingredients {
     ...ingredientFields
   }
@@ -214,8 +218,8 @@ export type GetRecipesQueryHookResult = ReturnType<typeof useGetRecipesQuery>;
 export type GetRecipesLazyQueryHookResult = ReturnType<typeof useGetRecipesLazyQuery>;
 export type GetRecipesQueryResult = ApolloReactCommon.QueryResult<GetRecipesQuery, GetRecipesQueryVariables>;
 export const GetRecipeDocument = gql`
-    query getRecipe($id: Int!) {
-  recipe(id: $id) {
+    query getRecipe($id: Int, $token: String) {
+  recipe(id: $id, token: $token) {
     ...recipeFields
   }
 }
@@ -234,6 +238,7 @@ export const GetRecipeDocument = gql`
  * const { data, loading, error } = useGetRecipeQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      token: // value for 'token'
  *   },
  * });
  */

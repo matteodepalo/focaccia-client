@@ -1,22 +1,19 @@
 import { Navbar as BPNavbar, Alignment, AnchorButton, Menu, Popover } from "@blueprintjs/core"
 import Head from "next/head"
-import { FunctionComponent } from "react"
+import { FunctionComponent, useContext } from "react"
 import { Box } from "rebass/styled-components"
 import Link from "next/link"
 import { useRouter } from 'next/router'
-import { User } from "../lib/user"
 import styled from "styled-components"
-
-interface Props {
-  user: User | null
-}
+import UserContext from "../lib/UserProvider"
 
 const Navbar = styled(BPNavbar)`
   background-color: ${(props) => props.theme.backgroundColor}
 `
 
-const Layout: FunctionComponent<Props> = ({ user, children }) => {
+const Layout: FunctionComponent = ({ children }) => {
   const router = useRouter()
+  const user = useContext(UserContext)
 
   const userMenu = <Menu>
     <Menu.Item icon="log-out" text="Logout" href="/api/logout" />

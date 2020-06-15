@@ -6,6 +6,7 @@ interface Config {
   AUTH0_DOMAIN: string,
   REDIRECT_URI: string,
   POST_LOGOUT_REDIRECT_URI: string,
+  HOST: string,
   SESSION_COOKIE_SECRET?: string,
   SESSION_COOKIE_LIFETIME?: number
 }

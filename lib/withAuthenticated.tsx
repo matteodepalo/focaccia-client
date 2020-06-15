@@ -2,6 +2,7 @@ import { NextPage, NextPageContext } from "next"
 import { User, CurrentUser } from "./user"
 import Layout from "../components/Layout"
 import { setCookie, destroyCookie } from "nookies"
+import { UserProvider } from "./UserProvider"
 
 interface Props {
   user: User | null
@@ -12,9 +13,11 @@ export const withAuthenticated = ({ required = true } = {}) => <P extends object
     if (user) CurrentUser.set(user)
 
     return (
-      <Layout user={user}>
-        <PageComponent {...pageProps as P} />
-      </Layout>
+      <UserProvider value={user}>
+        <Layout>
+          <PageComponent {...pageProps as P} />
+        </Layout>
+      </UserProvider>
     )
   }
 

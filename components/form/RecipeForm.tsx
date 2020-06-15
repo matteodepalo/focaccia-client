@@ -1,5 +1,5 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, StepInput } from '../../graphql'
-import { EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup, HTMLTable } from '@blueprintjs/core'
+import { EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup, HTMLTable, ButtonGroup } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
@@ -316,14 +316,14 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
           </Box>
 
           <Box mt={4} width={80}>
-            <Button fill={true} icon="floppy-disk" intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
-          </Box>
+            <ButtonGroup vertical={true}>
+              <Button icon="floppy-disk" intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
 
-          {recipe &&
-            <Box mt={3} width={80}>
-              <DeleteButton recipe={recipe} />
-            </Box>
-          }
+              {recipe &&
+                <DeleteButton recipe={recipe} />
+              }
+            </ButtonGroup>
+          </Box>
         </FormikForm>
       )}
     </Formik>
