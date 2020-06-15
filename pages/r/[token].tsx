@@ -23,4 +23,4 @@ const SharedRecipe = () => {
   return recipe ? <RecipeDetail recipe={recipe} shared={true} /> : null
 }
 
-export default withApollo(withAuthenticated()(SharedRecipe), { getDataFromTree })
+export default withApollo(withAuthenticated({ required: false })(SharedRecipe), { getDataFromTree })
