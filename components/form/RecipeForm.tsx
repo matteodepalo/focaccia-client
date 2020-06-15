@@ -11,6 +11,9 @@ import DeleteButton from './DeleteButton';
 import { StepField } from './StepField';
 import { useRouter } from 'next/router';
 import { Button } from '../base/Button';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc'
+import arrayMove from 'array-move'
+import { StepList } from './StepList';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
   const object = Yup.object({
@@ -287,25 +290,21 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                     <thead>
                       <tr>
                         <th></th>
+                        <th></th>
                         <th>Description</th>
                         <th>Time</th>
                       </tr>
                     </thead>
 
-                    <tbody>
-                      {values.steps.length > 0 && (
-                        values.steps.sort((a, b) => a.position - b.position).map((step, index) => (
-                          <StepField
-                            key={step.position}
-                            index={index}
-                            setFieldValue={setFieldValue}
-                            errors={errors}
-                            touched={touched}
-                            validateField={validateField}
-                            onRemove={() => arrayHelpers.remove(index)} />
-                        ))
-                      )}
-                    </tbody>
+                    {values.steps.length > 0 && (
+                      <StepList
+                        steps={values.steps}
+                        setFieldValue={setFieldValue}
+                        errors={errors}
+                        touched={touched}
+                        validateField={validateField}
+                        arrayHelpers={arrayHelpers} />
+                    )}
                   </HTMLTable>
 
                   <Box mt={2}>

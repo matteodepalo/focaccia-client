@@ -15,7 +15,7 @@ interface Props {
   validateField: FormikHelpers<any>['validateField']
 }
 
-const TD = styled.td`
+export const TD = styled.td`
   && {
     vertical-align: baseline;
   }
@@ -25,7 +25,7 @@ export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, vali
   const descriptionIntent = getIn(errors, `steps.${index}.description`) && getIn(touched, `steps.${index}.description`) ? "danger" : "none"
 
   return (
-    <tr>
+    <>
       <TD><Button icon="remove" onClick={() => onRemove()} minimal={true} /></TD>
       <TD>
         <Field name={`steps.${index}.description`}>
@@ -52,6 +52,6 @@ export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, vali
           )}
         </Field>
       </TD>
-    </tr>
+    </>
   )
 }
