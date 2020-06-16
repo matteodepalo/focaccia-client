@@ -3,10 +3,11 @@ import { StepField } from "./StepField"
 import { FunctionComponent } from "react"
 import { FormikHelpers, FormikErrors, FormikTouched, FieldArrayRenderProps } from "formik"
 import { FormValues } from "./RecipeForm"
-import { SortableContainer, SortableHandle, SortableElement, SortEndHandler, arrayMove } from "react-sortable-hoc"
+import { SortableContainer, SortableHandle, SortableElement, SortEndHandler } from "react-sortable-hoc"
 import { Icon } from "@blueprintjs/core"
 import { TD } from "../base/TD"
 import styled from "styled-components"
+import arrayMove from "array-move"
 
 interface Props {
   steps: StepInput[],
