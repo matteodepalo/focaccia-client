@@ -2,7 +2,7 @@ overwrite: true
 schema: "../focaccia-server/src/schema.gql"
 documents: "./operations.graphql"
 generates:
-  ./graphql.tsx:
+  ./lib/graphql.tsx:
     plugins:
       - "typescript"
       - "typescript-operations"

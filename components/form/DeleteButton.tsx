@@ -1,4 +1,4 @@
-import { useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument, RecipeFieldsFragment } from "graphql"
+import { useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument, RecipeFieldsFragment } from "lib/graphql"
 import { FunctionComponent, useState } from "react"
 import { Classes, Dialog } from "@blueprintjs/core"
 import { useRouter } from "next/router"

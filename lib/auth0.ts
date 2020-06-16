@@ -1,17 +1,16 @@
 import { initAuth0 } from '@auth0/nextjs-auth0'
-import config from './config'
 
 export default initAuth0({
-  clientId: config.AUTH0_CLIENT_ID,
-  clientSecret: config.AUTH0_CLIENT_SECRET,
-  scope: config.AUTH0_SCOPE,
-  domain: config.AUTH0_DOMAIN,
-  redirectUri: config.REDIRECT_URI,
-  audience: config.API_URL,
-  postLogoutRedirectUri: config.POST_LOGOUT_REDIRECT_URI,
+  clientId: process.env.AUTH0_CLIENT_ID || 'http://localhost:3001/graphql',
+  clientSecret: process.env.AUTH0_CLIENT_SECRET,
+  scope: 'openid profile offline_access',
+  domain: process.env.AUTH0_DOMAIN || 'focaccia.eu.auth0.com',
+  redirectUri: process.env.REDIRECT_URI || 'http://localhost:3000/api/callback',
+  audience: process.env.API_URL,
+  postLogoutRedirectUri: process.env.POST_LOGOUT_REDIRECT_URI || 'http://localhost:3000',
   session: {
-    cookieSecret: config.SESSION_COOKIE_SECRET!,
-    cookieLifetime: config.SESSION_COOKIE_LIFETIME,
+    cookieSecret: process.env.SESSION_COOKIE_SECRET!,
+    cookieLifetime: parseInt(process.env.SESSION_COOKIE_LIFETIME || "7200", 10),
     storeAccessToken: true,
     storeIdToken: true,
     storeRefreshToken: true

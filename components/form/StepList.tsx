@@ -1,4 +1,4 @@
-import { StepInput } from "graphql"
+import { StepInput } from "lib/graphql"
 import { StepField } from "./StepField"
 import { FunctionComponent } from "react"
 import { FormikHelpers, FormikErrors, FormikTouched, FieldArrayRenderProps } from "formik"

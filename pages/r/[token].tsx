@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import withApollo from "lib/withApollo"
 import { withAuthenticated } from "lib/withAuthenticated"
 import { getDataFromTree } from '@apollo/react-ssr';
-import { useGetRecipeQuery } from "graphql";
+import { useGetRecipeQuery } from "lib/graphql";
 import { Spinner } from "@blueprintjs/core";
 
 const SharedRecipe = () => {
