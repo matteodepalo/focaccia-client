@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import { Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
+import { FastField as Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { InputGroup } from "@blueprintjs/core";
 import { FormValues } from "./RecipeForm";
 import { DurationPicker } from "./DurationPicker";

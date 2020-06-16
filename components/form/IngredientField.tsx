@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { IngredientType } from "../../graphql";
-import { Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
+import { FastField as Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { InputGroup, Tag } from "@blueprintjs/core";
 import { labelForIngredientType, nameRequiredForType } from "../../lib/ingredients";
 import { FormValues } from "./RecipeForm";

@@ -1,6 +1,6 @@
 import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, StepInput } from '../../graphql'
 import { EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup, HTMLTable, ButtonGroup } from '@blueprintjs/core'
-import { Formik, Form as FormikForm, Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
+import { Formik, Form as FormikForm, FastField as Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
 import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypesWithLabels, doughIngredientRequired, ingredientTypeUnavailable, DoughIngredients, starterIngredients, doughIngredients, Ingredient } from '../../lib/ingredients';
