@@ -1,10 +1,10 @@
-import { RecipeFieldsFragment, IngredientType } from '../graphql'
+import { RecipeFieldsFragment, IngredientType } from 'graphql'
 import { Card, H1 } from '@blueprintjs/core'
 import { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { useRouter } from "next/router"
 import Ingredient from './Ingredient'
-import { ingredientTypeIcon, ingredientsHydration, flourList } from '../lib/ingredients'
+import { ingredientTypeIcon, ingredientsHydration, flourList } from 'lib/ingredients'
 import { round } from 'lodash'
 
 interface Props {

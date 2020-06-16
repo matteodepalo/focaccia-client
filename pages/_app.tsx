@@ -1,9 +1,15 @@
-import '../styles/global.css'
+import 'styles/global.css'
 import { AppProps } from 'next/app'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
-import ProgressBar from '../components/base/ProgressBar'
+import ProgressBar from 'components/base/ProgressBar'
 import { DefaultTheme } from 'styled-components'
 import { Classes } from '@blueprintjs/core'
+import * as Sentry from '@sentry/node'
+
+Sentry.init({
+  enabled: process.env.NODE_ENV === 'production',
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+})
 
 const theme: DefaultTheme = {
   backgroundColor: '#faeee7',
@@ -33,12 +39,12 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps, err }: AppProps & { err: any }) {
   return (
     <ThemeProvider theme={theme}>
       <ProgressBar />
       <GlobalStyle />
-      <Component {...pageProps} />
+      <Component {...pageProps} err={err} />
     </ThemeProvider>
   )
 }

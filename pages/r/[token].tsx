@@ -1,9 +1,9 @@
-import RecipeDetail from "../../components/RecipeDetail"
+import RecipeDetail from "components/RecipeDetail"
 import { useRouter } from "next/router"
-import withApollo from "../../lib/withApollo"
-import { withAuthenticated } from "../../lib/withAuthenticated"
+import withApollo from "lib/withApollo"
+import { withAuthenticated } from "lib/withAuthenticated"
 import { getDataFromTree } from '@apollo/react-ssr';
-import { useGetRecipeQuery } from "../../graphql";
+import { useGetRecipeQuery } from "graphql";
 import { Spinner } from "@blueprintjs/core";
 
 const SharedRecipe = () => {
