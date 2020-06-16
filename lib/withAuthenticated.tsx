@@ -4,6 +4,7 @@ import Layout from "components/Layout"
 import { setCookie, destroyCookie } from "nookies"
 import { UserProvider } from "./UserProvider"
 import createLoginUrl from "./url-helpers"
+import auth0 from "./auth0"
 
 interface Props {
   user: User | null
@@ -40,7 +41,6 @@ export const withAuthenticated = ({ required = true } = {}) => <P extends object
 
     if (req && res && typeof window === 'undefined') {
       // Server side
-      const { default: auth0 } = await import('./auth0')
       // ignore until https://github.com/auth0/nextjs-auth0/pull/113 is merged
       //@ts-ignore
       const session = await auth0.getSession(req)
