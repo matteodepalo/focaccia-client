@@ -8,11 +8,8 @@ import { IngredientField } from './IngredientField';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
 import DeleteButton from './DeleteButton';
-import { StepField } from './StepField';
 import { useRouter } from 'next/router';
 import { Button } from '../base/Button';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc'
-import arrayMove from 'array-move'
 import { StepList } from './StepList';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
