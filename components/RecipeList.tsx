@@ -1,4 +1,4 @@
-import { useGetRecipesQuery } from '../graphql'
+import { useGetRecipesQuery } from 'graphql'
 import { Spinner, NonIdealState, AnchorButton } from '@blueprintjs/core'
 import RecipeItem from './RecipeItem'
 import Link from 'next/link'

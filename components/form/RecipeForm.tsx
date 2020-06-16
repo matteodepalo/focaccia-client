@@ -1,15 +1,15 @@
-import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, StepInput } from '../../graphql'
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, StepInput } from 'graphql'
 import { EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup, HTMLTable, ButtonGroup } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, FastField as Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
-import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypesWithLabels, ingredientTypeUnavailable, starterIngredients, doughIngredients, Ingredient } from '../../lib/ingredients';
+import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypesWithLabels, ingredientTypeUnavailable, starterIngredients, doughIngredients, Ingredient } from 'lib/ingredients';
 import { IngredientField } from './IngredientField';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
 import DeleteButton from './DeleteButton';
 import { useRouter } from 'next/router';
-import { Button } from '../base/Button';
+import { Button } from 'components/base/Button';
 import { StepList } from './StepList';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {

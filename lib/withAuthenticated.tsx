@@ -1,6 +1,6 @@
 import { NextPage, NextPageContext } from "next"
 import { User, CurrentUser } from "./user"
-import Layout from "../components/Layout"
+import Layout from "components/Layout"
 import { setCookie, destroyCookie } from "nookies"
 import { UserProvider } from "./UserProvider"
 import createLoginUrl from "./url-helpers"

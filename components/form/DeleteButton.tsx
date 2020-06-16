@@ -1,8 +1,8 @@
-import { useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument, RecipeFieldsFragment } from "../../graphql"
+import { useRemoveRecipeMutation, GetRecipesQuery, GetRecipesDocument, RecipeFieldsFragment } from "graphql"
 import { FunctionComponent, useState } from "react"
 import { Classes, Dialog } from "@blueprintjs/core"
 import { useRouter } from "next/router"
-import { Button } from "../base/Button"
+import { Button } from "components/base/Button"
 
 interface Props {
   recipe: RecipeFieldsFragment

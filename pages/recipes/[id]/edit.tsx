@@ -1,10 +1,10 @@
 import { useRouter } from "next/router"
 import { getDataFromTree } from '@apollo/react-ssr';
-import RecipeForm from "../../../components/form/RecipeForm";
-import { useGetRecipeQuery } from "../../../graphql";
+import RecipeForm from "components/form/RecipeForm";
+import { useGetRecipeQuery } from "graphql";
 import { Spinner } from "@blueprintjs/core";
-import withApollo from "../../../lib/withApollo";
-import { withAuthenticated } from "../../../lib/withAuthenticated";
+import withApollo from "lib/withApollo";
+import { withAuthenticated } from "lib/withAuthenticated";
 
 const EditRecipe = () => {
   const router = useRouter()

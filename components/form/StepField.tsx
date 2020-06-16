@@ -3,8 +3,8 @@ import { FastField as Field, FieldProps, getIn, FormikHelpers, FormikErrors, For
 import { InputGroup } from "@blueprintjs/core";
 import { FormValues } from "./RecipeForm";
 import { DurationPicker } from "./DurationPicker";
-import { Button } from "../base/Button";
-import { TD } from "../base/TD";
+import { Button } from "components/base/Button";
+import { TD } from "components/base/TD";
 
 interface Props {
   index: number,

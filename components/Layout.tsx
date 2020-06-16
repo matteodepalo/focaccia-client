@@ -5,7 +5,7 @@ import { Box } from "rebass/styled-components"
 import Link from "next/link"
 import { useRouter } from 'next/router'
 import styled from "styled-components"
-import UserContext from "../lib/UserProvider"
+import UserContext from "lib/UserProvider"
 
 const Navbar = styled(BPNavbar)`
   background-color: ${(props) => props.theme.backgroundColor}
