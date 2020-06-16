@@ -6,7 +6,7 @@ export default initAuth0({
   scope: 'openid profile offline_access',
   domain: process.env.AUTH0_DOMAIN!,
   redirectUri: process.env.REDIRECT_URI!,
-  audience: process.env.API_URL,
+  audience: process.env.NEXT_PUBLIC_API_URL,
   postLogoutRedirectUri: process.env.POST_LOGOUT_REDIRECT_URI!,
   session: {
     cookieSecret: process.env.SESSION_COOKIE_SECRET!,
