@@ -2,9 +2,9 @@ import { FunctionComponent } from "react";
 import { Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { InputGroup } from "@blueprintjs/core";
 import { FormValues } from "./RecipeForm";
-import styled from "styled-components";
 import { DurationPicker } from "./DurationPicker";
 import { Button } from "../base/Button";
+import { TD } from "../base/TD";
 
 interface Props {
   index: number,
@@ -14,12 +14,6 @@ interface Props {
   touched: FormikTouched<FormValues>,
   validateField: FormikHelpers<any>['validateField']
 }
-
-export const TD = styled.td`
-  && {
-    vertical-align: baseline;
-  }
-`
 
 export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, validateField, onRemove, errors, touched }) => {
   const descriptionIntent = getIn(errors, `steps.${index}.description`) && getIn(touched, `steps.${index}.description`) ? "danger" : "none"
