@@ -33,7 +33,7 @@ export default withApollo(
     });
 
     const httpLink = createHttpLink({
-      uri: process.env.API_URL,
+      uri: process.env.NEXT_PUBLIC_API_URL,
       fetch
     })
 

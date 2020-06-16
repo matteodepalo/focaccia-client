@@ -1,5 +1,5 @@
 export function recipeShareUrl(token: string) {
-  return `${process.env.HOST}/r/${token}`
+  return `${process.env.NEXT_PUBLIC_HOST}/r/${token}`
 }
 
 export default function createLoginUrl(redirectTo?: string) {
