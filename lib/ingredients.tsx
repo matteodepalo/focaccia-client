@@ -1,7 +1,7 @@
 import { IngredientGroup, IngredientType, IngredientInput } from "../graphql"
 import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiCoolSpices } from 'react-icons/gi'
 import { CSSProperties } from "react"
-import { uniq, without } from "lodash"
+import { uniq } from "lodash"
 import { safeDivide } from "./utils"
 
 export type BaseIngredient = IngredientInput
@@ -10,36 +10,12 @@ export type Ingredient<T extends BaseIngredient, S extends IngredientType = Ingr
   type: S
 }
 
-type Water<T extends BaseIngredient> = Ingredient<T, IngredientType.water>
-type Flour<T extends BaseIngredient> = Ingredient<T, IngredientType.flour>
-
-type DoughIngredient<T extends BaseIngredient> = Water<T> | Flour<T> | Ingredient<T>
-export type DoughIngredients<T extends BaseIngredient> = [Water<T>, Flour<T>, ...T[]]
-
 export function starterIngredients<T extends BaseIngredient>(ingredients: T[]): T[] {
   return ingredients.filter(i => i.group === IngredientGroup.starter)
 }
 
-export function doughIngredients<T extends BaseIngredient>(ingredients: T[]): DoughIngredients<T> {
-  let doughIngredients = ingredients.filter(i => i.group === IngredientGroup.dough)
-  let water = findDoughIngredient(doughIngredients, IngredientType.water)
-  let flour = findDoughIngredient(doughIngredients, IngredientType.flour)
-
-  return [
-    water,
-    flour,
-    ...without(doughIngredients, water, flour)
-  ]
-}
-
-function findDoughIngredient<T extends BaseIngredient, S extends IngredientType>(ingredients: T[], type: S) {
-  for (let ingredient of ingredients) {
-    if (ingredient.type === type) {
-      return ingredient as Ingredient<T, S>
-    }
-  }
-
-  throw new Error(`Ingredient of type ${type} not found`)
+export function doughIngredients<T extends BaseIngredient>(ingredients: T[]): T[] {
+  return ingredients.filter(i => i.group === IngredientGroup.dough)
 }
 
 type IngredientGroupLabelObject<T extends IngredientGroup> = {
@@ -117,10 +93,6 @@ export function labelForIngredientType(type: IngredientType) {
   }
 
   throw new Error(`Label for type ${type} not found`)
-}
-
-export function doughIngredientRequired(ingredient: DoughIngredient<IngredientInput>, doughIngredients: DoughIngredients<IngredientInput>) {
-  return doughIngredients[0] === ingredient || doughIngredients[1] === ingredient
 }
 
 const uniqueIngredientTypes = [IngredientType.water, IngredientType.yeast, IngredientType.salt]

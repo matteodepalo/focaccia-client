@@ -3,7 +3,7 @@ import { EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, Fo
 import { Formik, Form as FormikForm, FastField as Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
-import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypesWithLabels, doughIngredientRequired, ingredientTypeUnavailable, DoughIngredients, starterIngredients, doughIngredients, Ingredient } from '../../lib/ingredients';
+import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypesWithLabels, ingredientTypeUnavailable, starterIngredients, doughIngredients, Ingredient } from '../../lib/ingredients';
 import { IngredientField } from './IngredientField';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
@@ -51,7 +51,7 @@ interface Props {
 export interface FormValues {
   name: string,
   starterIngredients: IngredientInput[],
-  doughIngredients: DoughIngredients<IngredientInput>,
+  doughIngredients: IngredientInput[],
   steps: StepInput[]
 }
 
@@ -75,7 +75,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
     doughIngredients: recipe ? doughIngredients(recipe.ingredients) : [
       newIngredient(IngredientGroup.dough, IngredientType.water),
       newIngredient(IngredientGroup.dough, IngredientType.flour)
-    ] as DoughIngredients<IngredientInput>,
+    ],
     steps: recipe?.steps ?? []
   }
 
@@ -240,7 +240,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                   <div>
                     <Box mb={3}>
                       {values.doughIngredients.length > 0 && (
-                        values.doughIngredients.map((ingredient, index) => (
+                        values.doughIngredients.map((_ingredient, index) => (
                           <IngredientField
                             key={index}
                             prefix="dough"
@@ -249,7 +249,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                             formValues={values}
                             errors={errors}
                             touched={touched}
-                            onRemove={doughIngredientRequired(ingredient, values.doughIngredients) ? undefined : () => arrayHelpers.remove(index)}
+                            onRemove={() => arrayHelpers.remove(index)}
                             validateField={validateField} />
                         ))
                       )}

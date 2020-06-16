@@ -64,17 +64,19 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
             </Box>
           }
 
-          <Box mt={4}>
-            <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
+          {doughIngredients.length > 0 &&
+            <Box mt={4}>
+              <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
 
-            <Box mt={3}>
-              {doughIngredients.map((ingredient, index) => {
-                return <div key={index}>
-                  {ingredientItem(ingredient)}
-                </div>
-              })}
+              <Box mt={3}>
+                {doughIngredients.map((ingredient, index) => {
+                  return <div key={index}>
+                    {ingredientItem(ingredient)}
+                  </div>
+                })}
+              </Box>
             </Box>
-          </Box>
+          }
 
           <Box mt={4}>
             <H2>Steps</H2>
