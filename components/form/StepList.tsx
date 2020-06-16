@@ -21,10 +21,10 @@ const Container = SortableContainer(({ children }: { children: React.ReactNode }
 
 const DragHandle = SortableHandle(() => <TD style={{ cursor: 'grab' }}><Icon icon="drag-handle-vertical"/></TD>)
 
-const SortableItem = SortableElement(({ value }: { value: React.ReactNode }) => (
+const SortableItem = SortableElement(({ children }: { children: React.ReactNode }) => (
   <tr>
     <DragHandle />
-    {value}
+    {children}
   </tr>
 ));
 
@@ -41,7 +41,7 @@ export const StepList: FunctionComponent<Props> = ({ steps, setFieldValue, valid
   return (
     <Container onSortEnd={onSortEnd} useDragHandle>
       {steps.sort((a, b) => a.position - b.position).map((step, index) => (
-        <SortableItem key={index} index={index} value={
+        <SortableItem key={index} index={index}>
           <StepField
             key={step.position}
             index={index}
@@ -50,7 +50,7 @@ export const StepList: FunctionComponent<Props> = ({ steps, setFieldValue, valid
             touched={touched}
             validateField={validateField}
             onRemove={() => arrayHelpers.remove(index)} />
-        } />
+        </SortableItem>
       ))}
     </Container>
   )
