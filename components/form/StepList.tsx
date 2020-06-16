@@ -44,10 +44,10 @@ export const StepList: FunctionComponent<Props> = ({ steps, setFieldValue, valid
 
   return (
     <Container onSortEnd={onSortEnd} useDragHandle>
-      {steps.sort((a, b) => a.position - b.position).map((step, index) => (
+      {steps.sort((a, b) => a.position - b.position).map((_step, index) => (
         <SortableItem key={index} index={index}>
           <StepField
-            key={step.position}
+            key={index}
             index={index}
             setFieldValue={setFieldValue}
             errors={errors}
