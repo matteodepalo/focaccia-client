@@ -6,6 +6,7 @@ import { FormValues } from "./RecipeForm"
 import { SortableContainer, SortableHandle, SortableElement, SortEndHandler, arrayMove } from "react-sortable-hoc"
 import { Icon } from "@blueprintjs/core"
 import { TD } from "../base/TD"
+import styled from "styled-components"
 
 interface Props {
   steps: StepInput[],
@@ -20,7 +21,9 @@ const Container = SortableContainer(({ children }: { children: React.ReactNode }
   return <tbody>{children}</tbody>
 })
 
-const DragHandle = SortableHandle(() => <TD style={{ cursor: 'grab' }}><Icon icon="drag-handle-vertical"/></TD>)
+const DragHandle = styled(SortableHandle(() => <TD><Icon icon="drag-handle-vertical"/></TD>))`
+  cursor: grab
+`
 
 const SortableItem = SortableElement(({ children }: { children: React.ReactNode }) => (
   <tr>
