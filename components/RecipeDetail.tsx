@@ -1,7 +1,7 @@
 import { H1, H2, H3, HTMLTable, Dialog, Classes, ButtonGroup, InputGroup } from '@blueprintjs/core'
 import { FunctionComponent, useState } from 'react'
 import { useRouter } from 'next/router'
-import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from 'graphql'
+import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from 'lib/graphql'
 import { Box } from 'rebass/styled-components'
 import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, starterIngredients as filterStarterIngredients, doughIngredients as filterDoughIngredients } from 'lib/ingredients'
 import Ingredient from './Ingredient'

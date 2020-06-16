@@ -1,4 +1,4 @@
-import { IngredientGroup, IngredientType, IngredientInput } from "graphql"
+import { IngredientGroup, IngredientType, IngredientInput } from "lib/graphql"
 import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiCoolSpices } from 'react-icons/gi'
 import { CSSProperties } from "react"
 import { uniq } from "lodash"

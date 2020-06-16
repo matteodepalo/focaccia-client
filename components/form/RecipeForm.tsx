@@ -1,4 +1,4 @@
-import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, StepInput } from 'graphql'
+import { useCreateRecipeMutation, GetRecipesQuery, GetRecipesDocument, CreateRecipeMutationVariables, IngredientGroup, IngredientType, RecipeFieldsFragment, UpdateRecipeMutationVariables, useUpdateRecipeMutation, IngredientInput, StepInput } from 'lib/graphql'
 import { EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, FormGroup, HTMLTable, ButtonGroup } from '@blueprintjs/core'
 import { Formik, Form as FormikForm, FastField as Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'

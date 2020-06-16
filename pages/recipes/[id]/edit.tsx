@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import { getDataFromTree } from '@apollo/react-ssr';
 import RecipeForm from "components/form/RecipeForm";
-import { useGetRecipeQuery } from "graphql";
+import { useGetRecipeQuery } from "lib/graphql";
 import { Spinner } from "@blueprintjs/core";
 import withApollo from "lib/withApollo";
 import { withAuthenticated } from "lib/withAuthenticated";
