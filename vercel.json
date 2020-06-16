@@ -1,21 +1,4 @@
 {
-  "build": {
-    "env": {
-      "API_URL": "https://focaccia-server.herokuapp.com/graphql",
-      "AUTH0_DOMAIN": "focaccia.eu.auth0.com",
-      "AUTH0_CLIENT_ID": "qQj5FuRpVJmBrRcu6RO05f2AyiYRzpXi",
-      "AUTH0_CLIENT_SECRET": "@auth0_client_secret",
-      "REDIRECT_URI": "https://focaccia.app/api/callback",
-      "POST_LOGOUT_REDIRECT_URI": "https://focaccia.app",
-      "HOST": "https://focaccia.app",
-      "SESSION_COOKIE_SECRET": "@session_cookie_secret",
-      "SESSION_COOKIE_LIFETIME": "7200",
-      "NEXT_PUBLIC_SENTRY_DSN": "https://a65dddbee6194685adbda0aad9cc53d7@o403782.ingest.sentry.io/5266794",
-      "SENTRY_AUTH_TOKEN": "@sentry_auth_token",
-      "SENTRY_ORG": "focaccia",
-      "SENTRY_PROJECT": "focaccia-client"
-    }
-  },
   "github": {
     "silent": true
   }
