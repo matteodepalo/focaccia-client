@@ -1,6 +1,7 @@
 
 const dotenv = require('dotenv')
 dotenv.config()
+const IgnorePlugin = require('webpack').IgnorePlugin
 
 // Use the hidden-source-map option when you don't want the source maps to be
 // publicly available on the servers, only to the error reporting
@@ -16,7 +17,11 @@ const {
   NODE_ENV,
 } = process.env
 
-module.exports = withSourceMaps({
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+module.exports = withBundleAnalyzer(withSourceMaps({
   webpack: (config, options) => {
     // In `pages/_app.js`, Sentry is imported from @sentry/node. While
     // @sentry/browser will run in a Node.js environment, @sentry/node will use
@@ -58,6 +63,10 @@ module.exports = withSourceMaps({
       )
     }
 
+    config.plugins.push(
+      new IgnorePlugin(/auth0/)
+    )
+
     return config
   },
-})
+}))
