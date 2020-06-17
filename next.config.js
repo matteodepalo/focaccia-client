@@ -64,7 +64,7 @@ module.exports = withBundleAnalyzer(withSourceMaps({
     }
 
     config.plugins.push(
-      new IgnorePlugin(/auth0/)
+      new IgnorePlugin(/iconSvgPaths/)
     )
 
     return config

@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useRouter } from 'next/router'
 import styled from "styled-components"
 import UserContext from "lib/UserProvider"
+import { icon } from "lib/icons"
 
 const Navbar = styled(BPNavbar)`
   background-color: ${(props) => props.theme.backgroundColor}
@@ -16,7 +17,7 @@ const Layout: FunctionComponent = ({ children }) => {
   const user = useContext(UserContext)
 
   const userMenu = <Menu>
-    <Menu.Item icon="log-out" text="Logout" href="/api/logout" />
+    <Menu.Item icon={icon("log-out")} text="Logout" href="/api/logout" />
   </Menu>
 
   return (
@@ -26,9 +27,9 @@ const Layout: FunctionComponent = ({ children }) => {
           <Navbar.Heading>
             {user ?
               <Popover content={userMenu}>
-                <AnchorButton minimal={true} icon="user" text={user.nickname} />
+                <AnchorButton minimal={true} icon={icon("user")} text={user.nickname} />
               </Popover>
-            : <AnchorButton minimal={true} icon="log-in" text="Login" href="/api/login" />}
+            : <AnchorButton minimal={true} icon={icon("log-in")} text="Login" href="/api/login" />}
           </Navbar.Heading>
 
           {user &&
@@ -36,10 +37,10 @@ const Layout: FunctionComponent = ({ children }) => {
               <Navbar.Divider />
 
               <Link href="/recipes">
-                <AnchorButton minimal={true} icon="document" text="Recipes" disabled={router.pathname === '/recipes'} />
+                <AnchorButton minimal={true} icon={icon("recipe")} text="Recipes" disabled={router.pathname === '/recipes'} />
               </Link>
               <Link href="/recipes/new">
-                <AnchorButton minimal={true} icon="plus" text="Add" disabled={router.pathname === '/recipes/new'} />
+                <AnchorButton minimal={true} icon={icon("add")} text="Add" disabled={router.pathname === '/recipes/new'} />
               </Link>
             </>}
         </Navbar.Group>

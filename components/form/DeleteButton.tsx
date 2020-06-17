@@ -3,6 +3,7 @@ import { FunctionComponent, useState } from "react"
 import { Classes, Dialog } from "@blueprintjs/core"
 import { useRouter } from "next/router"
 import { Button } from "components/base/Button"
+import { icon } from "lib/icons"
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -40,12 +41,12 @@ const DeleteButton: FunctionComponent<Props> = ({ recipe }) => {
 
   return (
     <>
-      <Button icon="trash" intent="danger" onClick={() => setIsDialogOpen(true)}>
+      <Button icon={icon("trash")} intent="danger" onClick={() => setIsDialogOpen(true)}>
         Delete
       </Button>
 
       <Dialog
-        icon="warning-sign"
+        icon={icon("warning")}
         onClose={() => setIsDialogOpen(false)}
         title="Confirm Deletion"
         isOpen={isDialogOpen}
@@ -58,7 +59,7 @@ const DeleteButton: FunctionComponent<Props> = ({ recipe }) => {
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
 
-            <Button icon="trash" loading={loading} intent="danger" onClick={handleRemoveClick}>
+            <Button icon={icon("trash")} loading={loading} intent="danger" onClick={handleRemoveClick}>
               Delete
             </Button>
           </div>

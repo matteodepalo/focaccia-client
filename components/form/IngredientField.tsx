@@ -8,6 +8,7 @@ import { Flex, Box } from "rebass/styled-components";
 import { lowerCase } from "lodash";
 import { NumericInput } from "components/base/NumericInput";
 import { Button } from "components/base/Button";
+import { icon } from "lib/icons";
 
 interface Props {
   prefix: string,
@@ -30,7 +31,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
   return (
     <Flex mb={2} alignItems="center">
       <Box mr={2}>
-        <Button icon="remove" disabled={disabled} onClick={() => onRemove?.()} minimal={true}  />
+        <Button icon={icon("remove")} disabled={disabled} onClick={() => onRemove?.()} minimal={true}  />
       </Box>
 
       <Box>
