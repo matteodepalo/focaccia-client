@@ -1,7 +1,6 @@
 
 const dotenv = require('dotenv')
 dotenv.config()
-const IgnorePlugin = require('webpack').IgnorePlugin
 
 // Use the hidden-source-map option when you don't want the source maps to be
 // publicly available on the servers, only to the error reporting
@@ -62,10 +61,6 @@ module.exports = withBundleAnalyzer(withSourceMaps({
         })
       )
     }
-
-    config.plugins.push(
-      new IgnorePlugin(/iconSvgPaths/)
-    )
 
     return config
   },
