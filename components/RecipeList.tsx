@@ -2,11 +2,12 @@ import { useGetRecipesQuery } from 'lib/graphql'
 import { Spinner, NonIdealState, AnchorButton } from '@blueprintjs/core'
 import RecipeItem from './RecipeItem'
 import Link from 'next/link'
+import { icon } from 'lib/icons'
 
 const EmptyList = () => {
   return (
     <NonIdealState
-      icon="document"
+      icon={icon("recipe")}
       title="You have no saved recipes"
       description="Create a new recipe"
       action={<Link href="/recipes/new"><AnchorButton intent="primary" text="Create"/></Link>} />

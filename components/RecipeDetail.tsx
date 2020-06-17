@@ -11,6 +11,7 @@ import { secondsToHours, secondsToMinutes } from 'lib/utils'
 import { Button } from 'components/base/Button'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { recipeShareUrl } from 'lib/url-helpers'
+import { icon } from 'lib/icons'
 
 interface Props {
   recipe: RecipeFieldsFragment,
@@ -115,17 +116,17 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
           {!shared &&
             <Box mt={4}>
               <ButtonGroup vertical={true}>
-                <Button icon="edit" onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)}>
+                <Button icon={icon("edit")} onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)}>
                   Edit
                 </Button>
 
-                <Button icon="share" intent="primary" onClick={() => setIsDialogOpen(true)}>
+                <Button icon={icon("share")} intent="primary" onClick={() => setIsDialogOpen(true)}>
                   Share
                 </Button>
               </ButtonGroup>
 
               <Dialog
-                icon="share"
+                icon={icon("share")}
                 onClose={() => setIsDialogOpen(false)}
                 title={`Share ${recipe.name}`}
                 isOpen={isDialogOpen}
@@ -138,7 +139,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
                   <div className={Classes.DIALOG_FOOTER_ACTIONS}>
                     <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
                     <CopyToClipboard text={recipeShareUrl(recipe.token)} onCopy={() => setIsDialogOpen(false)}>
-                      <Button icon="document-share">Copy</Button>
+                      <Button icon={icon("share")}>Copy</Button>
                     </CopyToClipboard>
                   </div>
                 </div>

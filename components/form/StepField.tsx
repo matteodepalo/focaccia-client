@@ -5,6 +5,7 @@ import { FormValues } from "./RecipeForm";
 import { DurationPicker } from "./DurationPicker";
 import { Button } from "components/base/Button";
 import { TD } from "components/base/TD";
+import { icon } from "lib/icons";
 
 interface Props {
   index: number,
@@ -20,7 +21,7 @@ export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, vali
 
   return (
     <>
-      <TD><Button icon="remove" onClick={() => onRemove()} minimal={true} /></TD>
+      <TD><Button icon={icon("remove")} onClick={() => onRemove()} minimal={true} /></TD>
       <TD>
         <Field name={`steps.${index}.description`}>
           {({ field }: FieldProps<string>) => (

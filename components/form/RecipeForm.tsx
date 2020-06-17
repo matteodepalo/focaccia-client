@@ -11,6 +11,7 @@ import DeleteButton from './DeleteButton';
 import { useRouter } from 'next/router';
 import { Button } from 'components/base/Button';
 import { StepList } from './StepList';
+import { icon } from 'lib/icons';
 
 const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
   const object = Yup.object({
@@ -224,7 +225,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                     ))
                   )}
 
-                  <Button icon="add" text="Add Ingredient" minimal={true} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.starter, IngredientType.other))} />
+                  <Button icon={icon("add")} text="Add Ingredient" minimal={true} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.starter, IngredientType.other))} />
                 </div>
               )}
             />
@@ -268,7 +269,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                               disabled={ingredientTypeUnavailable(type.value, values.doughIngredients)}/>
                           })}
                         </Menu>}>
-                        <Button icon="add" text="Add Ingredient" minimal={true} />
+                        <Button icon={icon("add")} text="Add Ingredient" minimal={true} />
                     </Popover>
                   </div>
                 )}
@@ -305,7 +306,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                   </HTMLTable>
 
                   <Box mt={2}>
-                    <Button icon="add" text="Add Step" minimal={true} onClick={() => arrayHelpers.push(newStep(values))} />
+                    <Button icon={icon("add")} text="Add Step" minimal={true} onClick={() => arrayHelpers.push(newStep(values))} />
                   </Box>
                 </>
               )} />
@@ -313,7 +314,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
 
           <Box mt={4} width={80}>
             <ButtonGroup vertical={true}>
-              <Button icon="floppy-disk" intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
+              <Button icon={icon("save")} intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
 
               {recipe &&
                 <DeleteButton recipe={recipe} />

@@ -1,8 +1,7 @@
 import { IngredientGroup, IngredientType, IngredientInput } from "lib/graphql"
-import { GiWheat, GiBubbles, GiWaterDrop, GiSaltShaker, GiCoolSpices } from 'react-icons/gi'
-import { CSSProperties } from "react"
 import { uniq } from "lodash"
 import { safeDivide } from "./utils"
+import { icon, IconProps } from "./icons"
 
 export type BaseIngredient = IngredientInput
 
@@ -101,23 +100,18 @@ export function ingredientTypeUnavailable(type: IngredientType, ingredients: Ing
   return uniqueIngredientTypes.includes(type) && ingredients.map(i => i.type).includes(type)
 }
 
-type IconProps = {
-  size: number
-  style: CSSProperties
-}
-
 export function ingredientTypeIcon(type: IngredientType, props?: IconProps) {
   switch (type) {
     case IngredientType.yeast:
-      return <GiBubbles color="brown" {...props} />
+      return icon("yeast", props)
     case IngredientType.flour:
-      return <GiWheat color="brown" {...props} />
+      return icon("flour", props)
     case IngredientType.water:
-      return <GiWaterDrop color="teal" {...props} />
+      return icon("water", props)
     case IngredientType.salt:
-      return <GiSaltShaker {...props} />
+      return icon("salt", props)
     case IngredientType.other:
-      return <GiCoolSpices {...props} />
+      return icon("misc", props)
     default:
       throw new Error(`No icon for type ${type}`)
   }

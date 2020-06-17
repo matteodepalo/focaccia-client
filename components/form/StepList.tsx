@@ -8,6 +8,7 @@ import { Icon } from "@blueprintjs/core"
 import { TD } from "components/base/TD"
 import styled from "styled-components"
 import arrayMove from "array-move"
+import { icon } from "lib/icons"
 
 interface Props {
   steps: StepInput[],
@@ -22,7 +23,7 @@ const Container = SortableContainer(({ children }: { children: React.ReactNode }
   return <tbody>{children}</tbody>
 })
 
-const DragHandle = styled(SortableHandle(() => <TD><Icon icon="drag-handle-vertical"/></TD>))`
+const DragHandle = styled(SortableHandle(() => <TD><Icon icon={icon("drag-handle")}/></TD>))`
   cursor: grab
 `
 
