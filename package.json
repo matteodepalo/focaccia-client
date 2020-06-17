@@ -6,12 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "codegen": "graphql-codegen --config codegen.yml --watch"
+    "codegen": "graphql-codegen --config codegen.yml --watch",
+    "analyze": "cross-env ANALYZE=true yarn build"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
     "@auth0/nextjs-auth0": "^0.13.0",
     "@blueprintjs/core": "^3.26.0",
+    "@next/bundle-analyzer": "^9.4.4",
     "@sentry/browser": "^5.17.0",
     "@sentry/node": "^5.17.0",
     "@sentry/webpack-plugin": "^1.11.1",
@@ -22,6 +24,7 @@
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
     "array-move": "^2.2.2",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "formik": "^2.1.4",
     "graphql": "^15.0.0",
