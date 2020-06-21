@@ -170,7 +170,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                   <EditableText
                     value={wrapNullableValue(field.value)}
                     confirmOnEnterKey={true}
-                    onChange={(value: string) => setFieldValue('name', value)}
+                    onChange={(value) => setFieldValue('name', value)}
                     onConfirm={(value) => {
                       setFieldValue('name', formatString(value))
                       validateField(field.name)

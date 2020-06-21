@@ -38,11 +38,9 @@ export const DurationPicker: FunctionComponent<Props> = ({ field, setFieldValue,
           onBlur={field.onBlur}
           onChange={(value) => setDuration(value ?? 0, minutes ?? 0)}
           validateField={validateField}
-          boxProps={{ width: 100 }}
-          inputProps={{
-            rightElement: <Tag minimal={true}>h</Tag>,
-            intent: durationIntent
-          }} />
+          containerProps={{ width: 100 }}
+          rightElement={<Tag minimal={true}>h</Tag>}
+          intent={durationIntent} />
       </Box>
 
       <Box>
@@ -52,11 +50,9 @@ export const DurationPicker: FunctionComponent<Props> = ({ field, setFieldValue,
           onBlur={field.onBlur}
           onChange={(value) => setDuration(hours ?? 0, value ?? 0)}
           validateField={validateField}
-          boxProps={{ width: 100 }}
-          inputProps={{
-            rightElement: <Tag minimal={true}>m</Tag>,
-            intent: durationIntent
-          }} />
+          containerProps={{ width: 100 }}
+          rightElement={<Tag minimal={true}>m</Tag>}
+          intent={durationIntent} />
       </Box>
     </Flex>
   )

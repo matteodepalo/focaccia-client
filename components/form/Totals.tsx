@@ -56,10 +56,8 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
           <NumericInput
             value={round(totalWeight / 1000, 1)}
             onChange={(value) => totalWeightChange((value ?? 0) * 1000)}
-            boxProps={{ marginX: 2, width: 100 }}
-            inputProps={{
-              stepSize: 0.1
-            }}/>
+            containerProps={{ marginX: 2, width: 100 }}
+            stepSize={0.1} />
         }
         kg
       </Flex>
@@ -70,10 +68,8 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
           <NumericInput
             value={round(hydration)}
             onChange={(value) => hydrationChange(value ?? 0)}
-            boxProps={{ marginX: 2, width: 100 }}
-            inputProps={{
-              min: round(hydrationMinimum)
-            }}/>
+            containerProps={{ marginX: 2, width: 100 }}
+            min={round(hydrationMinimum)} />
         }
         %
       </Flex>

@@ -2,20 +2,17 @@ import { NumericInput as BPNumericInput } from '@blueprintjs/core'
 import { FunctionComponent } from "react"
 import { Box, BoxProps } from "rebass/styled-components"
 import { gte } from 'lodash'
-import { FormikHelpers, FieldProps } from 'formik'
+import { FormikHelpers } from 'formik'
+import { wrapNullableValue } from 'lib/field-helpers'
 
-interface Props {
-  name?: string
-  value: number | undefined
+type Props = Omit<BPNumericInput['props'], 'onChange'> & {
   onChange: (value: number | undefined) => void
-  onBlur?: FieldProps<number | undefined>['field']['onBlur']
   validateField?: FormikHelpers<any>['validateField']
-  boxProps?: BoxProps
-  inputProps: BPNumericInput['props']
+  containerProps?: BoxProps
 }
 
 
-export const NumericInput: FunctionComponent<Props> = ({ value, name, onChange, onBlur, validateField, boxProps, inputProps }) => {
+export const NumericInput: FunctionComponent<Props> = ({ value, name, onChange, validateField, containerProps, ...props }) => {
   const handleNumericInputChange = (valueAsNumber: number, valueAsString: string) => {
     if (!isNaN(valueAsNumber) && valueAsString.length > 0 && gte(valueAsNumber, 0)) {
       onChange(valueAsNumber)
@@ -27,10 +24,9 @@ export const NumericInput: FunctionComponent<Props> = ({ value, name, onChange, 
   }
 
   return (
-    <Box sx={{ touchAction: 'manipulation' }} {...boxProps}>
+    <Box sx={{ touchAction: 'manipulation' }} {...containerProps}>
       <BPNumericInput
-        {...inputProps}
-        name={name}
+        {...props}
         allowNumericCharactersOnly={true}
         fill={true}
         onFocus={(event) => {
@@ -44,10 +40,10 @@ export const NumericInput: FunctionComponent<Props> = ({ value, name, onChange, 
             event.target.value = '0'
           }
 
-          onBlur?.(event)
+          props.onBlur?.(event)
         }}
-        min={inputProps.min ?? 0}
-        value={value}
+        min={props.min ?? 0}
+        value={wrapNullableValue(value)}
         placeholder='0'/>
     </Box>
   )

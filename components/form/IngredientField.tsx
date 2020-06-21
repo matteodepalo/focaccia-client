@@ -1,7 +1,7 @@
-import { FunctionComponent, FocusEvent } from "react";
+import { FunctionComponent } from "react";
 import { IngredientType } from "lib/graphql";
 import { FastField as Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
-import { InputGroup, Tag } from "@blueprintjs/core";
+import { Tag } from "@blueprintjs/core";
 import { labelForIngredientType, nameRequiredForType } from "lib/ingredients";
 import { FormValues, IngredientFormField } from "./RecipeForm";
 import { Flex, Box } from "rebass/styled-components";
@@ -9,7 +9,8 @@ import { lowerCase } from "lodash";
 import { NumericInput } from "components/base/NumericInput";
 import { Button } from "components/base/Button";
 import { icon } from "lib/icons";
-import { formatString, wrapNullableValue } from "lib/field-helpers";
+import { wrapNullableValue } from "lib/field-helpers";
+import { TextInput } from "components/base/TextInput";
 
 interface Props {
   prefix: string,
@@ -47,12 +48,11 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
                       validateField={validateField}
                       name={field.name}
                       value={field.value}
-                      boxProps={{ width: 120 }}
+                      containerProps={{ width: 120 }}
                       onBlur={field.onBlur}
-                      inputProps={{
-                        rightElement: <Tag minimal={true}>g</Tag>,
-                        intent: weightIntent
-                      }} />
+                      rightElement={<Tag minimal={true}>g</Tag>}
+                      intent={weightIntent}
+                     />
                   )}
                 </Field>
               </Box>
@@ -68,14 +68,11 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
             <Box pt={[1, 0]}>
               <Field name={`${prefix}Ingredients.${index}.name`}>
                 {({ field }: FieldProps<IngredientFormField['name']>) => (
-                  <InputGroup
+                  <TextInput
                     intent={nameIntent}
                     value={wrapNullableValue(field.value)}
                     onChange={field.onChange}
-                    onBlur={(event: FocusEvent<HTMLInputElement>) => {
-                      event.target.value = formatString(event.target.value)
-                      field.onBlur(event)
-                    }}
+                    onBlur={field.onBlur}
                     name={field.name}
                     placeholder="Name" />
                 )}
