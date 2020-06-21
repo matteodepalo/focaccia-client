@@ -26,7 +26,7 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
     const updatedIngredients = ingredients.map((ingredient) => {
       return {
         ...ingredient,
-        weight: updatedIngredientWeight(ingredient.weight)
+        weight: updatedIngredientWeight(ingredient.weight ?? 0)
       }
     })
 

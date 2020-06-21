@@ -3,7 +3,7 @@ import { uniq } from "lodash"
 import { safeDivide } from "./utils"
 import { icon, IconProps } from "./icons"
 
-export type BaseIngredient = Partial<IngredientInput>
+export type BaseIngredient = Partial<IngredientInput> & Pick<IngredientInput, "type" | "group">
 
 export type Ingredient<T extends BaseIngredient, S extends IngredientType = IngredientType> = T & {
   type: S
