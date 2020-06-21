@@ -14,7 +14,7 @@ import { StepList } from './StepList';
 import { icon } from 'lib/icons';
 
 // type and group are required
-type IngredientFormField = Partial<IngredientInput> & Pick<IngredientInput, "type" | "group">
+export type IngredientFormField = Partial<IngredientInput> & Pick<IngredientInput, "type" | "group">
 
 // position is required
 export type StepFormField = Partial<StepInput> & Pick<StepInput, "position">
@@ -163,7 +163,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
       {({ values, isSubmitting, setFieldValue, validateField, errors, touched, setValues, validateForm }) => (
         <FormikForm>
           <Field name="name">
-            {({ field }: FieldProps<string>) => (
+            {({ field }: FieldProps<IngredientFormField['name']>) => (
               <H1>
                 <FormGroup intent={errors.name && touched.name ? "danger" : "none"} helperText={<ErrorMessage name="name"/>}>
                   <EditableText

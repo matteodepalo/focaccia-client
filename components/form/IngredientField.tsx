@@ -3,7 +3,7 @@ import { IngredientType } from "lib/graphql";
 import { FastField as Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { InputGroup, Tag } from "@blueprintjs/core";
 import { labelForIngredientType, nameRequiredForType } from "lib/ingredients";
-import { FormValues } from "./RecipeForm";
+import { FormValues, IngredientFormField } from "./RecipeForm";
 import { Flex, Box } from "rebass/styled-components";
 import { lowerCase } from "lodash";
 import { NumericInput } from "components/base/NumericInput";
@@ -40,7 +40,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
             <Flex alignItems="center">
               <Box>
                 <Field name={`${prefix}Ingredients.${index}.weight`}>
-                  {({ field }: FieldProps<number>) => (
+                  {({ field }: FieldProps<IngredientFormField['weight']>) => (
                     <NumericInput
                       onChange={(value) => setFieldValue(field.name, value)}
                       validateField={validateField}
@@ -66,7 +66,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
           {nameRequired &&
             <Box pt={[1, 0]}>
               <Field name={`${prefix}Ingredients.${index}.name`}>
-                {({ field }: FieldProps<string>) => (
+                {({ field }: FieldProps<IngredientFormField['name']>) => (
                   <InputGroup
                     intent={nameIntent}
                     value={field.value}

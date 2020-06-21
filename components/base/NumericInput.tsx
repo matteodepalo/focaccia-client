@@ -8,7 +8,7 @@ interface Props {
   name?: string
   value: number | undefined
   onChange: (value: number | undefined) => void
-  onBlur?: FieldProps<number>['field']['onBlur']
+  onBlur?: FieldProps<number | undefined>['field']['onBlur']
   validateField?: FormikHelpers<any>['validateField']
   boxProps?: BoxProps
   inputProps: BPNumericInput['props']

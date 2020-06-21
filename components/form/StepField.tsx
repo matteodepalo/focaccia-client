@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { FastField as Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { InputGroup } from "@blueprintjs/core";
-import { FormValues } from "./RecipeForm";
+import { FormValues, StepFormField } from "./RecipeForm";
 import { DurationPicker } from "./DurationPicker";
 import { Button } from "components/base/Button";
 import { TD } from "components/base/TD";
@@ -24,7 +24,7 @@ export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, vali
       <TD><Button icon={icon("remove")} onClick={() => onRemove()} minimal={true} /></TD>
       <TD>
         <Field name={`steps.${index}.description`}>
-          {({ field }: FieldProps<string>) => (
+          {({ field }: FieldProps<StepFormField['description']>) => (
             <InputGroup
               intent={descriptionIntent}
               value={field.value}
@@ -37,7 +37,7 @@ export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, vali
       </TD>
       <TD>
         <Field name={`steps.${index}.duration`}>
-          {({ field }: FieldProps<number>) => (
+          {({ field }: FieldProps<StepFormField['duration']>) => (
             <DurationPicker
               field={field}
               setFieldValue={setFieldValue}

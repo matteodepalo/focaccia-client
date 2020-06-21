@@ -1,5 +1,5 @@
 import { FieldProps, FormikHelpers, FormikErrors, FormikTouched, getIn } from "formik"
-import { FormValues } from "./RecipeForm"
+import { FormValues, StepFormField } from "./RecipeForm"
 import { FunctionComponent } from "react"
 import { Flex, Box } from "rebass/styled-components"
 import { Tag } from "@blueprintjs/core"
@@ -7,7 +7,7 @@ import { NumericInput } from 'components/base/NumericInput'
 import { secondsToHours, secondsToMinutes, minutesToSeconds, hoursToSeconds } from "lib/utils"
 
 interface Props {
-  field: FieldProps<number>['field']
+  field: FieldProps<StepFormField['duration']>['field']
   setFieldValue: FormikHelpers<any>['setFieldValue'],
   errors: FormikErrors<FormValues>,
   touched: FormikTouched<FormValues>,
@@ -16,8 +16,13 @@ interface Props {
 
 export const DurationPicker: FunctionComponent<Props> = ({ field, setFieldValue, errors, touched, validateField }) => {
   const durationIntent = getIn(errors, field.name) && getIn(touched, field.name) ? "danger" : "none"
-  const hours = secondsToHours(field.value ?? 0)
-  const minutes = secondsToMinutes(field.value ?? 0)
+  let hours: number | undefined
+  let minutes: number | undefined
+
+  if (field.value !== undefined && field.value !== null) {
+    hours = secondsToHours(field.value)
+    minutes = secondsToMinutes(field.value)
+  }
 
   const setDuration = (hours: number, minutes: number) => {
     const totalDuration = minutesToSeconds(minutes) + hoursToSeconds(hours)
@@ -31,7 +36,7 @@ export const DurationPicker: FunctionComponent<Props> = ({ field, setFieldValue,
           value={hours}
           name={field.name}
           onBlur={field.onBlur}
-          onChange={(value) => setDuration(value ?? 0, minutes)}
+          onChange={(value) => setDuration(value ?? 0, minutes ?? 0)}
           validateField={validateField}
           boxProps={{ width: 100 }}
           inputProps={{
@@ -45,7 +50,7 @@ export const DurationPicker: FunctionComponent<Props> = ({ field, setFieldValue,
           value={minutes}
           name={field.name}
           onBlur={field.onBlur}
-          onChange={(value) => setDuration(hours, value ?? 0)}
+          onChange={(value) => setDuration(hours ?? 0, value ?? 0)}
           validateField={validateField}
           boxProps={{ width: 100 }}
           inputProps={{
