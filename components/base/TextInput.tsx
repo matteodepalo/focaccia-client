@@ -11,6 +11,7 @@ export const TextInput: FunctionComponent<Props> = (props) => {
       {...props}
       onBlur={(event: FocusEvent<HTMLInputElement>) => {
         event.target.value = formatString(event.target.value)
+        props.onChange?.(event)
         props.onBlur?.(event)
       }} />
   )

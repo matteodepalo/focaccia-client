@@ -27,21 +27,10 @@ export const NumericInput: FunctionComponent<Props> = ({ value, name, onChange, 
     <Box sx={{ touchAction: 'manipulation' }} {...containerProps}>
       <BPNumericInput
         {...props}
+        name={name}
         allowNumericCharactersOnly={true}
         fill={true}
-        onFocus={(event) => {
-          if (event.target.value === '0') {
-            event.target.value = ''
-          }
-        }}
         onValueChange={handleNumericInputChange}
-        onBlur={(event) => {
-          if (event.target.value === '') {
-            event.target.value = '0'
-          }
-
-          props.onBlur?.(event)
-        }}
         min={props.min ?? 0}
         value={wrapNullableValue(value)}
         placeholder='0'/>
