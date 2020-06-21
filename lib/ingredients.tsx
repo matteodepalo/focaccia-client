@@ -129,7 +129,7 @@ function flourWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
   return flours(ingredients).reduce((memo, i) => memo += i.weight ?? 0, 0)
 }
 
-function water<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+export function water<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
   return ingredients.filter(i => i.type === IngredientType.water)
 }
 
