@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, FocusEvent } from "react";
 import { FastField as Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { InputGroup } from "@blueprintjs/core";
 import { FormValues, StepFormField } from "./RecipeForm";
@@ -6,6 +6,7 @@ import { DurationPicker } from "./DurationPicker";
 import { Button } from "components/base/Button";
 import { TD } from "components/base/TD";
 import { icon } from "lib/icons";
+import { formatString } from "lib/field-helpers";
 
 interface Props {
   index: number,
@@ -29,7 +30,10 @@ export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, vali
               intent={descriptionIntent}
               value={field.value}
               onChange={field.onChange}
-              onBlur={field.onBlur}
+              onBlur={(event: FocusEvent<HTMLInputElement>) => {
+                event.target.value = formatString(event.target.value)
+                field.onBlur(event)
+              }}
               name={field.name}
               placeholder="Description" />
           )}

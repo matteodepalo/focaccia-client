@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, FocusEvent } from "react";
 import { IngredientType } from "lib/graphql";
 import { FastField as Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { InputGroup, Tag } from "@blueprintjs/core";
@@ -9,6 +9,7 @@ import { lowerCase } from "lodash";
 import { NumericInput } from "components/base/NumericInput";
 import { Button } from "components/base/Button";
 import { icon } from "lib/icons";
+import { formatString, wrapNullableValue } from "lib/field-helpers";
 
 interface Props {
   prefix: string,
@@ -69,9 +70,12 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
                 {({ field }: FieldProps<IngredientFormField['name']>) => (
                   <InputGroup
                     intent={nameIntent}
-                    value={field.value}
+                    value={wrapNullableValue(field.value)}
                     onChange={field.onChange}
-                    onBlur={field.onBlur}
+                    onBlur={(event: FocusEvent<HTMLInputElement>) => {
+                      event.target.value = formatString(event.target.value)
+                      field.onBlur(event)
+                    }}
                     name={field.name}
                     placeholder="Name" />
                 )}

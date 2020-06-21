@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { Button } from 'components/base/Button';
 import { StepList } from './StepList';
 import { icon } from 'lib/icons';
+import { formatString, wrapNullableValue } from 'lib/field-helpers';
 
 // type and group are required
 export type IngredientFormField = Partial<IngredientInput> & Pick<IngredientInput, "type" | "group">
@@ -167,9 +168,9 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
               <H1>
                 <FormGroup intent={errors.name && touched.name ? "danger" : "none"} helperText={<ErrorMessage name="name"/>}>
                   <EditableText
-                    value={field.value}
+                    value={wrapNullableValue(field.value)}
                     confirmOnEnterKey={true}
-                    onChange={(value: string) => setFieldValue('name', value)}
+                    onChange={(value: string) => setFieldValue('name', formatString(value))}
                     onConfirm={() => validateField(field.name)}
                     onCancel={() => validateField(field.name)}
                     multiline={true}
