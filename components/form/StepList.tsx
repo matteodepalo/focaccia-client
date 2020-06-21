@@ -1,13 +1,13 @@
 import { StepField } from "./StepField"
-import { FunctionComponent } from "react"
+import React, { FunctionComponent } from "react"
 import { FormikHelpers, FormikErrors, FormikTouched, FieldArrayRenderProps } from "formik"
 import { FormValues, StepFormField } from "./RecipeForm"
 import { SortableContainer, SortableHandle, SortableElement, SortEndHandler } from "react-sortable-hoc"
 import { Icon } from "@blueprintjs/core"
-import { TD } from "components/base/TD"
 import styled from "styled-components"
 import arrayMove from "array-move"
 import { icon } from "lib/icons"
+import { TD } from "components/base/TD"
 
 interface Props {
   steps: StepFormField[],
@@ -22,9 +22,11 @@ const Container = SortableContainer(({ children }: { children: React.ReactNode }
   return <tbody>{children}</tbody>
 })
 
-const DragHandle = styled(SortableHandle(() => <TD><Icon icon={icon("drag-handle")}/></TD>))`
+const StyledTD = styled(TD)`
   cursor: grab
 `
+
+const DragHandle = SortableHandle(() => <StyledTD><Icon icon={icon("drag-handle", { style: { verticalAlign: 'middle' } })}/></StyledTD>)
 
 const SortableItem = SortableElement(({ children }: { children: React.ReactNode }) => (
   <tr>
