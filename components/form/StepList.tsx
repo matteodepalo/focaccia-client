@@ -1,8 +1,7 @@
-import { StepInput } from "lib/graphql"
 import { StepField } from "./StepField"
 import { FunctionComponent } from "react"
 import { FormikHelpers, FormikErrors, FormikTouched, FieldArrayRenderProps } from "formik"
-import { FormValues } from "./RecipeForm"
+import { FormValues, StepFormField } from "./RecipeForm"
 import { SortableContainer, SortableHandle, SortableElement, SortEndHandler } from "react-sortable-hoc"
 import { Icon } from "@blueprintjs/core"
 import { TD } from "components/base/TD"
@@ -11,7 +10,7 @@ import arrayMove from "array-move"
 import { icon } from "lib/icons"
 
 interface Props {
-  steps: StepInput[],
+  steps: StepFormField[],
   setFieldValue: FormikHelpers<any>['setFieldValue'],
   errors: FormikErrors<FormValues>,
   touched: FormikTouched<FormValues>,

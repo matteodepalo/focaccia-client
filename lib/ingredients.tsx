@@ -3,7 +3,7 @@ import { uniq } from "lodash"
 import { safeDivide } from "./utils"
 import { icon, IconProps } from "./icons"
 
-export type BaseIngredient = IngredientInput
+export type BaseIngredient = Partial<IngredientInput>
 
 export type Ingredient<T extends BaseIngredient, S extends IngredientType = IngredientType> = T & {
   type: S
@@ -96,7 +96,7 @@ export function labelForIngredientType(type: IngredientType) {
 
 const uniqueIngredientTypes = [IngredientType.water, IngredientType.yeast, IngredientType.salt]
 
-export function ingredientTypeUnavailable(type: IngredientType, ingredients: Ingredient<IngredientInput>[]) {
+export function ingredientTypeUnavailable<T extends BaseIngredient>(type: IngredientType, ingredients: Ingredient<T>[]) {
   return uniqueIngredientTypes.includes(type) && ingredients.map(i => i.type).includes(type)
 }
 
@@ -118,7 +118,7 @@ export function ingredientTypeIcon(type: IngredientType, props?: IconProps) {
 }
 
 export function ingredientsWeightInG<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  return ingredients.reduce((memo, i) => memo += i.weight, 0)
+  return ingredients.reduce((memo, i) => memo += i.weight ?? 0, 0)
 }
 
 function flours<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
@@ -126,7 +126,7 @@ function flours<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
 }
 
 function flourWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  return flours(ingredients).reduce((memo, i) => memo += i.weight, 0)
+  return flours(ingredients).reduce((memo, i) => memo += i.weight ?? 0, 0)
 }
 
 function water<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
@@ -134,7 +134,7 @@ function water<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
 }
 
 function waterWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  return water(ingredients).reduce((memo, i) => memo += i.weight, 0)
+  return water(ingredients).reduce((memo, i) => memo += i.weight ?? 0, 0)
 }
 
 export function ingredientsHydration<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {

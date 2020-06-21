@@ -13,14 +13,20 @@ import { Button } from 'components/base/Button';
 import { StepList } from './StepList';
 import { icon } from 'lib/icons';
 
-const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => {
+// type and group are required
+type IngredientFormField = Partial<IngredientInput> & Pick<IngredientInput, "type" | "group">
+
+// position is required
+export type StepFormField = Partial<StepInput> & Pick<StepInput, "position">
+
+const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientFormField> => {
   const object = Yup.object({
     weight: Yup.number().moreThan(0, 'must be greater than 0').required(),
     group: Yup.mixed<IngredientGroup>().oneOf(Object.values(IngredientGroup)).required(),
     type: Yup.mixed<IngredientType>().oneOf(Object.values(IngredientType)).required()
   })
 
-  if (nameRequiredForType((value as IngredientInput).type)) {
+  if (nameRequiredForType((value as IngredientFormField).type)) {
     return object.shape({
       name: Yup.string().required('Name is required')
     })
@@ -29,7 +35,7 @@ const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientInput> => 
   }
 })
 
-const StepSchema: Yup.ObjectSchema<StepInput> = Yup.object({
+const StepSchema: Yup.ObjectSchema<StepFormField> = Yup.object({
   description: Yup.string().required(),
   duration: Yup.number().nullable(),
   position: Yup.number().moreThan(0, 'must be greater than 0')
@@ -51,16 +57,16 @@ interface Props {
 
 export interface FormValues {
   name: string,
-  starterIngredients: IngredientInput[],
-  doughIngredients: IngredientInput[],
-  steps: StepInput[]
+  starterIngredients: IngredientFormField[],
+  doughIngredients: IngredientFormField[],
+  steps: StepFormField[]
 }
 
-function newIngredient<T extends IngredientType>(group: IngredientGroup, type: T): Ingredient<IngredientInput, T> {
-  return { type, group, weight: 0, name: nameRequiredForType(type) ? '' : undefined }
+function newIngredient<T extends IngredientType>(group: IngredientGroup, type: T): Ingredient<IngredientFormField, T> {
+  return { type, group, name: nameRequiredForType(type) ? '' : undefined }
 }
 
-function newStep(values: FormValues): StepInput {
+function newStep(values: FormValues): StepFormField {
   return { position: values.steps.length + 1, description: '' }
 }
 
@@ -133,8 +139,8 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
       onSubmit={async (values) => {
         const recipeInput = {
           name: values.name,
-          ingredients: values.doughIngredients.concat(values.starterIngredients),
-          steps: values.steps
+          ingredients: values.doughIngredients.concat(values.starterIngredients) as IngredientInput[],
+          steps: values.steps as StepInput[]
         }
 
         if (recipe?.id) {

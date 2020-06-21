@@ -1,7 +1,7 @@
 import { NumericInput as BPNumericInput } from '@blueprintjs/core'
 import { FunctionComponent } from "react"
 import { Box, BoxProps } from "rebass/styled-components"
-import { lte } from 'lodash'
+import { gte } from 'lodash'
 import { FormikHelpers, FieldProps } from 'formik'
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 
 export const NumericInput: FunctionComponent<Props> = ({ value, name, onChange, onBlur, validateField, boxProps, inputProps }) => {
   const handleNumericInputChange = (valueAsNumber: number, valueAsString: string) => {
-    if (!isNaN(valueAsNumber) && valueAsString.length > 0 && valueAsNumber > 0) {
+    if (!isNaN(valueAsNumber) && valueAsString.length > 0 && gte(valueAsNumber, 0)) {
       onChange(valueAsNumber)
     } else {
       onChange(undefined)
@@ -33,10 +33,21 @@ export const NumericInput: FunctionComponent<Props> = ({ value, name, onChange, 
         name={name}
         allowNumericCharactersOnly={true}
         fill={true}
+        onFocus={(event) => {
+          if (event.target.value === '0') {
+            event.target.value = ''
+          }
+        }}
         onValueChange={handleNumericInputChange}
-        onBlur={onBlur}
+        onBlur={(event) => {
+          if (event.target.value === '') {
+            event.target.value = '0'
+          }
+
+          onBlur?.(event)
+        }}
         min={inputProps.min ?? 0}
-        value={lte(value, 0) ? undefined : value}
+        value={value}
         placeholder='0'/>
     </Box>
   )
