@@ -6,7 +6,7 @@ import { FormikHelpers, FieldProps } from 'formik'
 
 interface Props {
   name?: string
-  value: number
+  value: number | undefined
   onChange: (value: number | undefined) => void
   onBlur?: FieldProps<number>['field']['onBlur']
   validateField?: FormikHelpers<any>['validateField']
