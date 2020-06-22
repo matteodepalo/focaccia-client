@@ -28,7 +28,8 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
 
   const ingredientItem = (ingredient: IngredientFieldsFragment) => {
     return <Ingredient
-      text={`${round(ingredient.weight)} g of ${ingredient.name ?? lowerCase(labelForIngredientType(ingredient.type))}`}
+      name={ingredient.name ?? lowerCase(labelForIngredientType(ingredient.type))}
+      weight={`${round(ingredient.weight)} g`}
       icon={ingredientTypeIcon(ingredient.type, { size: 25, style: { marginRight: 15 } })} />
   }
 

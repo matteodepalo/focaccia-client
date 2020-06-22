@@ -27,11 +27,13 @@ const RecipeItem: FunctionComponent<Props> = ({ recipe }) => {
       <H1>{recipe.name}</H1>
       <div>
         <Ingredient
-          text={`${round(ingredientsHydration(recipe.ingredients))}%`}
+          name={`${round(ingredientsHydration(recipe.ingredients))}%`}
+          weight=''
           icon={ingredientTypeIcon(IngredientType.water, iconProps)} />
 
         <Ingredient
-          text={flourList(recipe.ingredients).join(', ')}
+          name={flourList(recipe.ingredients).join(', ')}
+          weight=''
           icon={ingredientTypeIcon(IngredientType.flour, iconProps)} />
       </div>
     </RecipeCard>

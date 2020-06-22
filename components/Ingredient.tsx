@@ -1,16 +1,24 @@
 import { FunctionComponent } from 'react'
-import { Flex } from 'rebass/styled-components'
+import { Flex, Box, Text } from 'rebass/styled-components'
 
 interface Props {
   icon: JSX.Element
-  text: string
+  name: string
+  weight: string
 }
 
-const Ingredient: FunctionComponent<Props> = ({ text, icon }) => {
+const Ingredient: FunctionComponent<Props> = ({ name, weight, icon }) => {
   return (
     <Flex paddingY={2} alignItems="center">
-      {icon}
-      <div>{text}</div>
+      <Box width={25} mr={10}>
+        {icon}
+      </Box>
+      <Text fontSize={16} fontWeight='bold' mr={10} sx={{textTransform: 'capitalize'}}>
+        {name}
+      </Text>
+      <Text fontSize={15}>
+        {weight}
+      </Text>
     </Flex>
   )
 }
