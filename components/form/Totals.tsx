@@ -1,4 +1,4 @@
-import { Flex } from "rebass/styled-components"
+import { Flex, Box } from "rebass/styled-components"
 import { round } from "lodash"
 import { NumericInput } from "components/base/NumericInput"
 import { ingredientsWeightInG, ingredientsHydration, BaseIngredient, isDoughWater, ingredientsByGroup, doughWaterWeightForHydration, water } from "lib/ingredients"
@@ -52,7 +52,9 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
   return (
     <>
       <Flex as="h3" mb={2} alignItems="center">
-        Recipe for ~
+        <Box width={100}>
+          Recipe for ~
+        </Box>
         {
           <NumericInput
             value={round(totalWeight / 1000, 1)}
@@ -64,7 +66,9 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
       </Flex>
 
       <Flex as="h3" alignItems="center">
-        Hydration
+        <Box width={100}>
+          Hydration
+        </Box>
         {
           <NumericInput
             value={round(hydration)}
