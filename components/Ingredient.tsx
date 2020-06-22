@@ -4,7 +4,7 @@ import { Flex, Box, Text } from 'rebass/styled-components'
 interface Props {
   icon: JSX.Element
   name: string
-  weight: string
+  weight?: string
 }
 
 const Ingredient: FunctionComponent<Props> = ({ name, weight, icon }) => {
@@ -16,9 +16,9 @@ const Ingredient: FunctionComponent<Props> = ({ name, weight, icon }) => {
       <Text fontSize={16} fontWeight='bold' mr={10} sx={{textTransform: 'capitalize'}}>
         {name}
       </Text>
-      <Text fontSize={15}>
+      {weight && <Text fontSize={15}>
         {weight}
-      </Text>
+      </Text>}
     </Flex>
   )
 }
