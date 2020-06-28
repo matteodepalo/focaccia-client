@@ -40,7 +40,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
         <Flex flexDirection={["column", "row"]}>
           <Box>
             <Flex alignItems="center">
-              <Box>
+              <Box mr={2}>
                 <Field name={`${prefix}Ingredients.${index}.weight`}>
                   {({ field }: FieldProps<IngredientFormField['weight']>) => (
                     <NumericInput
@@ -58,7 +58,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
               </Box>
 
               {type !== IngredientType.other &&
-                <Box ml={2} mr={2}>
+                <Box mr={2}>
                   of {lowerCase(labelForIngredientType(type))}
                 </Box>}
             </Flex>
