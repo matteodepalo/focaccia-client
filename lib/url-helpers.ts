@@ -6,5 +6,5 @@ export default function createLoginUrl(redirectTo?: string) {
   if (redirectTo) {
     return `/api/login?redirectTo=${encodeURIComponent(redirectTo)}`;
   }
-  return `/api/login`;
+  return `/api/login?redirectTo=${encodeURIComponent('/recipes')}`;
 }

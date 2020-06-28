@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import styled from "styled-components"
 import UserContext from "lib/UserProvider"
 import { icon } from "lib/icons"
+import createLoginUrl from "lib/url-helpers"
 
 const Navbar = styled(BPNavbar)`
   background-color: ${(props) => props.theme.backgroundColor}
@@ -29,7 +30,7 @@ const Layout: FunctionComponent = ({ children }) => {
               <Popover content={userMenu}>
                 <AnchorButton minimal={true} icon={icon("user")} text={user.nickname} />
               </Popover>
-            : <AnchorButton minimal={true} icon={icon("log-in")} text="Login" href="/api/login" />}
+            : <AnchorButton minimal={true} icon={icon("log-in")} text="Login" href={createLoginUrl()} />}
           </Navbar.Heading>
 
           {user &&
