@@ -50,16 +50,16 @@ const DeleteButton: FunctionComponent<Props> = ({ recipe }) => {
       <Dialog
         icon={icon("warning")}
         onClose={() => setIsDialogOpen(false)}
-        title="Confirm Deletion"
+        title={t('confirm-deletion')}
         isOpen={isDialogOpen}
       >
         <div className={Classes.DIALOG_BODY}>
-          <p>Are you sure you want to delete the recipe {recipe.name}?</p>
+          <p>{t('confirm-deletion-question', { name: recipe.name })}</p>
         </div>
 
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+            <Button onClick={() => setIsDialogOpen(false)}>{t('cancel')}</Button>
 
             <Button icon={icon("trash")} loading={loading} intent="danger" onClick={handleRemoveClick}>
               {t('delete')}

@@ -35,5 +35,8 @@
     "required": "を入力してください",
     "invalid": "は不正な値です",
     "greater-than": "は０より大きい値にしてください"
-  }
+  },
+  "confirm-deletion": "削除を確認",
+  "confirm-deletion-question": "本当に“{{name}}”のレシピを削除しますか？",
+  "cancel": "取り消し"
 }

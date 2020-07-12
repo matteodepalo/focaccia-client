@@ -35,5 +35,8 @@
     "required": "è richiesto",
     "invalid": "non è valido",
     "greater-than": "deve essere maggiore di 0"
-  }
+  },
+  "confirm-deletion": "Conferma Eliminazione",
+  "confirm-deletion-question": "Sei sicuro di voler cancellare la ricetta {{name}}?",
+  "cancel": "Annulla"
 }

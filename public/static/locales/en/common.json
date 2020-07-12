@@ -35,5 +35,8 @@
     "required": "is required",
     "invalid": "is invalid",
     "greater-than-0": "must be greater than 0"
-  }
+  },
+  "confirm-deletion": "Confirm Deletion",
+  "confirm-deletion-question": "Are you sure you want to delete the recipe {{name}}?",
+  "cancel": "Cancel"
 }
