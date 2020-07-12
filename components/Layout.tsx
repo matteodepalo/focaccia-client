@@ -32,7 +32,7 @@ const Layout: FunctionComponent = ({ children }) => {
               <Popover content={userMenu}>
                 <AnchorButton minimal={true} icon={icon("user")} text={user.nickname} />
               </Popover>
-            : <AnchorButton minimal={true} icon={icon("log-in")} text={t('login')} href={createLoginUrl()} />}
+            : <AnchorButton minimal={true} icon={icon("log-in")} text={t('login')} href={createLoginUrl(language)} />}
           </Navbar.Heading>
 
           <Navbar.Divider />
