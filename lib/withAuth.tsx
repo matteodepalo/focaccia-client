@@ -1,10 +1,9 @@
 import { NextPage, NextPageContext } from "next"
 import { User, CurrentUser } from "./user"
 import Layout from "components/Layout"
-import { setCookie, destroyCookie } from "nookies"
+import nookies, { setCookie, destroyCookie } from "nookies"
 import { UserProvider } from "./UserProvider"
 import createLoginUrl from "./url-helpers"
-
 interface Props {
   user: User | null
 }
@@ -30,7 +29,8 @@ export const withAuth = ({ required = true } = {}) => <P extends object>(PageCom
   }
 
   WithAuthenticated.getInitialProps = async (ctx: NextPageContext) => {
-    const { res, req } = ctx
+    const res = ctx.res
+    const req = ctx.req
 
     let pageProps = {} as P
 
@@ -54,7 +54,7 @@ export const withAuth = ({ required = true } = {}) => <P extends object>(PageCom
 
         if (required) {
           res.writeHead(302, {
-            Location: createLoginUrl(req.url),
+            Location: createLoginUrl(nookies.get(ctx)['next-i18next'] ?? 'en', req.url),
           })
           res.end()
         }
