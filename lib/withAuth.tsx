@@ -9,7 +9,7 @@ interface Props {
   user: User | null
 }
 
-export const withAuthenticated = ({ required = true } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
+export const withAuth = ({ required = true } = {}) => <P extends object>(PageComponent: NextPage<P>): NextPage<P & Props> => {
   const WithAuthenticated = ({ user, ...pageProps }: P & Props) => {
     if (user) CurrentUser.set(user)
 
@@ -26,7 +26,7 @@ export const withAuthenticated = ({ required = true } = {}) => <P extends object
    if (process.env.NODE_ENV !== 'production') {
     const displayName =
       PageComponent.displayName || PageComponent.name || 'Component'
-    WithAuthenticated.displayName = `withAuthenticated(${displayName})`
+    WithAuthenticated.displayName = `withAuth(${displayName})`
   }
 
   WithAuthenticated.getInitialProps = async (ctx: NextPageContext) => {

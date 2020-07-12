@@ -1,4 +1,4 @@
-import { Navbar as BPNavbar, Alignment, AnchorButton, Menu, Popover } from "@blueprintjs/core"
+import { Navbar as BPNavbar, Alignment, AnchorButton, Menu, Popover, HTMLSelect } from "@blueprintjs/core"
 import Head from "next/head"
 import { FunctionComponent, useContext } from "react"
 import { Box } from "rebass/styled-components"
@@ -8,6 +8,7 @@ import styled from "styled-components"
 import UserContext from "lib/UserProvider"
 import { icon } from "lib/icons"
 import createLoginUrl from "lib/url-helpers"
+import i18n from 'i18n'
 
 const Navbar = styled(BPNavbar)`
   background-color: ${(props) => props.theme.backgroundColor}
@@ -16,9 +17,10 @@ const Navbar = styled(BPNavbar)`
 const Layout: FunctionComponent = ({ children }) => {
   const router = useRouter()
   const user = useContext(UserContext)
+  const [t, { language }] = i18n.useTranslation()
 
   const userMenu = <Menu>
-    <Menu.Item icon={icon("log-out")} text="Logout" href="/api/logout" />
+    <Menu.Item icon={icon("log-out")} text={t('logout')} href="/api/logout" />
   </Menu>
 
   return (
@@ -30,18 +32,24 @@ const Layout: FunctionComponent = ({ children }) => {
               <Popover content={userMenu}>
                 <AnchorButton minimal={true} icon={icon("user")} text={user.nickname} />
               </Popover>
-            : <AnchorButton minimal={true} icon={icon("log-in")} text="Login" href={createLoginUrl()} />}
+            : <AnchorButton minimal={true} icon={icon("log-in")} text={t('login')} href={createLoginUrl()} />}
           </Navbar.Heading>
+
+          <Navbar.Divider />
+
+          <HTMLSelect minimal={true} options={['en', 'it', 'jp']} value={language} onChange={(event) => {
+            i18n.i18n.changeLanguage(event.target.value)
+          }}/>
 
           {user &&
             <>
               <Navbar.Divider />
 
               <Link href="/recipes">
-                <AnchorButton minimal={true} icon={icon("recipe")} text="Recipes" disabled={router.pathname === '/recipes'} />
+                <AnchorButton minimal={true} icon={icon("recipe")} text={t('recipes')} disabled={router.pathname === '/recipes'} />
               </Link>
               <Link href="/recipes/new">
-                <AnchorButton minimal={true} icon={icon("add")} text="Add" disabled={router.pathname === '/recipes/new'} />
+                <AnchorButton minimal={true} icon={icon("add")} text={t('add')} disabled={router.pathname === '/recipes/new'} />
               </Link>
             </>}
         </Navbar.Group>

@@ -1,10 +1,11 @@
 import 'styles/global.css'
-import { AppProps } from 'next/app'
+import NextApp, { AppProps, AppContext } from 'next/app'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
 import ProgressBar from 'components/base/ProgressBar'
 import { DefaultTheme } from 'styled-components'
 import { Classes } from '@blueprintjs/core'
 import * as Sentry from '@sentry/node'
+import i18n from 'i18n'
 
 Sentry.init({
   enabled: process.env.NODE_ENV === 'production',
@@ -39,6 +40,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+
 function App({ Component, pageProps, err }: AppProps & { err: any }) {
   return (
     <ThemeProvider theme={theme}>
@@ -49,4 +51,6 @@ function App({ Component, pageProps, err }: AppProps & { err: any }) {
   )
 }
 
-export default App
+App.getInitialProps = async (appContext: AppContext) => ({ ...await NextApp.getInitialProps(appContext) })
+
+export default i18n.appWithTranslation(App)

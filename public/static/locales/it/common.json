@@ -1,0 +1,39 @@
+{
+  "welcome": "Focaccia",
+  "login": "Login",
+  "logout": "Logout",
+  "recipes": "Ricette",
+  "add": "Aggiungi",
+  "total-weight": "Peso totale",
+  "hydration": "Idratazione",
+  "ingredients": "Ingredienti",
+  "starter": "Poolish",
+  "dough": "Impasto",
+  "steps": "Istruzioni",
+  "edit": "Modifica",
+  "share": "Condividi",
+  "delete": "Elimina",
+  "save": "Salva",
+  "flour": "Farina",
+  "yeast": "Lievito",
+  "water": "Acqua",
+  "salt": "Sale",
+  "other": "Altro",
+  "step-description": "Descrizione",
+  "flour-placeholder": "Tipo di farina",
+  "other-placeholder": "Altro",
+  "name-placeholder": "Cambia il nome...",
+  "share-title": "Condividi {{name}}",
+  "close": "Chiudi",
+  "copy": "Copia",
+  "recipes-error": "Errore nel caricare le ricette",
+  "recipes-empty-state": {
+    "title": "Non hai nessuna ricetta salvata",
+    "description": "Crea una nuova ricetta"
+  },
+  "errors": {
+    "required": "è richiesto",
+    "invalid": "non è valido",
+    "greater-than": "deve essere maggiore di 0"
+  }
+}

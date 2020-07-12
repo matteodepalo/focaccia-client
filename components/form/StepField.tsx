@@ -6,6 +6,7 @@ import { Button } from "components/base/Button";
 import { TD } from "components/base/TD";
 import { icon } from "lib/icons";
 import { TextInput } from "components/base/TextInput";
+import i18n from "i18n";
 
 interface Props {
   index: number,
@@ -19,6 +20,8 @@ interface Props {
 export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, validateField, onRemove, errors, touched }) => {
   const descriptionIntent = getIn(errors, `steps.${index}.description`) && getIn(touched, `steps.${index}.description`) ? "danger" : "none"
 
+  const [t] = i18n.useTranslation()
+
   return (
     <>
       <TD><Button icon={icon("remove")} onClick={() => onRemove()} minimal={true} /></TD>
@@ -31,7 +34,7 @@ export const StepField: FunctionComponent<Props> = ({ index, setFieldValue, vali
               onChange={field.onChange}
               onBlur={field.onBlur}
               name={field.name}
-              placeholder="Description" />
+              placeholder={t('step-description')} />
           )}
         </Field>
       </TD>
