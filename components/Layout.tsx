@@ -37,7 +37,7 @@ const Layout: FunctionComponent = ({ children }) => {
 
           <Navbar.Divider />
 
-          <HTMLSelect minimal={true} options={['en', 'it', 'jp']} value={language} onChange={(event) => {
+          <HTMLSelect minimal={true} options={['en', 'it', 'ja']} value={language} onChange={(event) => {
             i18n.i18n.changeLanguage(event.target.value)
           }}/>
 
