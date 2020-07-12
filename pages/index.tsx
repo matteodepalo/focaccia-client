@@ -1,11 +1,14 @@
 import { NonIdealState } from '@blueprintjs/core'
-import { withAuthenticated } from 'lib/withAuthenticated'
+import { withAuth } from 'lib/withAuth'
+import i18n from 'i18n'
 
 const Home = () => {
+  const [t] = i18n.useTranslation();
+
   return (
     <NonIdealState
-      title="Welcome to Focaccia" />
+      title={t('welcome')} />
   )
 }
 
-export default withAuthenticated({ required: false })(Home)
+export default withAuth({ required: false })(Home)

@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 import { IngredientType } from "lib/graphql";
 import { FastField as Field, FieldProps, getIn, FormikHelpers, FormikErrors, FormikTouched } from "formik";
 import { Tag } from "@blueprintjs/core";
-import { labelForIngredientType, nameRequiredForType } from "lib/ingredients";
+import { nameRequiredForType } from "lib/ingredients";
 import { FormValues, IngredientFormField } from "./RecipeForm";
 import { Flex, Box } from "rebass/styled-components";
 import { lowerCase } from "lodash";
@@ -11,6 +11,7 @@ import { Button } from "components/base/Button";
 import { icon } from "lib/icons";
 import { wrapNullableValue } from "lib/field-helpers";
 import { TextInput } from "components/base/TextInput";
+import i18n from "i18n";
 
 interface Props {
   prefix: string,
@@ -29,6 +30,8 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
   const weightIntent = getIn(errors, `${prefix}Ingredients.${index}.weight`) && getIn(touched, `${prefix}Ingredients.${index}.weight`) ? "danger" : "none"
   const nameIntent = getIn(errors, `${prefix}Ingredients.${index}.name`) && getIn(touched, `${prefix}Ingredients.${index}.name`) ? "danger" : "none"
   const disabled = typeof onRemove === 'undefined'
+
+  const [t] = i18n.useTranslation()
 
   return (
     <Flex mb={2} alignItems="center">
@@ -59,7 +62,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
 
               {type !== IngredientType.other &&
                 <Box mr={2}>
-                  of {lowerCase(labelForIngredientType(type))}
+                  {lowerCase(t(type))}
                 </Box>}
             </Flex>
           </Box>
@@ -74,7 +77,7 @@ export const IngredientField: FunctionComponent<Props> = ({ prefix, index, setFi
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     name={field.name}
-                    placeholder="Name" />
+                    placeholder={type === IngredientType.flour ? t('flour-placeholder') : t('other-placeholder')} />
                 )}
               </Field>
             </Box>}

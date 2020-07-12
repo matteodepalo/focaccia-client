@@ -3,6 +3,7 @@ import { round } from "lodash"
 import { NumericInput } from "components/base/NumericInput"
 import { ingredientsWeightInG, ingredientsHydration, BaseIngredient, isDoughWater, ingredientsByGroup, doughWaterWeightForHydration, water } from "lib/ingredients"
 import { safeDivide } from "lib/utils"
+import i18n from "i18n"
 
 const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients, onTotalsChange }: {
   starterIngredients: T[],
@@ -49,11 +50,13 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
     onTotalsChange(ingredientsByGroup(updatedIngredients))
   }
 
+  const [t] = i18n.useTranslation()
+
   return (
     <>
       <Flex as="h3" mb={2} alignItems="center">
-        <Box width={100}>
-          Recipe for ~
+        <Box width={120}>
+          {t('total-weight')}
         </Box>
         {
           <NumericInput
@@ -66,8 +69,8 @@ const Totals = <T extends BaseIngredient>({ starterIngredients, doughIngredients
       </Flex>
 
       <Flex as="h3" alignItems="center">
-        <Box width={100}>
-          Hydration
+        <Box width={120}>
+          {t('hydration')}
         </Box>
         {
           <NumericInput

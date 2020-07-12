@@ -3,7 +3,7 @@ import { FunctionComponent, useState } from 'react'
 import { useRouter } from 'next/router'
 import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from 'lib/graphql'
 import { Box } from 'rebass/styled-components'
-import { labelForIngredientGroup, ingredientTypeIcon, labelForIngredientType, starterIngredients as filterStarterIngredients, doughIngredients as filterDoughIngredients } from 'lib/ingredients'
+import { ingredientTypeIcon, starterIngredients as filterStarterIngredients, doughIngredients as filterDoughIngredients } from 'lib/ingredients'
 import Ingredient from './Ingredient'
 import { round, lowerCase } from 'lodash'
 import Totals from 'components/form/Totals'
@@ -12,6 +12,7 @@ import { Button } from 'components/base/Button'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { recipeShareUrl } from 'lib/url-helpers'
 import { icon } from 'lib/icons'
+import i18n from 'i18n'
 
 interface Props {
   recipe: RecipeFieldsFragment,
@@ -28,10 +29,12 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
 
   const ingredientItem = (ingredient: IngredientFieldsFragment) => {
     return <Ingredient
-      name={ingredient.name ?? lowerCase(labelForIngredientType(ingredient.type))}
+      name={ingredient.name ?? lowerCase(t(ingredient.type))}
       weight={`${round(ingredient.weight)} g`}
       icon={ingredientTypeIcon(ingredient.type, { size: 25, style: { marginRight: 15 } })} />
   }
+
+  const [t] = i18n.useTranslation()
 
   return (
     <>
@@ -49,12 +52,12 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
             }} />
 
           <Box mt={4}>
-            <H2>Ingredients</H2>
+            <H2>{t('ingredients')}</H2>
           </Box>
 
           {starterIngredients.length > 0 &&
             <Box mt={4}>
-              <H3>{labelForIngredientGroup(IngredientGroup.starter)}</H3>
+              <H3>{t(IngredientGroup.starter)}</H3>
 
               <Box mt={3}>
                 {starterIngredients.map((ingredient, index) => {
@@ -68,7 +71,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
 
           {doughIngredients.length > 0 &&
             <Box mt={4}>
-              <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
+              <H3>{t(IngredientGroup.dough)}</H3>
 
               <Box mt={3}>
                 {doughIngredients.map((ingredient, index) => {
@@ -81,18 +84,11 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
           }
 
           <Box mt={4}>
-            <H2>Steps</H2>
+            <H2>{t('steps')}</H2>
           </Box>
 
           <Box mt={4}>
             <HTMLTable striped={true}>
-              <thead>
-                <tr>
-                  <th>Description</th>
-                  <th>Time</th>
-                </tr>
-              </thead>
-
               <tbody>
                 {recipe.steps.length > 0 && (
                   recipe.steps.sort((a, b) => a.position - b.position).map((step) => (
@@ -118,18 +114,18 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
             <Box mt={4}>
               <ButtonGroup vertical={true}>
                 <Button icon={icon("edit")} onClick={() => router.push('/recipes/[id]/edit', `/recipes/${recipe.id}/edit`)}>
-                  Edit
+                  {t('edit')}
                 </Button>
 
                 <Button icon={icon("share")} intent="primary" onClick={() => setIsDialogOpen(true)}>
-                  Share
+                  {t('share')}
                 </Button>
               </ButtonGroup>
 
               <Dialog
                 icon={icon("share")}
                 onClose={() => setIsDialogOpen(false)}
-                title={`Share ${recipe.name}`}
+                title={t('share-title', { name: recipe.name })}
                 isOpen={isDialogOpen}
               >
                 <div className={Classes.DIALOG_BODY}>
@@ -138,9 +134,9 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
 
                 <div className={Classes.DIALOG_FOOTER}>
                   <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-                    <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
+                    <Button onClick={() => setIsDialogOpen(false)}>{t('close')}</Button>
                     <CopyToClipboard text={recipeShareUrl(recipe.token)} onCopy={() => setIsDialogOpen(false)}>
-                      <Button icon={icon("share")}>Copy</Button>
+                      <Button icon={icon("share")}>{t('copy')}</Button>
                     </CopyToClipboard>
                   </div>
                 </div>

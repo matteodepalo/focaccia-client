@@ -4,6 +4,7 @@ import { Classes, Dialog } from "@blueprintjs/core"
 import { useRouter } from "next/router"
 import { Button } from "components/base/Button"
 import { icon } from "lib/icons"
+import i18n from "i18n"
 
 interface Props {
   recipe: RecipeFieldsFragment
@@ -13,6 +14,7 @@ const DeleteButton: FunctionComponent<Props> = ({ recipe }) => {
   const [removeRecipe, { loading }] = useRemoveRecipeMutation()
   const router = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [t] = i18n.useTranslation()
 
   const handleRemoveClick = () => {
     removeRecipe({
@@ -42,7 +44,7 @@ const DeleteButton: FunctionComponent<Props> = ({ recipe }) => {
   return (
     <>
       <Button icon={icon("trash")} intent="danger" onClick={() => setIsDialogOpen(true)}>
-        Delete
+        {t('delete')}
       </Button>
 
       <Dialog
@@ -60,7 +62,7 @@ const DeleteButton: FunctionComponent<Props> = ({ recipe }) => {
             <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
 
             <Button icon={icon("trash")} loading={loading} intent="danger" onClick={handleRemoveClick}>
-              Delete
+              {t('delete')}
             </Button>
           </div>
         </div>

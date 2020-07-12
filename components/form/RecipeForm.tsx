@@ -3,7 +3,7 @@ import { EditableText, Switch, H3, H2, H1, Popover, Position, Menu, MenuItem, Fo
 import { Formik, Form as FormikForm, FastField as Field, FieldProps, FieldArray, FormikHelpers, ErrorMessage } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import * as Yup from 'yup';
-import { labelForIngredientGroup, nameRequiredForType, ingredientTypeIcon, ingredientTypesWithLabels, ingredientTypeUnavailable, starterIngredients, doughIngredients, Ingredient } from 'lib/ingredients';
+import { nameRequiredForType, ingredientTypeIcon, ingredientTypeUnavailable, starterIngredients, doughIngredients, Ingredient } from 'lib/ingredients';
 import { IngredientField } from './IngredientField';
 import { Box, Flex } from 'rebass/styled-components';
 import Totals from './Totals';
@@ -13,44 +13,13 @@ import { Button } from 'components/base/Button';
 import { StepList } from './StepList';
 import { icon } from 'lib/icons';
 import { formatString, wrapNullableValue } from 'lib/field-helpers';
+import i18n from 'i18n';
 
 // type and group are required
 export type IngredientFormField = Partial<IngredientInput> & Pick<IngredientInput, "type" | "group">
 
 // position is required
 export type StepFormField = Partial<StepInput> & Pick<StepInput, "position">
-
-const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientFormField> => {
-  const object = Yup.object({
-    weight: Yup.number().moreThan(0, 'must be greater than 0').required(),
-    group: Yup.mixed<IngredientGroup>().oneOf(Object.values(IngredientGroup)).required(),
-    type: Yup.mixed<IngredientType>().oneOf(Object.values(IngredientType)).required()
-  })
-
-  if (nameRequiredForType((value as IngredientFormField).type)) {
-    return object.shape({
-      name: Yup.string().required('Name is required')
-    })
-  } else {
-    return object
-  }
-})
-
-const StepSchema: Yup.ObjectSchema<StepFormField> = Yup.object({
-  description: Yup.string().required(),
-  duration: Yup.number().nullable(),
-  position: Yup.number().moreThan(0, 'must be greater than 0')
-})
-
-const RecipeSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
-  starterIngredients: Yup.array()
-    .of(IngredientSchema),
-  doughIngredients: Yup.array()
-    .of(IngredientSchema),
-  steps: Yup.array()
-    .of(StepSchema)
-});
 
 interface Props {
   recipe?: RecipeFieldsFragment
@@ -130,6 +99,50 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
     setStarterEnabled(enabled)
   }
 
+  const [t] = i18n.useTranslation()
+
+  Yup.setLocale({
+    mixed: {
+      default: t('errors.invalid'),
+      required: t('errors.required')
+    },
+    number: {
+      min: t('errors.greater-than-0',),
+    },
+  })
+
+  const IngredientSchema = Yup.lazy((value): Yup.ObjectSchema<IngredientFormField> => {
+    const object = Yup.object({
+      weight: Yup.number().moreThan(0).required(),
+      group: Yup.mixed<IngredientGroup>().oneOf(Object.values(IngredientGroup)).required(),
+      type: Yup.mixed<IngredientType>().oneOf(Object.values(IngredientType)).required()
+    })
+
+    if (nameRequiredForType((value as IngredientFormField).type)) {
+      return object.shape({
+        name: Yup.string().required()
+      })
+    } else {
+      return object
+    }
+  })
+
+  const StepSchema: Yup.ObjectSchema<StepFormField> = Yup.object({
+    description: Yup.string().required(),
+    duration: Yup.number().nullable(),
+    position: Yup.number().moreThan(0)
+  })
+
+  const RecipeSchema = Yup.object().shape({
+    name: Yup.string().required(),
+    starterIngredients: Yup.array()
+      .of(IngredientSchema),
+    doughIngredients: Yup.array()
+      .of(IngredientSchema),
+    steps: Yup.array()
+      .of(StepSchema)
+  });
+
   return (
     <Formik<FormValues>
       initialValues={initialValues}
@@ -166,7 +179,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
           <Field name="name">
             {({ field }: FieldProps<IngredientFormField['name']>) => (
               <H1>
-                <FormGroup intent={errors.name && touched.name ? "danger" : "none"} helperText={<ErrorMessage name="name"/>}>
+                <FormGroup intent={errors.name && touched.name ? "danger" : "none"} helperText={<ErrorMessage name="name" />}>
                   <EditableText
                     value={wrapNullableValue(field.value)}
                     confirmOnEnterKey={true}
@@ -177,7 +190,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                     }}
                     onCancel={() => validateField(field.name)}
                     multiline={true}
-                    placeholder="Edit name..." />
+                    placeholder={t('name-placeholder')} />
                 </FormGroup>
               </H1>
             )}
@@ -198,12 +211,12 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
             }}/>
 
           <Box mt={4}>
-            <H2>Ingredients</H2>
+            <H2>{t('ingredients')}</H2>
           </Box>
 
           <Box mt={4}>
             <Flex alignItems="center">
-              <H3>{labelForIngredientGroup(IngredientGroup.starter)}</H3>
+              <H3>{t(IngredientGroup.starter)}</H3>
 
               <Switch
                 checked={starterEnabled}
@@ -235,14 +248,14 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                     ))
                   )}
 
-                  <Button icon={icon("add")} text="Add Ingredient" minimal={true} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.starter, IngredientType.other))} />
+                  <Button icon={icon("add")} text={t('add')} minimal={true} onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.starter, IngredientType.other))} />
                 </div>
               )}
             />
           </Box>}
 
           <Box mt={4}>
-            <H3>{labelForIngredientGroup(IngredientGroup.dough)}</H3>
+            <H3>{t(IngredientGroup.dough)}</H3>
 
             <Box mt={3}>
               <FieldArray
@@ -270,16 +283,16 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
                       position={Position.RIGHT_TOP}
                       content={
                         <Menu>
-                          {ingredientTypesWithLabels.map((type, index) => {
+                          {Object.values(IngredientType).map((type, index) => {
                             return <MenuItem
                               key={index}
-                              icon={ingredientTypeIcon(type.value)}
-                              onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough, type.value))}
-                              text={type.label}
-                              disabled={ingredientTypeUnavailable(type.value, values.doughIngredients)}/>
+                              icon={ingredientTypeIcon(type)}
+                              onClick={() => arrayHelpers.push(newIngredient(IngredientGroup.dough, type))}
+                              text={t(type)}
+                              disabled={ingredientTypeUnavailable(type, values.doughIngredients)}/>
                           })}
                         </Menu>}>
-                        <Button icon={icon("add")} text="Add Ingredient" minimal={true} />
+                        <Button icon={icon("add")} text={t('add')} minimal={true} />
                     </Popover>
                   </div>
                 )}
@@ -288,35 +301,25 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
           </Box>
 
           <Box mt={4}>
-            <H2>Steps</H2>
+            <H2>{t('steps')}</H2>
 
             <FieldArray
               name="steps"
               render={arrayHelpers => (
                 <>
-                  <HTMLTable striped={true}>
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th></th>
-                        <th>Description</th>
-                        <th>Time</th>
-                      </tr>
-                    </thead>
+                  {values.steps.length > 0 && <HTMLTable striped={true}>
+                    <StepList
+                      steps={values.steps}
+                      setFieldValue={setFieldValue}
+                      errors={errors}
+                      touched={touched}
+                      validateField={validateField}
+                      arrayHelpers={arrayHelpers} />
 
-                    {values.steps.length > 0 && (
-                      <StepList
-                        steps={values.steps}
-                        setFieldValue={setFieldValue}
-                        errors={errors}
-                        touched={touched}
-                        validateField={validateField}
-                        arrayHelpers={arrayHelpers} />
-                    )}
-                  </HTMLTable>
+                  </HTMLTable>}
 
                   <Box mt={2}>
-                    <Button icon={icon("add")} text="Add Step" minimal={true} onClick={() => arrayHelpers.push(newStep(values))} />
+                    <Button icon={icon("add")} text={t('add')} minimal={true} onClick={() => arrayHelpers.push(newStep(values))} />
                   </Box>
                 </>
               )} />
@@ -324,7 +327,7 @@ const RecipeForm: FunctionComponent<Props> = ({ recipe }) => {
 
           <Box mt={4} width={80}>
             <ButtonGroup vertical={true}>
-              <Button icon={icon("save")} intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>Save</Button>
+              <Button icon={icon("save")} intent="primary" type="submit" loading={isSubmitting} disabled={isSubmitting}>{t('save')}</Button>
 
               {recipe &&
                 <DeleteButton recipe={recipe} />

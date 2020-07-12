@@ -1,6 +1,6 @@
 import withApollo from 'lib/withApollo'
 import RecipeList from 'components/RecipeList'
-import { withAuthenticated } from 'lib/withAuthenticated'
+import { withAuth } from 'lib/withAuth'
 import { getDataFromTree } from '@apollo/react-ssr';
 
 const Recipes = () => {
@@ -9,4 +9,4 @@ const Recipes = () => {
   )
 }
 
-export default withApollo(withAuthenticated()(Recipes), { getDataFromTree })
+export default withApollo(withAuth()(Recipes), { getDataFromTree })

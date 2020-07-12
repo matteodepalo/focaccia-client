@@ -17,81 +17,8 @@ export function doughIngredients<T extends BaseIngredient>(ingredients: T[]): T[
   return ingredients.filter(i => i.group === IngredientGroup.dough)
 }
 
-type IngredientGroupLabelObject<T extends IngredientGroup> = {
-  label: string,
-  value: T
-}
-
-type IngredientTypeLabelObject<T extends IngredientType> = {
-  label: string,
-  value: T
-}
-
-const ingredientGroupsWithLabels: [
-  IngredientGroupLabelObject<IngredientGroup.starter>,
-  IngredientGroupLabelObject<IngredientGroup.dough>,
-] = [
-  {
-    label: 'Starter',
-    value: IngredientGroup.starter
-  },
-  {
-    label: 'Dough',
-    value: IngredientGroup.dough
-  }
-]
-
-export const ingredientTypesWithLabels: [
-  IngredientTypeLabelObject<IngredientType.flour>,
-  IngredientTypeLabelObject<IngredientType.yeast>,
-  IngredientTypeLabelObject<IngredientType.water>,
-  IngredientTypeLabelObject<IngredientType.salt>,
-  IngredientTypeLabelObject<IngredientType.other>,
-] = [
-  {
-    label: 'Flour',
-    value: IngredientType.flour
-  },
-  {
-    label: 'Yeast',
-    value: IngredientType.yeast
-  },
-  {
-    label: 'Water',
-    value: IngredientType.water
-  },
-  {
-    label: 'Salt',
-    value: IngredientType.salt
-  },
-  {
-    label: 'Other',
-    value: IngredientType.other
-  }
-]
-
 export function nameRequiredForType(type: IngredientType) {
   return [IngredientType.flour, IngredientType.other].includes(type)
-}
-
-export function labelForIngredientGroup(group: IngredientGroup) {
-  for (let ingredient of ingredientGroupsWithLabels) {
-    if (ingredient.value === group) {
-      return ingredient.label
-    }
-  }
-
-  throw new Error(`Label for group ${group} not found`)
-}
-
-export function labelForIngredientType(type: IngredientType) {
-  for (let ingredient of ingredientTypesWithLabels) {
-    if (ingredient.value === type) {
-      return ingredient.label
-    }
-  }
-
-  throw new Error(`Label for type ${type} not found`)
 }
 
 const uniqueIngredientTypes = [IngredientType.water, IngredientType.yeast, IngredientType.salt]

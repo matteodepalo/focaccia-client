@@ -1,0 +1,39 @@
+{
+  "welcome": "Welcome to Focaccia",
+  "login": "Login",
+  "logout": "Logout",
+  "recipes": "Recipes",
+  "add": "Add",
+  "total-weight": "Total weight",
+  "hydration": "Hydration",
+  "ingredients": "Ingredients",
+  "starter": "Starter",
+  "dough": "Dough",
+  "steps": "Steps",
+  "edit": "Edit",
+  "share": "Share",
+  "delete": "Delete",
+  "save": "Save",
+  "flour": "Flour",
+  "yeast": "Yeast",
+  "water": "Water",
+  "salt": "Salt",
+  "other": "Other",
+  "step-description": "Description",
+  "flour-placeholder": "Flour type",
+  "other-placeholder": "Other",
+  "name-placeholder": "Edit name...",
+  "share-title": "Share {{name}}",
+  "close": "Close",
+  "copy": "Copy",
+  "recipes-error": "Error loading recipes",
+  "recipes-empty-state": {
+    "title": "You have no saved recipes",
+    "description": "Create a new recipe"
+  },
+  "errors": {
+    "required": "is required",
+    "invalid": "is invalid",
+    "greater-than-0": "must be greater than 0"
+  }
+}
