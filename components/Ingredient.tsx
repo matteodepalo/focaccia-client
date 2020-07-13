@@ -13,7 +13,7 @@ const Ingredient: FunctionComponent<Props> = ({ name, weight, icon }) => {
       <Box width={25} mr={10}>
         {icon}
       </Box>
-      <Text fontSize={16} fontWeight='bold' mr={10} sx={{textTransform: 'capitalize'}}>
+      <Text fontSize={16} fontWeight='bold' mr={10}>
         {name}
       </Text>
       {weight && <Text fontSize={15}>
