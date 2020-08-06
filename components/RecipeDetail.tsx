@@ -5,7 +5,7 @@ import { RecipeFieldsFragment, IngredientGroup, IngredientFieldsFragment } from 
 import { Box } from 'rebass/styled-components'
 import { ingredientTypeIcon, starterIngredients as filterStarterIngredients, doughIngredients as filterDoughIngredients } from 'lib/ingredients'
 import Ingredient from './Ingredient'
-import { round, lowerCase } from 'lodash'
+import { round } from 'lodash'
 import Totals from 'components/form/Totals'
 import { secondsToHours, secondsToMinutes } from 'lib/utils'
 import { Button } from 'components/base/Button'
@@ -29,7 +29,7 @@ const RecipeDetail: FunctionComponent<Props> = ({ recipe, shared }) => {
 
   const ingredientItem = (ingredient: IngredientFieldsFragment) => {
     return <Ingredient
-      name={ingredient.name ?? lowerCase(t(ingredient.type))}
+      name={ingredient.name ?? t(ingredient.type)}
       weight={`${round(ingredient.weight)} g`}
       icon={ingredientTypeIcon(ingredient.type, { size: 25, style: { marginRight: 15 } })} />
   }
