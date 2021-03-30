@@ -53,7 +53,11 @@ function flours<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
 }
 
 function flourWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  return flours(ingredients).reduce((memo, i) => memo += i.weight ?? 0, 0)
+  const flourWeight =
+    flours(ingredients).reduce((memo, i) => memo += i.weight ?? 0, 0) +
+    yeastsFlourWeight(ingredients)
+
+  return flourWeight
 }
 
 export function water<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
@@ -61,7 +65,28 @@ export function water<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
 }
 
 function waterWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
-  return water(ingredients).reduce((memo, i) => memo += i.weight ?? 0, 0)
+  const waterWeight =
+    water(ingredients).reduce((memo, i) => memo += i.weight ?? 0, 0) +
+    yeastsWaterWeight(ingredients)
+
+  return waterWeight
+}
+
+function yeasts<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+  return ingredients.filter(i => i.type === IngredientType.yeast)
+}
+
+function yeastsWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+  return yeasts(ingredients).reduce((memo, i) => memo += i.weight ?? 0, 0)
+}
+
+// we assume 50% hydration yeast
+function yeastsWaterWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+  return yeastsWeight(ingredients) / 3;
+}
+
+function yeastsFlourWeight<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
+  return yeastsWeight(ingredients) * (2/3)
 }
 
 export function ingredientsHydration<T extends BaseIngredient>(ingredients: Ingredient<T>[]) {
