@@ -43,7 +43,7 @@ export const withAuth = ({ required = true } = {}) => <P extends object>(PageCom
       const { default: auth0 } = await import('./auth0')
       // ignore until https://github.com/auth0/nextjs-auth0/pull/113 is merged
       //@ts-ignore
-      const session = await auth0.getSession(req)
+      const session = await auth0.getSession(req, res)
 
       if (session && session.user && session.accessToken) {
         setCookie(ctx, 'accessToken', session.accessToken, { path: '/' })

@@ -3,5 +3,5 @@ export function recipeShareUrl(token: string) {
 }
 
 export default function createLoginUrl(locale: string, redirectTo?: string) {
-  return `/api/login?redirectTo=${encodeURIComponent(redirectTo ?? '/recipes')}&ui_locales=${locale}`;
+  return `/api/login?returnTo=${encodeURIComponent(redirectTo ?? '/recipes')}&ui_locales=${locale}`;
 }
